@@ -78,7 +78,8 @@ a{color:inherit}
 .story .ph{aspect-ratio:3/2}
 .story .src{font:10.5px "IBM Plex Mono",monospace;color:var(--dim);letter-spacing:.03em;margin-top:10px}
 @media(max-width:900px){.story{grid-template-columns:1fr}}
-.pitch{margin-top:110px;display:grid;grid-template-columns:3fr 9fr;gap:32px}
+.pitch{margin-top:110px;display:grid;grid-template-columns:4fr 8fr;gap:48px;align-items:start}
+.pitch-side{position:sticky;top:90px}
 .pitch h2{max-width:18ch}
 .pitch ol{list-style:none;counter-reset:p;border-top:1px solid var(--hard);margin-top:34px}
 .pitch li{counter-increment:p;display:grid;grid-template-columns:60px 1fr;padding:22px 0;border-bottom:1px solid var(--line);transition:padding .35s,background .35s}
@@ -87,7 +88,7 @@ a{color:inherit}
 .pitch li h3{font-size:24px;font-weight:300;letter-spacing:-.02em}
 .pitch li p{color:var(--mute);font-size:14px}
 .cta{margin-top:56px;display:flex;gap:10px;flex-wrap:wrap}
-@media(max-width:860px){.pitch{grid-template-columns:1fr}}
+@media(max-width:860px){.pitch{grid-template-columns:1fr}.pitch-side{position:static}}
 /* ---------- how ---------- */
 .step{display:flex;flex-direction:column}.step h3{margin-top:14px}.step .ph{aspect-ratio:4/5;margin-top:auto;padding-top:0}.step p{margin-bottom:24px;min-height:96px}.cols>div.step{padding:20px 14px 0 14px}.cols>div.step:first-child{padding-left:0;padding-right:28px}.cols>div.step:last-child{padding-right:0;padding-left:28px}
 .step p{color:var(--mute);font-size:14px}
@@ -267,7 +268,7 @@ label{display:block;margin-bottom:6px}
   </article>
 
   <section class="pitch rv">
-    <span class="mono" style="padding-top:12px">Why you</span>
+    <div class="pitch-side"><span class="mono" style="display:block;padding-top:12px;margin-bottom:20px">Why you</span><div class="ph" style="aspect-ratio:3/4"><img src="img/14-whyyou.jpg" alt="Donor standing in a snowy field with a feather tattoo"></div><p class="cap">Ji-woo, 29 · gives to Ikh Nart, MN · third mark this year</p></div>
     <div>
       <h2>You already have exactly what they need.</h2>
       <p class="mute" style="font-size:17px">Your muscle is clean, traceable and grown from a living person who chose to give it. No one has to die for it. You don't have to wait until you do.</p>
