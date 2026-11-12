@@ -354,7 +354,7 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
   </article>
 
   <section class="pitch">
-    <div class="pitch-side"><span class="label">Why you</span><div class="ph"><img src="img/14-whyyou.jpg" alt="A donor standing in a snowy field, showing a feather tattoo on her arm"></div><span class="label">Ji-woo, 29, donates to the Ikh Nart station in Mongolia. This year she received her third mark.</span></div>
+    <div class="pitch-side"><span class="label">Why you</span><div class="ph"><img src="img/14-whyyou.jpg" alt="A donor standing in a snowy field, showing a feather tattoo on her arm"></div><span class="label">Ji-woo, 29, donated to the Ikh Nart station in Mongolia last spring. Her tissue is still being served there.</span></div>
     <div>
       <h2>You already have exactly what they need.</h2>
       <p class="mute">The food we grow from your muscle is clean, and we can trace every piece of it back to you. It comes from a living person who chose to give it. No animal has to die to make it, and you don't have to wait until the end of your own life to help.</p>
@@ -400,12 +400,12 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
       <div>
         <h2>Give once.<br>Wear it for life.</h2>
         <p class="mute">Every donor leaves with a small mark on the arm. It is tattooed directly over the place where your sample came out, so instead of a scar you keep a design, and it tells anyone who asks that part of you is up there somewhere. Most people get asked about it within a week.</p>
-        <p class="mute" style="margin-top:12px">Come back next year and you get another one. Some of our donors have a whole row now.</p>
+        <p class="mute" style="margin-top:12px">You can only donate once, so there is only ever one mark. It is the one thing you keep from the whole process.</p>
         <p class="small" id="markname" style="margin-top:18px">Feather. The most popular choice, picked by about half of our donors.</p>
       </div>
       <div class="marks" role="group" aria-label="Choose a mark to preview">
         <button class="on" data-m="Feather. The most popular choice, picked by about half of our donors."><div class="ph"><img src="img/04a-feather.jpg" alt=""></div><span>Feather</span></button>
-        <button data-m="Wings. Slightly wider, and the one regular donors tend to choose for their second mark."><div class="ph"><img src="img/04b-wings.jpg" alt=""></div><span>Wings</span></button>
+        <button data-m="Wings. Slightly wider, and a little easier to see from a distance."><div class="ph"><img src="img/04b-wings.jpg" alt=""></div><span>Wings</span></button>
         <button data-m="Donor number. Your own number, so you can always look up where your tissue went."><div class="ph"><img src="img/04c-number.jpg" alt=""></div><span>Donor number</span></button>
       </div>
     </div>
@@ -544,7 +544,7 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
 <details><summary>Why not just donate meat or money?</summary><p>You can, and many people already do. Feeding stations always need both. Eternal Flight is for people who want something more direct. Meat from a butcher comes from an animal you never knew. Money turns into meat you never see. Your own tissue is something you can trace from your arm to a particular field on a particular day.</p></details>
 <details><summary>Is it safe for the birds?</summary><p>That's the whole reason for the screening and the testing. Every batch is checked for anti-inflammatory drugs, antibiotics and heavy metals before it leaves the lab, and nothing is released if any residue is found. Cultivated tissue is also free of the bone fragments and lead shot that sometimes end up in donated carcasses. We adjust fat and calcium levels so the food matches what a wild vulture would get from a normal meal.</p></details>
 <details><summary>Can I choose which bird eats it?</summary><p>You choose the station. We can't assign an individual bird. Vultures feed in groups with their own order of who eats first, and older birds often push the young ones aside. We think it's better not to interfere with that.</p></details>
-<details><summary>Can I give more than once?</summary><p>Yes, once every twelve months. Each donation opens a new cell line, and the new sample is taken from a fresh spot beside your last mark, so you get a new mark there too. Some regular donors end up with a short row of feathers on their arm, one for each year.</p></details>
+<details><summary>Can I give more than once?</summary><p>No. Each person can donate only once. One sample is enough to grow around 160 kg of food, which is served over a couple of hundred meals, so a second donation isn't needed. It also means every line in our lab belongs to exactly one person, and every mark stands for exactly one gift.</p></details>
 <details><summary>What happens if I die before my line runs out?</summary><p>Your cells keep growing and your batches keep being served until the line reaches its natural limit. Your notices can be sent to someone you name in advance. Your name stays on the wall either way.</p></details>
 <details><summary>Can I change my mind?</summary><p>You can cancel at any point before the cartridge is posted. Once your sample reaches the lab and the line has started, we can still stop it, but we can't give anything back. Everything grown up to that point will be destroyed rather than served.</p></details>
     <p class="nores" id="nores">No questions match that search. Try a shorter word, or write to us when you request a kit.</p>
@@ -755,7 +755,7 @@ $('#fq').oninput=()=>{const q=$('#fq').value.trim().toLowerCase();let n=0;$$('#f
 
 /* ---------- toasts ---------- */
 const cities=['Lyon','Osaka','Seville','Toronto','Busan','Leipzig','Kathmandu','Cape Town','Melbourne','Porto','Ulaanbaatar','Daejeon'];
-const acts=['just requested a kit','received their first feeding notice','sent their sample back','came back for a second mark'];
+const acts=['just requested a kit','received their first feeding notice','sent their sample back','saw their tissue served for the first time'];
 function toast(){if(document.body.classList.contains('landing')||modal.classList.contains('on'))return;const s=pick(STATIONS);
   $('#toast').innerHTML=`Someone in ${pick(cities)} ${pick(acts)}.<small>Their tissue is going to ${s.n}, ${s.c}.</small>`;$('#toast').classList.add('on');setTimeout(()=>$('#toast').classList.remove('on'),4200)}
 setInterval(toast,16000);
