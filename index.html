@@ -192,7 +192,12 @@ input[type=range]:focus{background:transparent}
 .slist button:hover{color:var(--ink);padding-left:8px}
 .slist button.on{color:var(--ink);padding-left:8px}
 .slist small{font-size:11px;color:var(--dim)}
-.sdetail{border:1px solid var(--line);padding:30px;min-height:420px}
+.sdetail{border:1px solid var(--line);border-top:0;padding:26px;min-height:300px}
+.globe{position:relative;aspect-ratio:16/10;border:1px solid var(--line);background:radial-gradient(ellipse at 50% 50%,#151515 0%,#000 65%);overflow:hidden}
+.globe-hint{position:absolute;left:14px;bottom:12px;right:14px;font-size:11px;color:var(--dim);pointer-events:none;z-index:2}
+.gfxslot{aspect-ratio:4/3}
+.gfx{position:relative;width:100%;height:100%;border:1px solid var(--line);background:radial-gradient(ellipse at 50% 45%,#1a1a1a 0%,#030303 70%)}
+.gfx-cap{position:absolute;left:14px;bottom:12px;font-size:11px;color:var(--mute);pointer-events:none}
 .sdetail dl{display:grid;grid-template-columns:1fr 1fr;gap:18px 28px;margin-top:22px;border-top:1px solid var(--line);padding-top:20px}
 .sdetail dt{font-size:11px;color:var(--mute)}
 .sdetail dd{font-size:15px}
@@ -475,7 +480,7 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
 
   <section class="s" id="stations">
     <div class="shead"><span class="label">Feeding stations</span><div><h2>Seven stations on four continents.</h2><p class="mute">When you request a kit you choose where your tissue will go. Each station works with a local conservation team that runs the feeding site.</p></div></div>
-    <div class="stations"><ul class="slist" id="slist"></ul><div class="sdetail" id="sdetail"></div></div>
+    <div class="stations"><ul class="slist" id="slist"></ul><div><div id="globe" class="globe"><span class="globe-hint">Drag to turn the globe. The dashed line shows how young cinereous vultures fly from Mongolia to Korea each winter.</span></div><div class="sdetail" id="sdetail"></div></div></div>
   </section>
 
   <section class="s" id="donors">
@@ -637,10 +642,10 @@ procs.forEach((li,k)=>li.onclick=()=>cuffStep(k));$('#prevS').onclick=()=>cuffSt
 /* ---------- process (auto-advance) ---------- */
 const S=[
  {d:'Day 0 to 2',t:'Biopsy',p:'Your sealed cartridge travels to our lab, kept cold at 4 °C the whole way.',l:[['Size of the sample','about half a gram of muscle'],['Time in the post','less than two days'],['Temperature check','recorded every five minutes']],img:'05-capsule'},
- {d:'Day 2 to 5',t:'Isolation',p:'We separate out the muscle stem cells, called satellite cells, and check them for contamination.',l:[['What we test for','bacteria, mycoplasma and viruses'],['Your own cell line','started and labelled with your donor number']],img:'07-flasks'},
- {d:'Day 5 to 40',t:'Expansion',p:'The cells multiply in a nutrient liquid. Human cells can only divide a limited number of times, so each donor can only ever produce so much.',l:[['How many times the cells divide','about thirty'],['What they grow in','a nutrient liquid with no animal serum']],n:'One donor\'s cells usually grow into about 160 kg of tissue. This is served over roughly two hundred separate meals.'},
- {d:'Day 40 to 55',t:'Scale-up',p:'Your cells move into their own large tank. A label follows the tank through every transfer, so your cells are never mixed with anyone else\'s.',l:[['Where the cells grow','a tank used only for your cells'],['How we keep track','a label that moves with them every time']],img:'06-lab'},
- {d:'Day 55 to 65',t:'Differentiation',p:'The cells join together into muscle fibres on an edible frame and slowly thicken into solid tissue.',l:[['What the cells grow on','an edible frame made from plants'],['What comes out','solid muscle tissue']]},
+ {d:'Day 2 to 5',t:'Isolation',p:'We separate out the muscle stem cells, called satellite cells, and check them for contamination.',l:[['What we test for','bacteria, mycoplasma and viruses'],['Your own cell line','started and labelled with your donor number']],gfx:1},
+ {d:'Day 5 to 40',t:'Expansion',p:'The cells multiply in a nutrient liquid. Human cells can only divide a limited number of times, so each donor can only ever produce so much.',l:[['How many times the cells divide','about thirty'],['What they grow in','a nutrient liquid with no animal serum']],n:'One donor\'s cells usually grow into about 160 kg of tissue. This is served over roughly two hundred separate meals.',gfx:1},
+ {d:'Day 40 to 55',t:'Scale-up',p:'Your cells move into their own large tank. A label follows the tank through every transfer, so your cells are never mixed with anyone else\'s.',l:[['Where the cells grow','a tank used only for your cells'],['How we keep track','a label that moves with them every time']],gfx:1},
+ {d:'Day 55 to 65',t:'Differentiation',p:'The cells join together into muscle fibres on an edible frame and slowly thicken into solid tissue.',l:[['What the cells grow on','an edible frame made from plants'],['What comes out','solid muscle tissue']],gfx:1},
  {d:'Day 65 to 70',t:'Formulation',p:'We adjust the tissue to suit a vulture\'s diet and test it for drug residues before it can leave the lab.',l:[['What we add','fat and calcium, which wild vultures normally get from bones'],['Painkiller test','no trace may be found'],['Packaging','sealed airtight and labelled with your donor number and batch']],img:'08-feed'},
  {d:'Day 70 onwards',t:'Feeding',p:'The packs are sent cold to your feeding station. On feeding days they are laid out in the field together with the other food.',l:[['Feeding stations','seven, on four continents'],['What we tell you','the date, the station and the batch']],img:'09-feeding',n:'We send you a message every time one of your batches is served.'}];
 const rail=$('#rail'),stage=$('#stage');let si=0,playing=true,ptimer,t0=0;const DUR=6500;
@@ -648,7 +653,8 @@ rail.innerHTML=S.map((s,i)=>`<button data-i="${i}">${s.d}<b>${s.t}</b><i></i></b
 const rb=$$('#rail button');
 function showStage(i){si=i;rb.forEach((b,k)=>{b.classList.toggle('on',k===i);b.classList.toggle('done',k<i);b.querySelector('i').style.width=k<i?'100%':'0'});const s=S[i];
   stage.innerHTML=`<div class="fade"><span class="label">Stage ${i+1} of 7, ${s.d.toLowerCase()}</span><h2 style="margin-top:12px">${s.t}</h2><p class="mute">${s.p}</p><ul>${s.l.map(x=>`<li><span>${x[0]}</span><span>${x[1]}</span></li>`).join('')}</ul>${s.n?`<p class="note">${s.n}</p>`:''}</div>
-  <div class="fade">${s.img?`<div class="ph"><img src="img/${s.img}.jpg" alt=""></div>`:`<div class="empty">There is nothing to photograph at this stage. The cells are too small to see.</div>`}</div>`;t0=performance.now()}
+  <div class="fade">${s.gfx?'<div class="gfxslot"></div>':`<div class="ph"><img src="img/${s.img}.jpg" alt=""></div>`}</div>`;t0=performance.now();
+  if(s.gfx){const sl=stage.querySelector('.gfxslot');if(window.cultureMount)window.cultureMount(sl,i);else window.__pendingCulture=[sl,i]}}
 function tick(t){if(playing&&$('#details').classList.contains('on')){const k=(t-t0)/DUR;rb[si].querySelector('i').style.width=Math.min(k,1)*100+'%';if(k>=1)showStage((si+1)%7)}requestAnimationFrame(tick)}
 function setPlay(p){playing=p;$('#playbtn').textContent=p?'Pause':'Play';$('#playstate').textContent=p?'Playing through the stages':'Paused';if(p)t0=performance.now()-(parseFloat(rb[si].querySelector('i').style.width)||0)/100*DUR}
 rb.forEach(b=>b.onclick=()=>{showStage(+b.dataset.i);setPlay(false)});$('#playbtn').onclick=()=>setPlay(!playing);
@@ -658,7 +664,7 @@ showStage(0);requestAnimationFrame(tick);
 $('#slist').innerHTML=STATIONS.map((s,i)=>`<li><button data-i="${i}"><span>${s.n}, ${s.c}</span><small>${s.sp}</small></button></li>`).join('');
 $('#stn').innerHTML=STATIONS.map(s=>`<option>${s.n}, ${s.c} (${s.sp})</option>`).join('');
 const sb=$$('#slist button');
-function showStationInfo(i){sb.forEach((b,k)=>b.classList.toggle('on',k===i));const s=STATIONS[i],max=1410;
+window.showStationInfo=showStationInfo;function showStationInfo(i){if(window.globeFocus)window.globeFocus(i);sb.forEach((b,k)=>b.classList.toggle('on',k===i));const s=STATIONS[i],max=1410;
   $('#sdetail').innerHTML=`<div class="fade"><span class="label">${s.c}</span><h2 style="margin-top:10px">${s.n}</h2><p class="mute">${s.note}</p>
   <dl><div><dt>Birds fed here</dt><dd>${s.sp[0].toUpperCase()+s.sp.slice(1)}</dd></div><div><dt>When birds are present</dt><dd>${s.season}</dd></div><div><dt>Local population</dt><dd>${s.birds}</dd></div><div><dt>Part of Eternal Flight since</dt><dd>${s.since}</dd></div></dl>
   <div style="margin-top:24px;display:flex;justify-content:space-between" class="small"><span class="mute">Donors giving to this station</span><span>${s.donors.toLocaleString('en-US')}</span></div><div class="meter"><i id="sm"></i></div>
@@ -884,6 +890,139 @@ function loop(){requestAnimationFrame(loop);if(!visible)return;
   if(goal){cam.position.lerp(goal.p,.08);ctl.target.lerp(goal.t,.08);if(cam.position.distanceTo(goal.p)<.01)goal=null}
   ctl.update();renderer.render(scene,cam)}
 (document.fonts?document.fonts.ready:Promise.resolve()).then(()=>{draw();$('#cfgload').remove();loop();setTimeout(()=>ctl.autoRotate=true,4000)});
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+const DPR=Math.min(devicePixelRatio,2);
+function mkRenderer(){const r=new THREE.WebGLRenderer({antialias:true,alpha:true});r.setPixelRatio(DPR);r.outputColorSpace=THREE.SRGBColorSpace;r.domElement.style.cssText='position:absolute;inset:0;width:100%;height:100%';return r}
+function watch(el,fn){let v=false;new IntersectionObserver(e=>v=e[0].isIntersecting).observe(el);return()=>v}
+
+/* =============================== GLOBE =============================== */
+(function(){
+const box=document.getElementById('globe');if(!box)return;
+const R=1,r=mkRenderer();box.appendChild(r.domElement);r.domElement.style.cursor='grab';
+const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(32,1,.1,50);cam.position.set(0,0,4.2);
+const ctl=new OrbitControls(cam,r.domElement);ctl.enablePan=false;ctl.enableZoom=false;ctl.enableDamping=true;ctl.rotateSpeed=.5;
+const world=new THREE.Group();scene.add(world);
+// dark core + faint rim
+world.add(new THREE.Mesh(new THREE.SphereGeometry(R*.995,64,64),new THREE.MeshBasicMaterial({color:0x080808})));
+const rim=new THREE.Mesh(new THREE.SphereGeometry(R*1.12,64,64),new THREE.ShaderMaterial({transparent:true,side:THREE.BackSide,depthWrite:false,
+  vertexShader:'varying vec3 n;void main(){n=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+  fragmentShader:'varying vec3 n;void main(){float i=pow(max(0.,.6-dot(n,vec3(0,0,1.))),4.);gl_FragColor=vec4(vec3(1.),i*.35);}'}));scene.add(rim);
+const ll=(lat,lon,h=1)=>{const p=(90-lat)*Math.PI/180,t=(lon+180)*Math.PI/180;return new THREE.Vector3(-R*h*Math.sin(p)*Math.cos(t),R*h*Math.cos(p),R*h*Math.sin(p)*Math.sin(t))};
+
+// land dots from world-atlas topojson (decoded by hand, no extra library)
+fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json').then(x=>x.json()).then(topo=>{
+  const {scale:[sx,sy],translate:[tx,ty]}=topo.transform;
+  const arcs=topo.arcs.map(a=>{let x=0,y=0;return a.map(([dx,dy])=>{x+=dx;y+=dy;return[x*sx+tx,y*sy+ty]})});
+  const arc=i=>i>=0?arcs[i]:arcs[~i].slice().reverse();
+  const ring=idx=>{let out=[];idx.forEach((i,k)=>{const a=arc(i);out=out.concat(k?a.slice(1):a)});return out};
+  const W=2048,H=1024,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');g.fillStyle='#fff';
+  const geoms=topo.objects.land.geometries||[topo.objects.land];
+  geoms.forEach(gm=>{const polys=gm.type==='MultiPolygon'?gm.arcs:[gm.arcs];polys.forEach(poly=>{g.beginPath();poly.forEach(rg=>{
+    let pts=ring(rg),prev=pts[0][0],off=0;const un=pts.map(([lo,la])=>{let d=lo+off-prev;if(d>180)off-=360;else if(d<-180)off+=360;prev=lo+off;return[lo+off,la]});
+    const span=Math.max(...un.map(p=>p[0]))-Math.min(...un.map(p=>p[0]));if(span>340)return; // Antarctica, handled below
+    [-360,0,360].forEach(o=>{un.forEach(([lo,la],k)=>{const x=(lo+o+180)/360*W,y=(90-la)/180*H;k?g.lineTo(x,y):g.moveTo(x,y)});g.closePath()})});g.fill('evenodd')})});
+  g.fillRect(0,H*(150/180),W,H);
+  const d=g.getImageData(0,0,W,H).data,pos=[];
+  for(let la=-84;la<=84;la+=1.15){const step=1.15/Math.max(.2,Math.cos(la*Math.PI/180));for(let lo=-180;lo<180;lo+=step){
+    const x=Math.floor((lo+180)/360*W),y=Math.floor((90-la)/180*H);if(d[(y*W+x)*4]>128){const v=ll(la,lo,1.002);pos.push(v.x,v.y,v.z)}}}
+  const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
+  world.add(new THREE.Points(geo,new THREE.PointsMaterial({color:0x8e8e89,size:.011,sizeAttenuation:true})));
+}).catch(()=>{});
+
+// stations
+const ST=[[45.7,108.7],[39.85,-6.0],[44.2,3.2],[41.5,25.9],[27.5,84.4],[-25.8,27.6],[38.2,127.3]];
+const dotGeo=new THREE.SphereGeometry(.018,16,16),ringGeo=new THREE.RingGeometry(.03,.036,48);
+const markers=ST.map(([la,lo],i)=>{const p=ll(la,lo,1.004);const m=new THREE.Mesh(dotGeo,new THREE.MeshBasicMaterial({color:0xf0f0ec}));m.position.copy(p);m.userData.i=i;world.add(m);
+  const rg=new THREE.Mesh(ringGeo,new THREE.MeshBasicMaterial({color:0xf0f0ec,transparent:true,side:THREE.DoubleSide}));rg.position.copy(p);rg.lookAt(p.clone().multiplyScalar(2));world.add(rg);m.userData.ring=rg;return m});
+
+// migration arc: Ikh Nart (breeding) -> Cheorwon (wintering)
+function arcLine(a,b){const A=ll(...a),B=ll(...b),pts=[];for(let i=0;i<=80;i++){const t=i/80,p=A.clone().lerp(B,t).normalize().multiplyScalar(R*(1+.18*Math.sin(Math.PI*t)));pts.push(p)}
+  const geo=new THREE.BufferGeometry().setFromPoints(pts);const l=new THREE.Line(geo,new THREE.LineDashedMaterial({color:0xf0f0ec,dashSize:.03,gapSize:.025,transparent:true,opacity:.8}));l.computeLineDistances();world.add(l);return l}
+const mig=arcLine(ST[0],ST[6]);
+// a small travelling dot along the arc
+const traveler=new THREE.Mesh(new THREE.SphereGeometry(.012,12,12),new THREE.MeshBasicMaterial({color:0xffffff}));world.add(traveler);
+const migPts=mig.geometry.attributes.position;
+
+let sel=6,goalQ=null;
+window.globeFocus=i=>{sel=i;const [la,lo]=ST[i];const v=ll(la,lo);
+  const yaw=-Math.atan2(v.x,v.z),pitch=la*Math.PI/180*.85;
+  goalQ=new THREE.Quaternion().setFromEuler(new THREE.Euler(pitch,yaw,0,'XYZ'));ctl.reset()};
+const ray=new THREE.Raycaster(),mouse=new THREE.Vector2();let down=null;
+r.domElement.addEventListener('pointerdown',e=>{down=[e.clientX,e.clientY];goalQ=null;r.domElement.style.cursor='grabbing'});
+r.domElement.addEventListener('pointerup',e=>{r.domElement.style.cursor='grab';if(!down||Math.hypot(e.clientX-down[0],e.clientY-down[1])>4)return;
+  const b=r.domElement.getBoundingClientRect();mouse.set((e.clientX-b.left)/b.width*2-1,-(e.clientY-b.top)/b.height*2+1);ray.setFromCamera(mouse,cam);ray.params.Mesh={threshold:.05};
+  const hit=ray.intersectObjects(markers.map(m=>m.userData.ring).concat(markers))[0];if(hit){const o=hit.object.userData.i??markers.findIndex(m=>m.userData.ring===hit.object);if(o>=0&&window.showStationInfo)window.showStationInfo(o)}});
+function size(){const w=box.clientWidth,h=box.clientHeight;r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}
+new ResizeObserver(size).observe(box);size();
+const vis=watch(box);let t=0;
+(function loop(){requestAnimationFrame(loop);if(!vis())return;t+=.016;
+  if(goalQ){world.quaternion.slerp(goalQ,.06);if(world.quaternion.angleTo(goalQ)<.002)goalQ=null}
+  markers.forEach((m,i)=>{const on=i===sel,k=(t*.8+i*.3)%1;m.scale.setScalar(on?1.8:1);const rg=m.userData.ring;rg.scale.setScalar(on?1+k*2.2:1+k*1.2);rg.material.opacity=(on?.9:.35)*(1-k)});
+  mig.material.dashOffset=-t*.15;const n=migPts.count,k=Math.floor((t*18)%n);traveler.position.fromBufferAttribute(migPts,k);
+  ctl.update();r.render(scene,cam)})();
+setTimeout(()=>window.globeFocus(sel),50);
+})();
+
+/* =============================== CULTURE =============================== */
+(function(){
+const r=mkRenderer(),holder=document.createElement('div');holder.className='gfx';holder.appendChild(r.domElement);
+const cap=document.createElement('div');cap.className='gfx-cap';holder.appendChild(cap);
+const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(34,4/3,.1,60);cam.position.set(0,.6,7.5);cam.lookAt(0,0,0);
+scene.add(new THREE.HemisphereLight(0xffffff,0x111111,1.1));const L=new THREE.DirectionalLight(0xffffff,2.2);L.position.set(3,4,5);scene.add(L);
+const L2=new THREE.DirectionalLight(0xffffff,.8);L2.position.set(-4,-1,-3);scene.add(L2);
+const N=420;
+const cells=new THREE.InstancedMesh(new THREE.SphereGeometry(.12,20,16),new THREE.MeshPhysicalMaterial({color:0xe8e6e0,roughness:.35,transmission:.25,thickness:.4,clearcoat:.4}),N);
+cells.instanceMatrix.setUsage(THREE.DynamicDrawUsage);scene.add(cells);
+const nuc=new THREE.InstancedMesh(new THREE.SphereGeometry(.045,10,8),new THREE.MeshBasicMaterial({color:0x2a2a2a}),N);scene.add(nuc);
+// tank for scale-up
+const tank=new THREE.Group();
+tank.add(new THREE.Mesh(new THREE.CylinderGeometry(1.7,1.7,3.6,64,1,true),new THREE.MeshPhysicalMaterial({color:0xffffff,transparent:true,opacity:.08,roughness:.05,side:THREE.DoubleSide})));
+[1.8,-1.8].forEach(y=>{const e=new THREE.Mesh(new THREE.TorusGeometry(1.7,.03,8,96),new THREE.MeshStandardMaterial({color:0xbfbfbf,metalness:.9,roughness:.3}));e.rotation.x=Math.PI/2;e.position.y=y;tank.add(e)});
+const shaft=new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,3.4,8),new THREE.MeshStandardMaterial({color:0x9a9a9a,metalness:.9,roughness:.3}));tank.add(shaft);
+const imp=new THREE.Mesh(new THREE.BoxGeometry(1.1,.04,.18),new THREE.MeshStandardMaterial({color:0x9a9a9a,metalness:.9}));imp.position.y=-1.2;tank.add(imp);
+const imp2=imp.clone();imp2.rotation.y=Math.PI/2;tank.add(imp2);
+tank.visible=false;scene.add(tank);
+// tissue lump for isolation
+const lump=new THREE.Mesh(new THREE.IcosahedronGeometry(1.1,4),new THREE.MeshStandardMaterial({color:0x6e4a46,roughness:.8,flatShading:false}));
+{const p=lump.geometry.attributes.position,v=new THREE.Vector3();for(let i=0;i<p.count;i++){v.fromBufferAttribute(p,i);v.multiplyScalar(1+.12*Math.sin(v.x*3.1)*Math.cos(v.y*2.7)+.06*Math.sin(v.z*7));p.setXYZ(i,v.x,v.y*.75,v.z)}lump.geometry.computeVertexNormals()}
+lump.position.set(-1.2,0,0);scene.add(lump);
+
+const cur=[],tgt=[],scl=[],tscl=[],stretch=[];for(let i=0;i<N;i++){cur.push(new THREE.Vector3(0,0,-30));tgt.push(new THREE.Vector3(0,0,-30));scl.push(0);tscl.push(0);stretch.push(1)}
+const rnd=(a,b)=>a+Math.random()*(b-a);
+const inBall=(rad)=>{let v;do{v=new THREE.Vector3(rnd(-1,1),rnd(-1,1),rnd(-1,1))}while(v.length()>1);return v.multiplyScalar(rad)};
+let stage=-1,t0=0,born=0;
+const TXT=['Satellite cells being separated from your sample','Each cell divides again and again','Your cells growing in their own tank','Cells joining into muscle fibres'];
+function setStage(s){stage=s;t0=performance.now();cap.textContent=TXT[s-1]||'';
+  tank.visible=s===3;lump.visible=s===1;
+  for(let i=0;i<N;i++){tscl[i]=0;stretch[i]=1}
+  if(s===1){for(let i=0;i<14;i++){cur[i].copy(lump.position).add(inBall(.6));tgt[i].set(rnd(.4,2.6),rnd(-1.3,1.3),rnd(-.8,.8));tscl[i]=1;scl[i]=.2}born=14}
+  if(s===2){born=8;for(let i=0;i<N;i++){cur[i].copy(inBall(.6));tgt[i].copy(cur[i]);tscl[i]=i<8?1:0;scl[i]=i<8?1:0}}
+  if(s===3){born=N;for(let i=0;i<N;i++){const a=rnd(0,6.28),rr=Math.sqrt(Math.random())*1.45;cur[i].set(Math.cos(a)*rr,rnd(-1.6,1.6),Math.sin(a)*rr);tgt[i].copy(cur[i]);tscl[i]=i<280?.55:0;scl[i]=tscl[i];cur[i].a=a;cur[i].r=rr}}
+  if(s===4){born=N;const rows=7,cols=60;for(let i=0;i<N;i++){const row=i%rows,col=Math.floor(i/rows)%cols;cur[i].copy(inBall(2.2));tgt[i].set(-3.1+col*.105,-1.0+row*.34+Math.sin(col*.3)*.04,(row%2)*.15-.07);tscl[i]=.85;scl[i]=.85}}
+}
+const m4=new THREE.Matrix4(),q=new THREE.Quaternion(),sv=new THREE.Vector3(),pv=new THREE.Vector3();
+function frame(){const t=(performance.now()-t0)/1000;
+  if(stage===2){const want=Math.min(N,Math.floor(8*Math.pow(2,t/1.6)));while(born<want){const p=Math.floor(Math.random()*born);cur[born].copy(cur[p]);tgt[born].copy(cur[p]).add(inBall(.35));tscl[born]=1;scl[born]=.3;born++}
+    const rad=.6+Math.cbrt(born)*.32;for(let i=0;i<born;i++){if(tgt[i].length()>rad)tgt[i].setLength(rad)}if(born>=N&&t>14)setStage(2)}
+  if(stage===3){for(let i=0;i<N;i++){cur[i].a+=.006+.004*(1.5-cur[i].r);tgt[i].set(Math.cos(cur[i].a)*cur[i].r,tgt[i].y+Math.sin(t+i)*.002,Math.sin(cur[i].a)*cur[i].r)}imp.rotation.y+=.05;imp2.rotation.y+=.05}
+  if(stage===4){const k=Math.min(1,Math.max(0,(t-2.2)/3));for(let i=0;i<N;i++)stretch[i]=1+k*1.6}
+  for(let i=0;i<N;i++){cur[i].lerp(tgt[i],stage===3?.2:stage===4?.09:.06);scl[i]+=(tscl[i]-scl[i])*.08;
+    q.identity();sv.set(scl[i]*stretch[i],scl[i]*(stretch[i]>1?.8:1),scl[i]);m4.compose(cur[i],q,sv);cells.setMatrixAt(i,m4);
+    sv.set(scl[i],scl[i],scl[i]);pv.copy(cur[i]);pv.z+=.07*scl[i];m4.compose(pv,q,sv);nuc.setMatrixAt(i,m4)}
+  cells.instanceMatrix.needsUpdate=true;nuc.instanceMatrix.needsUpdate=true;
+  scene.rotation.y=stage===4?Math.sin(t*.2)*.12:stage===3?.15:Math.sin(t*.25)*.25;
+  if(stage===1)lump.rotation.y+=.003;
+  r.render(scene,cam)}
+function size(){const w=holder.clientWidth,h=holder.clientHeight;if(!w)return;r.setSize(w,h,false);cam.aspect=w/h;cam.position.z=w/h<1.2?9.5:7.5;cam.updateProjectionMatrix()}
+new ResizeObserver(size).observe(holder);
+const vis=watch(holder);(function loop(){requestAnimationFrame(loop);if(stage>0&&vis())frame()})();
+window.cultureMount=(slot,s)=>{slot.appendChild(holder);size();setStage(s)};
+if(window.__pendingCulture){window.cultureMount(...window.__pendingCulture)}
+})();
 </script>
 
 </body>
