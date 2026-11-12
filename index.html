@@ -180,6 +180,25 @@ body.landing .navlink{display:block}
 .st.s2::before,.st.s3::before{background:linear-gradient(90deg,currentColor 50%,transparent 50%)}
 .scroll{overflow-x:auto}
 @media(max-width:700px){.hide-m{display:none}.board .top{grid-template-columns:1fr 1fr}}
+/* ---------- flap board ---------- */
+.fb{--tw:17.75px;background:#050505;border:1px solid #232323;padding:26px 26px 18px;font-family:"IBM Plex Mono",monospace;box-shadow:0 30px 80px rgba(0,0,0,.6) inset}
+.fb-top{display:flex;gap:40px;flex-wrap:wrap;padding-bottom:22px;margin-bottom:12px;border-bottom:1px solid #1d1d1d}
+.fb-stat span{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin-bottom:8px}
+.fb-stat .t{font-size:24px}
+.fb-scroll{overflow-x:auto}
+.fb-grid{min-width:max-content}
+.fr{display:flex;gap:22px;padding:4px 0}
+.fh{padding-bottom:10px}
+.fl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.fc{display:flex;gap:2px}
+.t{display:inline-flex;align-items:center;justify-content:center;width:1.05em;height:1.6em;font-size:15px;font-weight:500;color:#cfcfca;background:linear-gradient(180deg,#1b1b1b 0,#151515 50%,#111 50%,#0d0d0d 100%);border-radius:2px;position:relative;box-shadow:0 1px 0 #000,inset 0 1px 0 rgba(255,255,255,.04);transform-origin:50% 50%}
+.t::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.9)}
+.t.f{animation:flap .11s ease-in}
+@keyframes flap{0%{transform:perspective(200px) rotateX(-80deg);filter:brightness(1.6)}100%{transform:none}}
+.fr.done .fc:last-child .t,.fr.done .fc:first-child .t{color:#fff;text-shadow:0 0 8px rgba(255,255,255,.35)}
+.fb-foot{margin-top:16px;padding-top:14px;border-top:1px solid #1d1d1d;font-size:11px;color:var(--dim);max-width:none}
+@media(max-width:900px){.hm2{display:none!important}}
+@media(max-width:640px){.hm{display:none!important}.t{font-size:12px}.fb{padding:16px;--tw:14.6px}}
 /* ---------- track ---------- */
 .track{display:grid;grid-template-columns:5fr 7fr;gap:56px;align-items:start}
 .track form{display:flex}
@@ -386,14 +405,15 @@ label{display:block;margin-bottom:6px}
 <!-- ================= 03 QUEUE ================= -->
 <main class="panel" id="p-queue"><div class="wrap">
   <div class="head rv"><span class="mono">Donor queue</span><h2>People who are donating right now.</h2></div>
-  <div class="board rv">
-    <div class="top">
-      <div><span>Waiting for a kit</span><b id="q-wait">1,284</b></div>
-      <div><span>Cells growing in the lab</span><b id="q-cult">418</b></div>
-      <div><span>Served to vultures this month</span><b id="q-fed">312</b></div>
-      <div class="live">LIVE</div>
+  <div class="fb rv">
+    <div class="fb-top">
+      <div class="fb-stat"><span>Waiting for a kit</span><div class="fc" id="st-w"></div></div>
+      <div class="fb-stat"><span>Cells growing in the lab</span><div class="fc" id="st-c"></div></div>
+      <div class="fb-stat"><span>Served this month</span><div class="fc" id="st-f"></div></div>
+      <div class="fb-stat" style="margin-left:auto"><span class="live">Live · local time</span><div class="fc" id="st-t"></div></div>
     </div>
-    <div class="scroll"><table class="tbl"><thead><tr><th>Donor number</th><th>Name</th><th class="hide-m">Country</th><th class="hide-m">Sample taken from</th><th>Feeding station</th><th>Current status</th></tr></thead><tbody id="q-body"></tbody></table></div>
+    <div class="fb-scroll"><div class="fb-grid" id="fb"></div></div>
+    <p class="fb-foot">Updated every few seconds. Names are shortened to protect donors' privacy.</p>
   </div>
 </div></main>
 
@@ -568,11 +588,25 @@ const sp=['cinereous vultures','cinereous and griffon vultures','griffon vulture
 const pick=a=>a[Math.floor(Math.random()*a.length)];
 let seq=4710,rows=[];const mk=s=>({id:'EF-2026-0'+(++seq),n:pick(first)+' '+pick(last),c:pick(ctry),si:pick(site),st:pick(stn),s});
 for(let i=0;i<10;i++)rows.push(mk(Math.floor(Math.random()*5)));
-const tb=$('#q-body');
-const render=f=>tb.innerHTML=rows.map((r,i)=>`<tr class="${i===f?'flash':''}"><td>${r.id}</td><td>${r.n}</td><td class="hide-m">${r.c}</td><td class="hide-m">${r.si}</td><td>${r.st}</td><td><span class="st s${r.s}">${ST[r.s]}</span></td></tr>`).join('');
-render();
-let W=1284,C=418,F=312;const q=(id,v)=>$(id).textContent=v.toLocaleString('en-US');
-setInterval(()=>{if(Math.random()<.45){rows.unshift(mk(0));rows.length=10;W++;render(0)}else{const i=Math.floor(Math.random()*rows.length);if(rows[i].s<4){rows[i].s++;if(rows[i].s===2){C++;W--}if(rows[i].s===4){F++;C--}}render(i)}q('#q-wait',W);q('#q-cult',C);q('#q-fed',F)},2600);
+const ST2=['KIT SENT','SAMPLE RECEIVED','CELLS GROWING','BEING PREPARED','SERVED TO VULTURES'];
+const COLS=[['Donor number',13,''],['Name',12,''],['From',4,'hm'],['Feeding station',17,'hm2'],['Status',18,'']];
+const CH='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-';
+const fb=$('#fb');
+function tiles(n){return Array.from({length:n},()=>'<span class="t" data-c=" ">&nbsp;</span>').join('')}
+fb.innerHTML='<div class="fr fh">'+COLS.map(c=>`<div class="fl ${c[2]}" style="width:calc(${c[1]} * var(--tw))">${c[0]}</div>`).join('')+'</div>'+
+  Array.from({length:10},()=>'<div class="fr">'+COLS.map(c=>`<div class="fc ${c[2]}">${tiles(c[1])}</div>`).join('')+'</div>').join('');
+function flipTo(el,ch){if(el.dataset.c===ch)return;el.dataset.c=ch;let k=0,n=3+Math.floor(Math.random()*7);clearInterval(el._t);
+  el._t=setInterval(()=>{el.classList.remove('f');void el.offsetWidth;el.classList.add('f');
+    if(++k>=n){clearInterval(el._t);el.innerHTML=ch===' '?'&nbsp;':ch}else el.textContent=CH[Math.floor(Math.random()*CH.length)]},55)}
+function setCell(cell,txt,len){txt=(txt||'').toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g,'').padEnd(len).slice(0,len);[...cell.children].forEach((t,i)=>setTimeout(()=>flipTo(t,txt[i]),i*18))}
+function rowVals(r){return[r.id,r.n,r.c,r.st,ST2[r.s]]}
+function paint(){[...fb.querySelectorAll('.fr:not(.fh)')].forEach((row,i)=>{const r=rows[i];[...row.children].forEach((c,k)=>setCell(c,rowVals(r)[k],COLS[k][1]));row.classList.toggle('done',r.s===4)})}
+function setNum(id,v,len){setCell($(id),String(v).padStart(len,' '),len)}
+$('#st-w').innerHTML=tiles(5);$('#st-c').innerHTML=tiles(5);$('#st-f').innerHTML=tiles(5);$('#st-t').innerHTML=tiles(5);
+let W=1284,C=418,F=312;
+function stats(){setNum('#st-w',W,5);setNum('#st-c',C,5);setNum('#st-f',F,5);const d=new Date();setCell($('#st-t'),String(d.getHours()).padStart(2,'0')+'-'+String(d.getMinutes()).padStart(2,'0'),5)}
+paint();stats();
+setInterval(()=>{if(Math.random()<.45){rows.unshift(mk(0));rows.length=10;W++}else{const i=Math.floor(Math.random()*rows.length);if(rows[i].s<4){rows[i].s++;if(rows[i].s===2){C++;W--}if(rows[i].s===4){F++;C--}}}paint();stats()},3400);
 
 // ---------- track ----------
 $('#try').onclick=()=>{$('#tid').value='EF-2026-00413';$('#trackf').requestSubmit()};
