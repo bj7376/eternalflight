@@ -89,6 +89,16 @@ a{color:inherit}
 .pitch li p{color:var(--mute);font-size:14px}
 .cta{margin-top:56px;display:flex;gap:10px;flex-wrap:wrap}
 @media(max-width:860px){.pitch{grid-template-columns:1fr}.pitch-side{position:static}}
+.hero-full{position:relative;height:calc(100vh - 60px);min-height:560px;margin:0 0 110px;overflow:hidden;display:flex;align-items:flex-end}
+.hero-full>img{position:absolute;inset:0;filter:grayscale(1) contrast(1.05) brightness(.82);transform:scale(1.04);animation:heroIn 2.4s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes heroIn{to{transform:none}}
+.hero-full::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,11,11,.55) 0%,rgba(11,11,11,0) 30%,rgba(11,11,11,0) 45%,rgba(11,11,11,.85) 100%)}
+.hero-full .wrap{position:relative;z-index:2;width:100%;padding-bottom:64px;display:flex;justify-content:flex-end}
+.hero-full .wrap>div{max-width:600px}
+.hero-full .mono{color:#d8d8d4}
+.hero-full::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(11,11,11,0) 35%,rgba(11,11,11,.6) 100%)}
+.hero-full h1{margin:20px 0 24px;max-width:13ch}
+.hero-full p{font-size:16px;color:#e4e4e0;max-width:56ch}
 /* ---------- how ---------- */
 .step{display:flex;flex-direction:column}.step h3{margin-top:14px}.step .ph{aspect-ratio:4/5;margin-top:auto;padding-top:0}.step p{margin-bottom:24px;min-height:96px}.cols>div.step{padding:20px 14px 0 14px}.cols>div.step:first-child{padding-left:0;padding-right:28px}.cols>div.step:last-child{padding-right:0;padding-left:28px}
 .step p{color:var(--mute);font-size:14px}
@@ -237,22 +247,23 @@ label{display:block;margin-bottom:6px}
 </div></div>
 
 <!-- ================= 00 HOME ================= -->
-<main class="panel" id="p-home"><div class="wrap">
-  <section class="hero">
-    <div class="rv">
+<main class="panel" id="p-home" style="padding-top:0">
+  <section class="hero-full">
+    <img src="img/15-hero.jpg" alt="The Eternal Flight sampling cuff and cartridge on a rock above a snowy valley, with a vulture flying overhead">
+    <div class="wrap"><div class="rv">
       <span class="mono">A tissue donation service for wild vultures</span>
       <h1>Become part of something that flies.</h1>
       <p>We take a tiny sample of muscle from your arm and grow it in a lab until there is enough to feed wild vultures. We then send it to feeding stations on four continents. Each one is close to a place where vultures breed or spend the winter, and where they can no longer find enough food on their own.</p>
-    </div>
-    <div class="rv"><div class="ph"><img src="img/01-hero.jpg" alt="Cinereous vulture in flight"></div><p class="cap">A cinereous vulture flying over the hills of Cheorwon, South Korea. Its wings are almost three metres across, which makes it one of the largest birds of prey in the world.</p></div>
+    </div></div>
   </section>
+  <div class="wrap">
 
   <div class="head rv"><span class="mono">Why vultures need help</span><h2>Vultures live on what we leave behind. These days we leave them almost nothing.</h2></div>
 
   <article class="story rv">
     <div><span class="mono">Part 1 of 3</span><h3 style="margin-top:10px">A medicine that worked too well</h3></div>
     <div><p>In the 1990s, vets across South Asia began giving cattle diclofenac, a cheap anti-inflammatory drug. When the cattle died their bodies were left in the open, as they always had been, and vultures ate them.</p><p>The drug was harmless to cows and fatal to vultures. It destroyed their kidneys within days. By the time scientists traced the cause, some species had lost almost all of their population.</p><p class="src">Oaks, J.L. et al. (2004). Diclofenac residues as the cause of vulture population decline in Pakistan. Nature, 427, 630–633.</p></div>
-    <div class="ph"><img src="img/09-feeding.jpg" alt="Vultures feeding"></div>
+    <div class="ph"><img src="img/01-hero.jpg" alt="A cinereous vulture in flight"></div>
   </article>
 
   <article class="story rv">
@@ -284,21 +295,9 @@ label{display:block;margin-bottom:6px}
 
 <!-- ================= 01 HOW ================= -->
 <main class="panel" id="p-how"><div class="wrap">
-  <section class="omni rv">
-    <div class="omni-text">
-      <span class="mono">How it works</span>
-      <h2 style="margin-top:18px">Somewhere above them, a small part of each of them is flying.</h2>
-      <p class="mute">A birder on a frozen riverbank. A father and daughter on a hill. A woman laughing with her neighbours after a long morning in the fields. They have never met. What they share is a small mark on the arm and a few hundred meals served this year to birds they will probably never see up close.</p>
-    </div>
-    <div class="omni-grid">
-      <figure><div class="ph"><img src="img/13a.jpg" alt=""></div><figcaption class="cap">Ha-eun, 34, lives in Seoul and donates to the Cheorwon station in Korea.</figcaption></figure>
-      <figure><div class="ph"><img src="img/13b.jpg" alt=""></div><figcaption class="cap">Min-jun, 41, lives in Busan and donates to the Ikh Nart station in Mongolia.</figcaption></figure>
-      <figure><div class="ph"><img src="img/13c.jpg" alt=""></div><figcaption class="cap">Soon-ja, 63, donor number 018427, donates to the Chitwan station in Nepal.</figcaption></figure>
-    </div>
-  </section>
 
   <section class="box rv">
-    <div class="head" style="margin-bottom:40px"><span class="mono">In the box</span><div><h2>It starts with a box on your doorstep.</h2><p class="mute">Everything you need comes in one package. There is nothing to book and nowhere to go. You open it at your own table, whenever you are ready.</p></div></div>
+    <div class="head" style="margin-bottom:40px"><span class="mono">How it works · In the box</span><div><h2>It starts with a box on your doorstep.</h2><p class="mute">Everything you need comes in one package. There is nothing to book and nowhere to go. You open it at your own table, whenever you are ready.</p></div></div>
     <div class="ph" style="aspect-ratio:16/8"><img src="img/12-unboxing.jpg" alt="Opening the Eternal Flight donation kit"></div>
     <div class="cols" style="grid-template-columns:repeat(4,1fr);margin-top:28px;border-top:0">
       <div><span class="mono">A</span><h3 style="margin-top:8px">Sampling cuff</h3><p class="mute" style="font-size:13px">Takes the sample and then applies your mark. You use it only once.</p></div>
@@ -344,6 +343,18 @@ label{display:block;margin-bottom:6px}
     </div>
     <div><div class="screen" id="screen"></div><div class="ph" style="aspect-ratio:3/2;margin-top:20px"><img src="img/03-cuff.jpg" alt=""></div></div>
   </div>
+  <section class="omni rv" style="margin:120px 0 0;border-top:1px solid var(--hard);padding-top:30px">
+    <div class="omni-text">
+      <span class="mono">Our donors</span>
+      <h2 style="margin-top:18px">Somewhere above them, a small part of each of them is flying.</h2>
+      <p class="mute">A birder on a frozen riverbank. A father and daughter on a hill. A woman laughing with her neighbours after a long morning in the fields. They have never met. What they share is a small mark on the arm and a few hundred meals served this year to birds they will probably never see up close.</p>
+    </div>
+    <div class="omni-grid">
+      <figure><div class="ph"><img src="img/13a.jpg" alt=""></div><figcaption class="cap">Ha-eun, 34, lives in Seoul and donates to the Cheorwon station in Korea.</figcaption></figure>
+      <figure><div class="ph"><img src="img/13b.jpg" alt=""></div><figcaption class="cap">Min-jun, 41, lives in Busan and donates to the Ikh Nart station in Mongolia.</figcaption></figure>
+      <figure><div class="ph"><img src="img/13c.jpg" alt=""></div><figcaption class="cap">Soon-ja, 63, donor number 018427, donates to the Chitwan station in Nepal.</figcaption></figure>
+    </div>
+  </section>
 </div></main>
 
 <!-- ================= 02 PROCESS ================= -->
