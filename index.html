@@ -109,6 +109,17 @@ a{color:inherit}
 .keep{display:grid;grid-template-columns:5fr 7fr;gap:48px;align-items:center;border-top:1px solid var(--hard);padding:30px 0 96px}
 .keep .tatt .ph{aspect-ratio:3/4}
 @media(max-width:860px){.keep{grid-template-columns:1fr}}
+.omni{margin-bottom:120px}
+.omni-text{display:grid;grid-template-columns:3fr 9fr;gap:32px;margin-bottom:40px}
+.omni-text .mono{padding-top:12px}
+.omni-text h2{max-width:20ch}
+.omni-text p{grid-column:2}
+.omni-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.omni-grid .ph{aspect-ratio:2/3}
+.omni-grid figure:nth-child(2){transform:translateY(40px)}
+.omni-grid img{filter:grayscale(1) contrast(1.05) brightness(.92)}
+.box{margin-bottom:110px}
+@media(max-width:860px){.omni-text{grid-template-columns:1fr}.omni-text p{grid-column:1}.omni-grid{grid-template-columns:1fr}.omni-grid figure:nth-child(2){transform:none}}
 /* ---------- process ---------- */
 .rail{display:flex;border-top:1px solid var(--hard);border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
 .rail button{flex:1;min-width:120px;background:none;border:0;border-right:1px solid var(--line);color:var(--mute);text-align:left;padding:16px 14px;cursor:pointer;font:11px "IBM Plex Mono",monospace;letter-spacing:.05em;text-transform:uppercase;position:relative;transition:color .2s}
@@ -271,9 +282,38 @@ label{display:block;margin-bottom:6px}
 
 <!-- ================= 01 HOW ================= -->
 <main class="panel" id="p-how"><div class="wrap">
-  <div class="ph rv" style="aspect-ratio:16/8;margin-bottom:14px"><img src="img/12-unboxing.jpg" alt="Opening the Eternal Flight donation kit"></div>
-  <p class="cap rv" style="margin-bottom:72px">Fig. 02 — The donation kit as it arrives at your door.</p>
-  <div class="keep rv">
+  <section class="omni rv">
+    <div class="omni-text">
+      <span class="mono">01 · How it works</span>
+      <h2 style="margin-top:18px">Somewhere above them, a little of them is flying.</h2>
+      <p class="mute">A birder on a frozen riverbank. A father and daughter on a hill. A woman laughing with her neighbours after a long morning in the fields. They have never met. What they share is a small mark on the arm and a few hundred meals served this winter to birds they will probably never see up close.</p>
+    </div>
+    <div class="omni-grid">
+      <figure><div class="ph"><img src="img/13a.jpg" alt=""></div><figcaption class="cap">Ha-eun, 34 · donor since 2025 · Cheorwon</figcaption></figure>
+      <figure><div class="ph"><img src="img/13b.jpg" alt=""></div><figcaption class="cap">Min-jun, 41 · donor since 2026 · Paju</figcaption></figure>
+      <figure><div class="ph"><img src="img/13c.jpg" alt=""></div><figcaption class="cap">Soon-ja, 63 · donor No. 018427 · Goseong</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="box rv">
+    <div class="head" style="margin-bottom:40px"><span class="mono">In the box</span><div><h2>It starts with a box on your doorstep.</h2><p class="mute">Everything you need comes in one package. There is nothing to book and nowhere to go. You open it at your own table, whenever you are ready.</p></div></div>
+    <div class="ph" style="aspect-ratio:16/8"><img src="img/12-unboxing.jpg" alt="Opening the Eternal Flight donation kit"></div>
+    <div class="cols" style="grid-template-columns:repeat(4,1fr);margin-top:28px;border-top:0">
+      <div><span class="mono">A</span><h3 style="margin-top:8px">Sampling cuff</h3><p class="mute" style="font-size:13px">Takes the sample and applies your mark. Single use.</p></div>
+      <div><span class="mono">B</span><h3 style="margin-top:8px">Specimen cartridge</h3><p class="mute" style="font-size:13px">Clicks into the cuff and seals itself shut.</p></div>
+      <div><span class="mono">C</span><h3 style="margin-top:8px">Antiseptic wipe</h3><p class="mute" style="font-size:13px">For cleaning your arm before you begin.</p></div>
+      <div><span class="mono">D</span><h3 style="margin-top:8px">Return capsule</h3><p class="mute" style="font-size:13px">Keeps the cartridge cold on its way back. Postage is paid.</p></div>
+    </div>
+  </section>
+
+  <div class="head rv"><span class="mono">Three steps</span><div><h2>Ten minutes at home.</h2><p class="mute">Once the box is open there are only three things to do. The cuff handles the hard parts and you never see a needle.</p></div></div>
+  <div class="cols rv" style="grid-template-columns:repeat(3,1fr)">
+    <div class="step"><span class="mono">Step 1</span><h3>Sample</h3><p>Wrap the cuff around your upper arm and press start. It numbs the skin and takes a piece of muscle about the size of a grain of rice.</p><div class="ph"><img src="img/03-cuff.jpg" alt=""></div></div>
+    <div class="step"><span class="mono">Step 2</span><h3>Mark</h3><p>The cuff leaves a small tattoo next to where the sample was taken. You choose a feather, a pair of wings or your donor number.</p><div class="ph"><img src="img/04a-feather.jpg" alt=""></div></div>
+    <div class="step"><span class="mono">Step 3</span><h3>Return</h3><p>Put the sealed cartridge into the return capsule and post it. It reaches our lab cold within two days.</p><div class="ph"><img src="img/05-capsule.jpg" alt=""></div></div>
+  </div>
+
+  <div class="keep rv" style="margin-top:110px">
     <div>
       <span class="mono">The mark</span>
       <h2 style="margin-top:18px">Give once.<br>Wear it for life.</h2>
@@ -286,15 +326,11 @@ label{display:block;margin-bottom:6px}
       <div class="ph"><img src="img/04c-number.jpg" alt=""><span class="tl">Donor no.</span></div>
     </div>
   </div>
-  <div class="head rv"><span class="mono">01 · How it works</span><div><h2>Three steps you can do at home.</h2><p class="mute">The cuff does the sampling and the marking for you. You never see a needle.</p></div></div>
-  <div class="cols rv" style="grid-template-columns:repeat(3,1fr)">
-    <div class="step"><span class="mono">Step 1</span><h3>Sample</h3><p>Wrap the cuff around your upper arm and press start. It numbs the skin and takes a piece of muscle about the size of a grain of rice.</p><div class="ph"><img src="img/03-cuff.jpg" alt=""></div></div>
-    <div class="step"><span class="mono">Step 2</span><h3>Mark</h3><p>The cuff leaves a small tattoo next to where the sample was taken. You choose a feather, a pair of wings or your donor number.</p><div class="ph"><img src="img/04a-feather.jpg" alt=""></div></div>
-    <div class="step"><span class="mono">Step 3</span><h3>Return</h3><p>Put the sealed cartridge into the return capsule and post it. It reaches our lab cold within two days.</p><div class="ph"><img src="img/05-capsule.jpg" alt=""></div></div>
-  </div>
-  <div class="procedure rv">
+
+  <div class="procedure rv" style="margin-top:0">
     <div>
       <span class="mono">Inside the cuff · tap a step</span>
+      <p class="mute" style="margin-top:12px;font-size:13px">For the curious. This is what the cuff is doing on your arm, minute by minute.</p>
       <ol id="proc">
         <li data-s="PREPARE&#10;Screening complete.&#10;Clean outer upper arm."><i>01</i><div><b>Prepare</b><span>Finish the screening questions and wipe your upper arm with the antiseptic pad.</span></div></li>
         <li data-s="FIT&#10;Tightening…&#10;Position confirmed."><i>02</i><div><b>Fit</b><span>Wrap the cuff and press start. It tightens and checks its position.</span></div></li>
@@ -304,26 +340,7 @@ label{display:block;margin-bottom:6px}
         <li data-s="AFTERCARE&#10;Keep band on for 24 h.&#10;Detach cartridge."><i>06</i><div><b>Aftercare</b><span>Leave the waterproof band on for a day. Look after the mark like any new tattoo.</span></div></li>
       </ol>
     </div>
-    <div>
-      <div class="screen" id="screen"></div>
-      <div class="tatt">
-        <div class="ph"><img src="img/04a-feather.jpg" alt=""><span class="tl">Feather</span></div>
-        <div class="ph"><img src="img/04b-wings.jpg" alt=""><span class="tl">Wings</span></div>
-        <div class="ph"><img src="img/04c-number.jpg" alt=""><span class="tl">Donor no.</span></div>
-      </div>
-      <p class="cap">The mark sits next to the sampling site. A faint line usually stays visible beside it.</p>
-    </div>
-  </div>
-  <div class="procedure rv" style="grid-template-columns:7fr 5fr;align-items:end">
-    <div class="ph" style="aspect-ratio:3/2"><img src="img/02-kit.jpg" alt="Kit"></div>
-    <div><span class="mono">In the box</span>
-      <ol style="margin-top:14px">
-        <li style="cursor:default"><i>A</i><div><b>Sampling cuff with e-ink display</b></div></li>
-        <li style="cursor:default"><i>B</i><div><b>Sealed specimen cartridge</b></div></li>
-        <li style="cursor:default"><i>C</i><div><b>Antiseptic wipe</b></div></li>
-        <li style="cursor:default"><i>D</i><div><b>Prepaid return capsule</b></div></li>
-      </ol>
-    </div>
+    <div><div class="screen" id="screen"></div><div class="ph" style="aspect-ratio:3/2;margin-top:20px"><img src="img/03-cuff.jpg" alt=""></div></div>
   </div>
 </div></main>
 
