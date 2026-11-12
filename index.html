@@ -196,7 +196,7 @@ input[type=range]:focus{background:transparent}
 .globe{position:relative;aspect-ratio:16/10;border:1px solid var(--line);background:radial-gradient(ellipse at 50% 50%,#151515 0%,#000 65%);overflow:hidden}
 .globe-hint{position:absolute;left:14px;bottom:12px;right:14px;font-size:11px;color:var(--dim);pointer-events:none;z-index:2}
 .gfxslot{aspect-ratio:4/3}
-.gfx{position:relative;width:100%;height:100%;border:1px solid var(--line);background:radial-gradient(ellipse at 50% 45%,#1a1a1a 0%,#030303 70%)}
+.gfx{position:relative;width:100%;height:100%;border:1px solid var(--line);background:radial-gradient(ellipse at 50% 45%,#2a0c0c 0%,#070202 72%)}
 .gfx-cap{position:absolute;left:14px;bottom:12px;font-size:11px;color:var(--mute);pointer-events:none}
 .sdetail dl{display:grid;grid-template-columns:1fr 1fr;gap:18px 28px;margin-top:22px;border-top:1px solid var(--line);padding-top:20px}
 .sdetail dt{font-size:11px;color:var(--mute)}
@@ -969,52 +969,97 @@ setTimeout(()=>window.globeFocus(sel),50);
 
 /* =============================== CULTURE =============================== */
 (function(){
-const r=mkRenderer(),holder=document.createElement('div');holder.className='gfx';holder.appendChild(r.domElement);
+const r=mkRenderer();r.toneMapping=THREE.ACESFilmicToneMapping;r.toneMappingExposure=1.15;
+const holder=document.createElement('div');holder.className='gfx';holder.appendChild(r.domElement);
 const cap=document.createElement('div');cap.className='gfx-cap';holder.appendChild(cap);
-const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(34,4/3,.1,60);cam.position.set(0,.6,7.5);cam.lookAt(0,0,0);
-scene.add(new THREE.HemisphereLight(0xffffff,0x111111,1.1));const L=new THREE.DirectionalLight(0xffffff,2.2);L.position.set(3,4,5);scene.add(L);
-const L2=new THREE.DirectionalLight(0xffffff,.8);L2.position.set(-4,-1,-3);scene.add(L2);
+const scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x0a0303,.06);
+const cam=new THREE.PerspectiveCamera(34,4/3,.1,60);cam.position.set(0,.6,7.5);cam.lookAt(0,0,0);
+scene.add(new THREE.HemisphereLight(0xffe9e4,0x1a0505,.9));
+const L=new THREE.DirectionalLight(0xfff2ec,2.4);L.position.set(3,4,5);scene.add(L);
+const back=new THREE.DirectionalLight(0xff5a4a,2.2);back.position.set(-3,1,-5);scene.add(back);
+const pt=new THREE.PointLight(0xff8070,6,8);pt.position.set(0,0,2.5);scene.add(pt);
+
+/* simple 3D value noise for organic shapes */
+const H=(x,y,z)=>{const s=Math.sin(x*127.1+y*311.7+z*74.7)*43758.5453;return s-Math.floor(s)};
+function noise(x,y,z){const X=Math.floor(x),Y=Math.floor(y),Z=Math.floor(z),fx=x-X,fy=y-Y,fz=z-Z,u=fx*fx*(3-2*fx),v=fy*fy*(3-2*fy),w=fz*fz*(3-2*fz);
+  const l=(a,b,t)=>a+(b-a)*t;return l(l(l(H(X,Y,Z),H(X+1,Y,Z),u),l(H(X,Y+1,Z),H(X+1,Y+1,Z),u),v),l(l(H(X,Y,Z+1),H(X+1,Y,Z+1),u),l(H(X,Y+1,Z+1),H(X+1,Y+1,Z+1),u),v),w)}
+function blob(geo,amp,freq,seed=0){const p=geo.attributes.position,v=new THREE.Vector3();for(let i=0;i<p.count;i++){v.fromBufferAttribute(p,i);const n=noise(v.x*freq+seed,v.y*freq,v.z*freq)*.7+noise(v.x*freq*2.3,v.y*freq*2.3+seed,v.z*freq*2.3)*.3;v.multiplyScalar(1+(n-.5)*amp);p.setXYZ(i,v.x,v.y,v.z)}geo.computeVertexNormals();return geo}
+
+/* canvas textures: membrane speckle and muscle striation */
+function canvasTex(w,h,fn){const c=document.createElement('canvas');c.width=w;c.height=h;fn(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;return t}
+const speck=canvasTex(256,256,(g,w,h)=>{g.fillStyle='#fff';g.fillRect(0,0,w,h);for(let i=0;i<1800;i++){g.fillStyle=`rgba(120,20,30,${Math.random()*.25})`;const s=Math.random()*3+.5;g.beginPath();g.arc(Math.random()*w,Math.random()*h,s,0,7);g.fill()}});
+const stri=canvasTex(512,512,(g,w,h)=>{g.fillStyle='#a8302c';g.fillRect(0,0,w,h);for(let y=0;y<h;y+=3){g.fillStyle=`rgba(${y%9<3?255:40},${y%9<3?140:10},${y%9<3?130:15},${.18+Math.random()*.12})`;g.fillRect(0,y,w,1.4)}
+  for(let i=0;i<500;i++){g.fillStyle=`rgba(255,220,210,${Math.random()*.15})`;g.fillRect(Math.random()*w,Math.random()*h,Math.random()*40+10,1)}for(let i=0;i<60;i++){g.fillStyle='rgba(240,225,210,.35)';g.fillRect(0,Math.random()*h,w,Math.random()*2+1)}});
+
+/* ---- cells ---- */
 const N=420;
-const cells=new THREE.InstancedMesh(new THREE.SphereGeometry(.12,20,16),new THREE.MeshPhysicalMaterial({color:0xe8e6e0,roughness:.35,transmission:.25,thickness:.4,clearcoat:.4}),N);
-cells.instanceMatrix.setUsage(THREE.DynamicDrawUsage);scene.add(cells);
-const nuc=new THREE.InstancedMesh(new THREE.SphereGeometry(.045,10,8),new THREE.MeshBasicMaterial({color:0x2a2a2a}),N);scene.add(nuc);
-// tank for scale-up
+const cellGeo=blob(new THREE.IcosahedronGeometry(.13,4),.32,6.5);
+const cellMat=new THREE.MeshPhysicalMaterial({color:0xffffff,map:speck,roughness:.28,transmission:.55,thickness:.5,ior:1.38,attenuationColor:new THREE.Color(0xb3202a),attenuationDistance:.25,
+  sheen:1,sheenColor:new THREE.Color(0xff9a8e),sheenRoughness:.4,clearcoat:.6,clearcoatRoughness:.25,transparent:true,opacity:.96});
+const cells=new THREE.InstancedMesh(cellGeo,cellMat,N);cells.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+const nucGeo=blob(new THREE.IcosahedronGeometry(.052,3),.25,14,3);
+const nuc=new THREE.InstancedMesh(nucGeo,new THREE.MeshStandardMaterial({color:0x4a0a14,roughness:.5,emissive:0x2a0308}),N);
+const col=new THREE.Color();for(let i=0;i<N;i++){col.setHSL(.99+Math.random()*.03,.55+Math.random()*.2,.42+Math.random()*.14);cells.setColorAt(i,col)}
+scene.add(cells,nuc);
+
+/* floating debris in the medium */
+const dp=[];for(let i=0;i<500;i++)dp.push((Math.random()-.5)*12,(Math.random()-.5)*7,(Math.random()-.5)*6);
+const debrisGeo=new THREE.BufferGeometry();debrisGeo.setAttribute('position',new THREE.Float32BufferAttribute(dp,3));
+const debris=new THREE.Points(debrisGeo,new THREE.PointsMaterial({color:0xff8a7c,size:.025,transparent:true,opacity:.45,depthWrite:false}));scene.add(debris);
+
+/* ---- tank ---- */
 const tank=new THREE.Group();
-tank.add(new THREE.Mesh(new THREE.CylinderGeometry(1.7,1.7,3.6,64,1,true),new THREE.MeshPhysicalMaterial({color:0xffffff,transparent:true,opacity:.08,roughness:.05,side:THREE.DoubleSide})));
+tank.add(new THREE.Mesh(new THREE.CylinderGeometry(1.7,1.7,3.6,64,1,true),new THREE.MeshPhysicalMaterial({color:0xffffff,transparent:true,opacity:.07,roughness:.05,side:THREE.DoubleSide})));
+const medium=new THREE.Mesh(new THREE.CylinderGeometry(1.66,1.66,3.2,64),new THREE.MeshBasicMaterial({color:0xd04a50,transparent:true,opacity:.07,depthWrite:false}));medium.position.y=-.15;tank.add(medium);
 [1.8,-1.8].forEach(y=>{const e=new THREE.Mesh(new THREE.TorusGeometry(1.7,.03,8,96),new THREE.MeshStandardMaterial({color:0xbfbfbf,metalness:.9,roughness:.3}));e.rotation.x=Math.PI/2;e.position.y=y;tank.add(e)});
-const shaft=new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,3.4,8),new THREE.MeshStandardMaterial({color:0x9a9a9a,metalness:.9,roughness:.3}));tank.add(shaft);
+tank.add(new THREE.Mesh(new THREE.CylinderGeometry(.03,.03,3.4,8),new THREE.MeshStandardMaterial({color:0x9a9a9a,metalness:.9,roughness:.3})));
 const imp=new THREE.Mesh(new THREE.BoxGeometry(1.1,.04,.18),new THREE.MeshStandardMaterial({color:0x9a9a9a,metalness:.9}));imp.position.y=-1.2;tank.add(imp);
 const imp2=imp.clone();imp2.rotation.y=Math.PI/2;tank.add(imp2);
+// rising bubbles
+const bub=new THREE.InstancedMesh(new THREE.SphereGeometry(.03,10,8),new THREE.MeshPhysicalMaterial({color:0xffffff,transmission:.9,roughness:0,thickness:.1,transparent:true,opacity:.6}),60);
+const bubs=Array.from({length:60},()=>({x:(Math.random()-.5)*2.6,y:Math.random()*3.2-1.6,z:(Math.random()-.5)*2.6,s:.5+Math.random()}));tank.add(bub);
 tank.visible=false;scene.add(tank);
-// tissue lump for isolation
-const lump=new THREE.Mesh(new THREE.IcosahedronGeometry(1.1,4),new THREE.MeshStandardMaterial({color:0x6e4a46,roughness:.8,flatShading:false}));
-{const p=lump.geometry.attributes.position,v=new THREE.Vector3();for(let i=0;i<p.count;i++){v.fromBufferAttribute(p,i);v.multiplyScalar(1+.12*Math.sin(v.x*3.1)*Math.cos(v.y*2.7)+.06*Math.sin(v.z*7));p.setXYZ(i,v.x,v.y*.75,v.z)}lump.geometry.computeVertexNormals()}
-lump.position.set(-1.2,0,0);scene.add(lump);
 
-const cur=[],tgt=[],scl=[],tscl=[],stretch=[];for(let i=0;i<N;i++){cur.push(new THREE.Vector3(0,0,-30));tgt.push(new THREE.Vector3(0,0,-30));scl.push(0);tscl.push(0);stretch.push(1)}
+/* ---- tissue sample for isolation ---- */
+const lumpGeo=blob(new THREE.IcosahedronGeometry(1.1,6),.4,1.6,7);
+{const p=lumpGeo.attributes.position;for(let i=0;i<p.count;i++)p.setY(i,p.getY(i)*.72);lumpGeo.computeVertexNormals()}
+const lump=new THREE.Mesh(lumpGeo,new THREE.MeshPhysicalMaterial({map:stri,color:0xffffff,roughness:.45,clearcoat:.8,clearcoatRoughness:.2,sheen:.8,sheenColor:new THREE.Color(0xff8c80),bumpMap:stri,bumpScale:2.5}));
+lump.position.set(-1.3,0,0);scene.add(lump);
+
+/* ---- muscle fibres for differentiation ---- */
+const fibres=new THREE.Group();const fibreMat=new THREE.MeshPhysicalMaterial({map:stri,color:0xffb0a8,roughness:.4,clearcoat:.7,sheen:.8,sheenColor:new THREE.Color(0xff8c80),transparent:true,opacity:0,bumpMap:stri,bumpScale:3});
+for(let row=0;row<7;row++){const g=new THREE.CapsuleGeometry(.16,6,8,24);g.rotateZ(Math.PI/2);blob(g,.12,2.4,row*3);const m=new THREE.Mesh(g,fibreMat);m.position.set(0,-1+row*.34,(row%2)*.15-.07);fibres.add(m)}
+fibres.visible=false;scene.add(fibres);
+
+const cur=[],tgt=[],scl=[],tscl=[],stretch=[],rot=[],ph=[];
+for(let i=0;i<N;i++){cur.push(new THREE.Vector3(0,0,-30));tgt.push(new THREE.Vector3(0,0,-30));scl.push(0);tscl.push(0);stretch.push(1);rot.push(new THREE.Euler(Math.random()*6,Math.random()*6,Math.random()*6));ph.push(Math.random()*6.28)}
 const rnd=(a,b)=>a+Math.random()*(b-a);
-const inBall=(rad)=>{let v;do{v=new THREE.Vector3(rnd(-1,1),rnd(-1,1),rnd(-1,1))}while(v.length()>1);return v.multiplyScalar(rad)};
+const inBall=rad=>{let v;do{v=new THREE.Vector3(rnd(-1,1),rnd(-1,1),rnd(-1,1))}while(v.length()>1);return v.multiplyScalar(rad)};
 let stage=-1,t0=0,born=0;
 const TXT=['Satellite cells being separated from your sample','Each cell divides again and again','Your cells growing in their own tank','Cells joining into muscle fibres'];
 function setStage(s){stage=s;t0=performance.now();cap.textContent=TXT[s-1]||'';
-  tank.visible=s===3;lump.visible=s===1;
+  tank.visible=s===3;lump.visible=s===1;fibres.visible=s===4;fibreMat.opacity=0;
   for(let i=0;i<N;i++){tscl[i]=0;stretch[i]=1}
-  if(s===1){for(let i=0;i<14;i++){cur[i].copy(lump.position).add(inBall(.6));tgt[i].set(rnd(.4,2.6),rnd(-1.3,1.3),rnd(-.8,.8));tscl[i]=1;scl[i]=.2}born=14}
-  if(s===2){born=8;for(let i=0;i<N;i++){cur[i].copy(inBall(.6));tgt[i].copy(cur[i]);tscl[i]=i<8?1:0;scl[i]=i<8?1:0}}
-  if(s===3){born=N;for(let i=0;i<N;i++){const a=rnd(0,6.28),rr=Math.sqrt(Math.random())*1.45;cur[i].set(Math.cos(a)*rr,rnd(-1.6,1.6),Math.sin(a)*rr);tgt[i].copy(cur[i]);tscl[i]=i<280?.55:0;scl[i]=tscl[i];cur[i].a=a;cur[i].r=rr}}
-  if(s===4){born=N;const rows=7,cols=60;for(let i=0;i<N;i++){const row=i%rows,col=Math.floor(i/rows)%cols;cur[i].copy(inBall(2.2));tgt[i].set(-3.1+col*.105,-1.0+row*.34+Math.sin(col*.3)*.04,(row%2)*.15-.07);tscl[i]=.85;scl[i]=.85}}
+  if(s===1){for(let i=0;i<16;i++){cur[i].copy(lump.position).add(inBall(.5));tgt[i].set(rnd(.4,2.6),rnd(-1.3,1.3),rnd(-.8,.8));tscl[i]=1.15;scl[i]=.1}born=16}
+  if(s===2){born=6;for(let i=0;i<N;i++){cur[i].copy(inBall(.5));tgt[i].copy(cur[i]);tscl[i]=i<6?1.15:0;scl[i]=tscl[i]}}
+  if(s===3){born=N;for(let i=0;i<N;i++){const a=rnd(0,6.28),rr=Math.sqrt(Math.random())*1.45;cur[i].set(Math.cos(a)*rr,rnd(-1.6,1.4),Math.sin(a)*rr);tgt[i].copy(cur[i]);tscl[i]=i<260?.62:0;scl[i]=tscl[i];cur[i].a=a;cur[i].r=rr}}
+  if(s===4){born=N;const rows=7,cols=60;for(let i=0;i<N;i++){const row=i%rows,col=Math.floor(i/rows)%cols;cur[i].copy(inBall(2.2));tgt[i].set(-3.1+col*.105,-1.0+row*.34+Math.sin(col*.3)*.04,(row%2)*.15-.07);tscl[i]=.9;scl[i]=.9}}
 }
-const m4=new THREE.Matrix4(),q=new THREE.Quaternion(),sv=new THREE.Vector3(),pv=new THREE.Vector3();
-function frame(){const t=(performance.now()-t0)/1000;
-  if(stage===2){const want=Math.min(N,Math.floor(8*Math.pow(2,t/1.6)));while(born<want){const p=Math.floor(Math.random()*born);cur[born].copy(cur[p]);tgt[born].copy(cur[p]).add(inBall(.35));tscl[born]=1;scl[born]=.3;born++}
-    const rad=.6+Math.cbrt(born)*.32;for(let i=0;i<born;i++){if(tgt[i].length()>rad)tgt[i].setLength(rad)}if(born>=N&&t>14)setStage(2)}
-  if(stage===3){for(let i=0;i<N;i++){cur[i].a+=.006+.004*(1.5-cur[i].r);tgt[i].set(Math.cos(cur[i].a)*cur[i].r,tgt[i].y+Math.sin(t+i)*.002,Math.sin(cur[i].a)*cur[i].r)}imp.rotation.y+=.05;imp2.rotation.y+=.05}
-  if(stage===4){const k=Math.min(1,Math.max(0,(t-2.2)/3));for(let i=0;i<N;i++)stretch[i]=1+k*1.6}
+const m4=new THREE.Matrix4(),q=new THREE.Quaternion(),sv=new THREE.Vector3(),pv=new THREE.Vector3(),off=new THREE.Vector3();
+function frame(){const now=performance.now(),t=(now-t0)/1000,tt=now/1000;
+  if(stage===2){const want=Math.min(N,Math.floor(6*Math.pow(2,t/1.4)));while(born<want){const p=Math.floor(Math.random()*born);cur[born].copy(cur[p]);tgt[born].copy(cur[p]).add(inBall(.4));tscl[born]=1.15;scl[born]=.25;scl[p]=.7;born++}
+    const rad=.6+Math.cbrt(born)*.3;for(let i=0;i<born;i++){if(tgt[i].length()>rad)tgt[i].setLength(rad)}if(born>=N&&t>14)setStage(2)}
+  if(stage===3){for(let i=0;i<N;i++){cur[i].a+=.006+.004*(1.5-cur[i].r);tgt[i].set(Math.cos(cur[i].a)*cur[i].r,tgt[i].y+Math.sin(t+i)*.002,Math.sin(cur[i].a)*cur[i].r)}imp.rotation.y+=.05;imp2.rotation.y+=.05;
+    bubs.forEach((b,i)=>{b.y+=.008*b.s;if(b.y>1.5)b.y=-1.6;m4.compose(pv.set(b.x+Math.sin(tt*2+i)*.03,b.y,b.z),q.identity(),sv.setScalar(b.s));bub.setMatrixAt(i,m4)});bub.instanceMatrix.needsUpdate=true}
+  if(stage===4){const k=Math.min(1,Math.max(0,(t-2.2)/3));for(let i=0;i<N;i++){stretch[i]=1+k*1.7;tscl[i]=.9*(1-Math.max(0,(t-5)/2.5))}fibreMat.opacity=Math.min(1,Math.max(0,(t-4.2)/2.2))}
   for(let i=0;i<N;i++){cur[i].lerp(tgt[i],stage===3?.2:stage===4?.09:.06);scl[i]+=(tscl[i]-scl[i])*.08;
-    q.identity();sv.set(scl[i]*stretch[i],scl[i]*(stretch[i]>1?.8:1),scl[i]);m4.compose(cur[i],q,sv);cells.setMatrixAt(i,m4);
-    sv.set(scl[i],scl[i],scl[i]);pv.copy(cur[i]);pv.z+=.07*scl[i];m4.compose(pv,q,sv);nuc.setMatrixAt(i,m4)}
+    const w=1+Math.sin(tt*1.6+ph[i])*.06,w2=1+Math.cos(tt*1.3+ph[i])*.06;
+    if(stage===4)q.identity();else{rot[i].y+=.002;q.setFromEuler(rot[i])}
+    sv.set(scl[i]*stretch[i]*w,scl[i]*(stretch[i]>1?.75:w2),scl[i]*w2);m4.compose(cur[i],q,sv);cells.setMatrixAt(i,m4);
+    off.set(.02,.01,.03).applyQuaternion(q).multiplyScalar(scl[i]);pv.copy(cur[i]).add(off);sv.setScalar(scl[i]*(stretch[i]>1?1.1:1));m4.compose(pv,q,sv);nuc.setMatrixAt(i,m4)}
   cells.instanceMatrix.needsUpdate=true;nuc.instanceMatrix.needsUpdate=true;
-  scene.rotation.y=stage===4?Math.sin(t*.2)*.12:stage===3?.15:Math.sin(t*.25)*.25;
+  const dpos=debrisGeo.attributes.position;for(let i=0;i<dpos.count;i++){let y=dpos.getY(i)+.0015;if(y>3.5)y=-3.5;dpos.setY(i,y)}dpos.needsUpdate=true;
+  scene.rotation.y=stage===4?Math.sin(tt*.2)*.15:stage===3?.15:Math.sin(tt*.25)*.25;
   if(stage===1)lump.rotation.y+=.003;
   r.render(scene,cam)}
 function size(){const w=holder.clientWidth,h=holder.clientHeight;if(!w)return;r.setSize(w,h,false);cam.aspect=w/h;cam.position.z=w/h<1.2?9.5:7.5;cam.updateProjectionMatrix()}
