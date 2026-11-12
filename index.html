@@ -106,6 +106,9 @@ a{color:inherit}
 .tatt .ph{aspect-ratio:3/2}
 .tatt .tl{position:absolute;left:0;bottom:0;background:var(--bg);padding:4px 8px;font:10px "IBM Plex Mono",monospace;letter-spacing:.06em;z-index:2}
 @media(max-width:860px){.procedure{grid-template-columns:1fr}}
+.keep{display:grid;grid-template-columns:5fr 7fr;gap:48px;align-items:center;border-top:1px solid var(--hard);padding:30px 0 96px}
+.keep .tatt .ph{aspect-ratio:3/4}
+@media(max-width:860px){.keep{grid-template-columns:1fr}}
 /* ---------- process ---------- */
 .rail{display:flex;border-top:1px solid var(--hard);border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
 .rail button{flex:1;min-width:120px;background:none;border:0;border-right:1px solid var(--line);color:var(--mute);text-align:left;padding:16px 14px;cursor:pointer;font:11px "IBM Plex Mono",monospace;letter-spacing:.05em;text-transform:uppercase;position:relative;transition:color .2s}
@@ -242,7 +245,7 @@ label{display:block;margin-bottom:6px}
   <article class="story rv">
     <div><span class="mono">02 · The hunger</span><h3 style="margin-top:10px">Nothing left to find</h3></div>
     <div><p>Vultures do not hunt. They eat what has already died. In modern Korea dead livestock are collected and destroyed, roadkill is cleared within hours, and fields are kept clean.</p><p>So the birds that come here for the winter are fed by people. Volunteers, farmers and local governments haul meat to fields in Cheorwon, Paju and Goseong and leave it on the snow. When the meat runs out, the birds go hungry.</p><p class="src">The cinereous vulture is listed as a Natural Monument and an endangered species in Korea.</p></div>
-    <div class="ph"><img src="img/11-cart.jpg" onerror="this.onerror=null;this.src='img/09-feeding.jpg'" alt="Volunteer pushing a feeding cart across a snowy field"></div>
+    <div class="ph"><img src="img/11-cart.jpg" alt="Volunteer pushing a feeding cart across a snowy field"></div>
   </article>
 
   <article class="story rv">
@@ -268,6 +271,21 @@ label{display:block;margin-bottom:6px}
 
 <!-- ================= 01 HOW ================= -->
 <main class="panel" id="p-how"><div class="wrap">
+  <div class="ph rv" style="aspect-ratio:16/8;margin-bottom:14px"><img src="img/12-unboxing.jpg" alt="Opening the Eternal Flight donation kit"></div>
+  <p class="cap rv" style="margin-bottom:72px">Fig. 02 — The donation kit as it arrives at your door.</p>
+  <div class="keep rv">
+    <div>
+      <span class="mono">The mark</span>
+      <h2 style="margin-top:18px">Give once.<br>Wear it for life.</h2>
+      <p class="mute">Every donor leaves with a small mark on the arm. It sits right next to the line where your sample came out, and it tells anyone who asks that part of you is up there somewhere. Most people get asked about it within a week.</p>
+      <p class="mute" style="margin-top:14px">Go back next winter and you get another one. Some of our donors have a whole row now.</p>
+    </div>
+    <div class="tatt" style="margin-top:0">
+      <div class="ph"><img src="img/04a-feather.jpg" alt=""><span class="tl">Feather</span></div>
+      <div class="ph"><img src="img/04b-wings.jpg" alt=""><span class="tl">Wings</span></div>
+      <div class="ph"><img src="img/04c-number.jpg" alt=""><span class="tl">Donor no.</span></div>
+    </div>
+  </div>
   <div class="head rv"><span class="mono">01 · How it works</span><div><h2>Three steps you can do at home.</h2><p class="mute">The cuff does the sampling and the marking for you. You never see a needle.</p></div></div>
   <div class="cols rv" style="grid-template-columns:repeat(3,1fr)">
     <div class="step"><span class="mono">Step 1</span><h3>Sample</h3><p>Wrap the cuff around your upper arm and press start. It numbs the skin and takes a piece of muscle about the size of a grain of rice.</p><div class="ph"><img src="img/03-cuff.jpg" alt=""></div></div>
