@@ -6,19 +6,19 @@
 <title>Eternal Flight — Tissue Donation for Vultures</title>
 <meta name="description" content="Grow a small part of yourself into food for wild vultures.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0b0b0b;--ink:#f2f2ef;--mute:#8d8d88;--dim:#4a4a47;--line:rgba(242,242,239,.14);--hard:rgba(242,242,239,.6);--red:#ff4a2e}
+:root{--bg:#0b0b0b;--ink:#f2f2ef;--mute:#8d8d88;--dim:#4a4a47;--line:rgba(242,242,239,.14);--hard:rgba(242,242,239,.6);--red:#f2f2ef}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:var(--bg);color:var(--ink)}
-body{font:15px/1.6 "Inter Tight","Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{font:14px/1.7 "IBM Plex Mono",ui-monospace,monospace;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 ::selection{background:var(--ink);color:var(--bg)}
 img{display:block;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.05) brightness(.9);transition:filter .6s,transform 1.2s cubic-bezier(.2,.7,.2,1)}
 .ph{overflow:hidden;background:#151515;position:relative}
 .ph:hover img{filter:grayscale(0) brightness(1);transform:scale(1.03)}
 h1,h2,h3{font-weight:300;letter-spacing:-.035em;line-height:1.02}
-h1{font-size:clamp(46px,7.4vw,118px)}
-h2{font-size:clamp(32px,4.4vw,62px);margin-bottom:24px}
+h1{font-size:clamp(38px,5.4vw,80px);letter-spacing:-.06em}
+h2{font-size:clamp(26px,3.2vw,44px);margin-bottom:24px;letter-spacing:-.05em}
 h3{font-size:19px;font-weight:400;letter-spacing:-.01em;margin-bottom:8px}
 p{max-width:58ch}
 .mono,label,.cap{font:11px/1.5 "IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
@@ -28,13 +28,13 @@ a{color:inherit}
 /* ---------- top bar & tabs ---------- */
 .bar{position:sticky;top:0;z-index:30;background:rgba(11,11,11,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
 .bar .wrap{display:flex;align-items:center;gap:40px;height:60px}
-.logo{font:500 13px "Inter Tight",sans-serif;letter-spacing:.14em;text-transform:uppercase;display:flex;gap:10px;align-items:center;white-space:nowrap;cursor:pointer}
+.logo{font:500 13px "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase;display:flex;gap:10px;align-items:center;white-space:nowrap;cursor:pointer}
 .logo svg{transition:transform 1s}.logo:hover svg{transform:rotate(180deg)}
 .tabs{display:flex;gap:2px;position:relative;overflow-x:auto;scrollbar-width:none;flex:1}
 .tabs::-webkit-scrollbar{display:none}
 .tab{background:none;border:0;color:var(--mute);font:11px "IBM Plex Mono",monospace;letter-spacing:.07em;text-transform:uppercase;padding:21px 14px;cursor:pointer;white-space:nowrap;transition:color .25s}
 .tab:hover,.tab.on{color:var(--ink)}
-.tab b{font-weight:400;color:var(--dim);margin-right:6px;transition:color .25s}.tab.on b{color:var(--red)}
+.tab b{font-weight:400;color:var(--dim);margin-right:6px;transition:color .25s}.tab.on b{color:var(--ink)}
 .ink{position:absolute;bottom:0;height:1px;background:var(--ink);transition:left .45s cubic-bezier(.6,0,.2,1),width .45s cubic-bezier(.6,0,.2,1)}
 .btn{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--bg);border:1px solid var(--ink);padding:13px 20px;font:12px "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;text-decoration:none;position:relative;overflow:hidden;white-space:nowrap}
 .btn span{position:relative;z-index:1}
@@ -43,7 +43,7 @@ a{color:inherit}
 .btn .arr{position:relative;z-index:1;transition:transform .35s}.btn:hover .arr{transform:translateX(4px)}
 .btn.ghost{background:transparent;color:var(--ink)}.btn.ghost::after{background:var(--ink)}.btn.ghost:hover{color:var(--bg)}
 .bar .btn{padding:9px 14px;font-size:11px}
-@media(max-width:760px){.bar .wrap{gap:14px}.bar .btn{display:none}.logo span{display:none}}
+@media(max-width:760px){.bar .wrap{gap:14px}.logo span{display:none}}
 /* ---------- panels ---------- */
 .panel{display:none;padding:72px 0 120px;min-height:calc(100vh - 60px)}
 .panel.on{display:block}
@@ -61,35 +61,35 @@ a{color:inherit}
 .hero{display:grid;grid-template-columns:6fr 6fr;gap:40px;align-items:end;margin-bottom:110px}
 .hero h1{margin:26px 0 30px}
 .hero p{font-size:18px;color:#c9c9c4;margin-bottom:36px;max-width:44ch}
-.hero .ph{aspect-ratio:1}
+.hero .ph{aspect-ratio:3/2}
 .hero .ph img{object-position:center 30%}
 .hero p.cap,.cap{font-size:11px;color:var(--mute);margin-top:12px;text-transform:none;letter-spacing:.02em}
 @media(max-width:900px){.hero{grid-template-columns:1fr}}
 .big-stat{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--hard);margin:0 0 110px}
 .big-stat>div{padding:22px 28px 0 0}
 .big-stat>div+div{padding-left:28px;border-left:1px solid var(--line)}
-.big-stat b{display:block;font:300 clamp(48px,6vw,88px)/1 "Inter Tight",sans-serif;letter-spacing:-.05em;margin:14px 0 14px}
+.big-stat b{display:block;font:300 clamp(48px,6vw,88px)/1 "IBM Plex Mono",monospace;letter-spacing:-.05em;margin:14px 0 14px}
 .big-stat b em{font-style:normal;color:var(--red)}
 .big-stat p{color:var(--mute);font-size:14px}
 @media(max-width:860px){.big-stat{grid-template-columns:1fr}.big-stat>div+div{border-left:0;padding-left:0;border-top:1px solid var(--line);margin-top:22px}}
 .story{display:grid;grid-template-columns:3fr 5fr 4fr;gap:32px;padding:34px 0;border-top:1px solid var(--line)}
 .story:first-of-type{border-top:1px solid var(--hard)}
 .story p{color:#c9c9c4;margin-bottom:14px}
-.story .ph{aspect-ratio:4/3}
+.story .ph{aspect-ratio:3/2}
 .story .src{font:10.5px "IBM Plex Mono",monospace;color:var(--dim);letter-spacing:.03em;margin-top:10px}
 @media(max-width:900px){.story{grid-template-columns:1fr}}
 .pitch{margin-top:110px;display:grid;grid-template-columns:3fr 9fr;gap:32px}
 .pitch h2{max-width:18ch}
 .pitch ol{list-style:none;counter-reset:p;border-top:1px solid var(--hard);margin-top:34px}
-.pitch li{counter-increment:p;display:grid;grid-template-columns:70px 1fr;padding:22px 0;border-bottom:1px solid var(--line);transition:padding .35s,background .35s}
+.pitch li{counter-increment:p;display:grid;grid-template-columns:60px 1fr;padding:22px 0;border-bottom:1px solid var(--line);transition:padding .35s,background .35s}
 .pitch li:hover{padding-left:14px;background:rgba(255,255,255,.03)}
-.pitch li::before{content:counter(p,decimal-leading-zero);font:11px "IBM Plex Mono",monospace;color:var(--red);padding-top:6px}
+.pitch li::before{content:counter(p,decimal-leading-zero);font:11px "IBM Plex Mono",monospace;color:var(--mute);padding-top:8px}
 .pitch li h3{font-size:24px;font-weight:300;letter-spacing:-.02em}
 .pitch li p{color:var(--mute);font-size:14px}
 .cta{margin-top:56px;display:flex;gap:10px;flex-wrap:wrap}
 @media(max-width:860px){.pitch{grid-template-columns:1fr}}
 /* ---------- how ---------- */
-.step .ph{aspect-ratio:4/5;margin:18px 0 20px}
+.step{display:flex;flex-direction:column}.step h3{margin-top:14px}.step .ph{aspect-ratio:4/5;margin-top:auto;padding-top:0}.step p{margin-bottom:24px;min-height:96px}.cols>div.step{padding:20px 14px 0 14px}.cols>div.step:first-child{padding-left:0;padding-right:28px}.cols>div.step:last-child{padding-right:0;padding-left:28px}
 .step p{color:var(--mute);font-size:14px}
 .procedure{margin-top:96px;display:grid;grid-template-columns:1fr 1fr;gap:56px;border-top:1px solid var(--hard);padding-top:26px}
 .procedure ol{list-style:none;margin-top:20px}
@@ -103,14 +103,14 @@ a{color:inherit}
 .screen .cur{display:inline-block;width:7px;height:13px;background:var(--ink);vertical-align:-2px;animation:blink 1s steps(2) infinite}
 @keyframes blink{50%{opacity:0}}
 .tatt{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);margin-top:22px}
-.tatt .ph{aspect-ratio:1}
+.tatt .ph{aspect-ratio:3/2}
 .tatt .tl{position:absolute;left:0;bottom:0;background:var(--bg);padding:4px 8px;font:10px "IBM Plex Mono",monospace;letter-spacing:.06em;z-index:2}
 @media(max-width:860px){.procedure{grid-template-columns:1fr}}
 /* ---------- process ---------- */
 .rail{display:flex;border-top:1px solid var(--hard);border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
 .rail button{flex:1;min-width:120px;background:none;border:0;border-right:1px solid var(--line);color:var(--mute);text-align:left;padding:16px 14px;cursor:pointer;font:11px "IBM Plex Mono",monospace;letter-spacing:.05em;text-transform:uppercase;position:relative;transition:color .2s}
 .rail button:last-child{border-right:0}
-.rail button b{display:block;font:300 22px "Inter Tight",sans-serif;letter-spacing:-.02em;text-transform:none;color:var(--ink);margin-top:6px;opacity:.45;transition:opacity .2s}
+.rail button b{display:block;font:300 22px "IBM Plex Mono",monospace;letter-spacing:-.02em;text-transform:none;color:var(--ink);margin-top:6px;opacity:.45;transition:opacity .2s}
 .rail button.on,.rail button:hover{color:var(--ink)}.rail button.on b,.rail button:hover b{opacity:1}
 .rail button::after{content:"";position:absolute;left:0;bottom:-1px;height:2px;width:0;background:var(--red);transition:width .5s}
 .rail button.on::after{width:100%}
@@ -127,7 +127,7 @@ a{color:inherit}
 /* ---------- queue ---------- */
 .board{border-top:1px solid var(--hard);border-bottom:1px solid var(--hard);font-family:"IBM Plex Mono",monospace}
 .board .top{display:grid;grid-template-columns:repeat(3,1fr) auto;padding:18px 0;border-bottom:1px solid var(--hard)}
-.board .top b{font:300 40px "Inter Tight",sans-serif;letter-spacing:-.04em;display:block;margin-top:4px}
+.board .top b{font:300 40px "IBM Plex Mono",monospace;letter-spacing:-.04em;display:block;margin-top:4px}
 .board .top span{font-size:10.5px;color:var(--mute);letter-spacing:.08em;text-transform:uppercase}
 .live{display:inline-flex;align-items:center;gap:8px;font-size:10.5px;letter-spacing:.1em;align-self:start}
 .live::before{content:"";width:7px;height:7px;background:var(--red);animation:blink 1.2s steps(2) infinite}
@@ -136,7 +136,7 @@ a{color:inherit}
 .tbl td{padding:11px 10px 11px 0;border-top:1px solid var(--line);white-space:nowrap}
 .tbl tbody tr{transition:background .2s}.tbl tbody tr:hover{background:rgba(255,255,255,.04)}
 .tbl tr.flash td{animation:flash 1.6s}
-@keyframes flash{0%{background:rgba(255,74,46,.22)}100%{background:transparent}}
+@keyframes flash{0%{background:rgba(255,255,255,.12)}100%{background:transparent}}
 .st{font-size:10.5px;letter-spacing:.05em;text-transform:uppercase}
 .st::before{content:"";display:inline-block;width:6px;height:6px;margin-right:8px;border:1px solid currentColor;vertical-align:1px}
 .st.s4{color:var(--ink)}.st.s4::before{background:var(--ink)}.st.s0,.st.s1{color:var(--mute)}
@@ -150,7 +150,7 @@ a{color:inherit}
 .result{border-top:1px solid var(--hard);border-bottom:1px solid var(--hard);padding:22px 0;min-height:320px;font-family:"IBM Plex Mono",monospace}
 .result .row{display:flex;justify-content:space-between;padding:11px 0;border-top:1px solid var(--line);font-size:12px}
 .result .row span:first-child{color:var(--mute);text-transform:uppercase;letter-spacing:.05em}
-.result .big{font:300 60px "Inter Tight",sans-serif;letter-spacing:-.05em;margin:14px 0 4px}
+.result .big{font:300 60px "IBM Plex Mono",monospace;letter-spacing:-.05em;margin:14px 0 4px}
 .prog2{height:1px;background:var(--line);margin:22px 0 8px}
 .prog2 i{display:block;height:1px;background:var(--red);width:0;transition:width 1.8s cubic-bezier(.2,.7,.2,1)}
 @media(max-width:860px){.track{grid-template-columns:1fr}}
@@ -158,16 +158,16 @@ input,select{font:14px "IBM Plex Mono",monospace;padding:14px;border:1px solid v
 input::placeholder{color:var(--dim)}
 input:focus,select:focus{outline:none;border-color:var(--ink);background:rgba(255,255,255,.04)}
 select option{background:#111}
-.tags{color:var(--red);font:10.5px "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase}
+.tags{color:var(--ink);border:1px solid var(--hard);padding:3px 7px;display:inline-block;font:10.5px "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase}
 /* ---------- wall ---------- */
 .wall{position:relative;overflow:hidden;height:580px;border:1px solid var(--line)}
 .wall img{filter:grayscale(1) blur(3px) brightness(.35)}
 .names{position:absolute;inset:0;padding:40px;display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:3px 24px;align-content:start;font:11.5px "IBM Plex Mono",monospace;letter-spacing:.05em;text-transform:uppercase;overflow:hidden;mask-image:linear-gradient(180deg,#000 70%,transparent)}
 .names span{color:var(--mute);transition:color .2s;cursor:default}.names span:hover{color:var(--ink)}
-.names span.new{color:var(--red)}
+.names span.new{color:var(--ink);text-decoration:underline;text-underline-offset:4px}
 details{border-top:1px solid var(--line);padding:22px 0}
 details:last-of-type{border-bottom:1px solid var(--hard)}
-summary{cursor:pointer;font:300 24px "Inter Tight",sans-serif;letter-spacing:-.02em;list-style:none;display:flex;justify-content:space-between;transition:padding .3s}
+summary{cursor:pointer;font:300 24px "IBM Plex Mono",monospace;letter-spacing:-.02em;list-style:none;display:flex;justify-content:space-between;transition:padding .3s}
 summary:hover{padding-left:10px}
 summary::-webkit-details-marker{display:none}
 summary::after{content:"+";font:16px "IBM Plex Mono",monospace;color:var(--mute);transition:transform .3s}
@@ -193,9 +193,9 @@ label{display:block;margin-bottom:6px}
 .opt input{display:none}
 .opt:has(input:checked){background:var(--ink);color:var(--bg)}
 .opt img{aspect-ratio:1;margin-bottom:8px}
-.chk{display:flex;gap:12px;align-items:flex-start;padding:13px 0;border-top:1px solid var(--line);font:14px "Inter Tight",sans-serif;text-transform:none;letter-spacing:0;color:var(--ink);margin:0;cursor:pointer}
-.chk input{width:15px;height:15px;margin-top:4px;flex:none;accent-color:#ff4a2e}
-.warn{color:var(--red);font:12px "IBM Plex Mono",monospace;max-height:0;overflow:hidden;transition:max-height .4s,margin .4s}
+.chk{display:flex;gap:12px;align-items:flex-start;padding:13px 0;border-top:1px solid var(--line);font:14px "IBM Plex Mono",monospace;text-transform:none;letter-spacing:0;color:var(--ink);margin:0;cursor:pointer}
+.chk input{width:15px;height:15px;margin-top:4px;flex:none;accent-color:#f2f2ef}
+.warn{color:var(--ink);font:12px "IBM Plex Mono",monospace;max-height:0;overflow:hidden;transition:max-height .4s,margin .4s}
 .warn.on{max-height:60px;margin-top:10px}
 .foot{display:flex;justify-content:space-between;margin-top:30px}
 .id{font:400 28px "IBM Plex Mono",monospace;margin:20px 0;padding:18px 0;border-top:1px solid var(--hard);border-bottom:1px solid var(--hard);letter-spacing:.04em}
@@ -227,16 +227,9 @@ label{display:block;margin-bottom:6px}
       <span class="mono">Proposal No. 07 · Tissue donation for vultures</span>
       <h1>Become part of something that flies.</h1>
       <p>We take a tiny sample of your muscle and grow it into food for wild cinereous vultures. They spend every winter in Korea, and every winter there is not enough to eat.</p>
-      <div class="cta"><button class="btn" data-open><span>Request a kit</span><span class="arr">→</span></button><button class="btn ghost" data-go="how"><span>See how it works</span></button></div>
     </div>
     <div class="rv"><div class="ph"><img src="img/01-hero.jpg" alt="Cinereous vulture in flight"></div><p class="cap">Fig. 01 — Cinereous vulture (Aegypius monachus) over the hills of Cheorwon. Wingspan close to three metres.</p></div>
   </section>
-
-  <div class="big-stat rv">
-    <div><span class="mono">South Asia, 1990s–2000s</span><b data-count="95">0<em>%</em></b><p>Some vulture populations in India and Pakistan disappeared almost completely within about a decade. The cause turned out to be a common painkiller left in cattle carcasses.</p></div>
-    <div><span class="mono">Every winter, Korea</span><b>~3<em>m</em></b><p>The cinereous vulture is one of the largest birds of prey in the world. Young birds fly in from Mongolia each winter and many arrive already weak.</p></div>
-    <div><span class="mono">Korea, today</span><b data-count="90">0<em>%+</em></b><p>Almost everyone here is cremated. A body that could have fed something goes into a furnace instead.</p></div>
-  </div>
 
   <div class="head rv"><span class="mono">Background</span><h2>Vultures live on what we leave behind. We have stopped leaving anything.</h2></div>
 
@@ -249,7 +242,7 @@ label{display:block;margin-bottom:6px}
   <article class="story rv">
     <div><span class="mono">02 · The hunger</span><h3 style="margin-top:10px">Nothing left to find</h3></div>
     <div><p>Vultures do not hunt. They eat what has already died. In modern Korea dead livestock are collected and destroyed, roadkill is cleared within hours, and fields are kept clean.</p><p>So the birds that come here for the winter are fed by people. Volunteers, farmers and local governments haul meat to fields in Cheorwon, Paju and Goseong and leave it on the snow. When the meat runs out, the birds go hungry.</p><p class="src">The cinereous vulture is listed as a Natural Monument and an endangered species in Korea.</p></div>
-    <div class="ph"><img src="img/10-wall.jpg" alt="Snowy field"></div>
+    <div class="ph"><img src="img/11-cart.jpg" onerror="this.onerror=null;this.src='img/09-feeding.jpg'" alt="Volunteer pushing a feeding cart across a snowy field"></div>
   </article>
 
   <article class="story rv">
@@ -264,12 +257,11 @@ label{display:block;margin-bottom:6px}
       <h2>You already have exactly what they need.</h2>
       <p class="mute" style="font-size:17px">Your muscle is clean, traceable and grown from a living person who chose to give it. No one has to die for it. You don't have to wait until you do.</p>
       <ol>
-        <li><div></div><div><h3>Clean food they can trust</h3><p>Every batch is screened for painkillers, antibiotics and lead before it leaves the lab. That is more than anyone can say about a carcass in a field.</p></div></li>
-        <li><div></div><div><h3>A body that doesn't go to waste</h3><p>You don't have to give up your body at the end. Half a gram now is enough to grow a lot of food.</p></div></li>
-        <li><div></div><div><h3>A relationship you can follow</h3><p>You'll know which station received you, on which day, and in which batch. Your name stays on a wall at the edge of their feeding ground.</p></div></li>
-        <li><div></div><div><h3>Something of you, in the air</h3><p>The protein in your tissue becomes their muscle. Some of it will end up in the wings that carry them back to Mongolia in spring.</p></div></li>
+        <li><div><h3>Clean food they can trust</h3><p>Every batch is screened for painkillers, antibiotics and lead before it leaves the lab. That is more than anyone can say about a carcass in a field.</p></div></li>
+        <li><div><h3>A body that doesn't go to waste</h3><p>You don't have to give up your body at the end. Half a gram now is enough to grow a lot of food.</p></div></li>
+        <li><div><h3>A relationship you can follow</h3><p>You'll know which station received you, on which day, and in which batch. Your name stays on a wall at the edge of their feeding ground.</p></div></li>
+        <li><div><h3>Something of you, in the air</h3><p>The protein in your tissue becomes their muscle. Some of it will end up in the wings that carry them back to Mongolia in spring.</p></div></li>
       </ol>
-      <div class="cta"><button class="btn" data-open><span>Request a kit</span><span class="arr">→</span></button><button class="btn ghost" data-go="process"><span>Read the process</span></button></div>
     </div>
   </section>
 </div></main>
@@ -278,9 +270,9 @@ label{display:block;margin-bottom:6px}
 <main class="panel" id="p-how"><div class="wrap">
   <div class="head rv"><span class="mono">01 · How it works</span><div><h2>Three steps you can do at home.</h2><p class="mute">The cuff does the sampling and the marking for you. You never see a needle.</p></div></div>
   <div class="cols rv" style="grid-template-columns:repeat(3,1fr)">
-    <div class="step"><span class="mono">Step 1</span><div class="ph"><img src="img/03-cuff.jpg" alt=""></div><h3>Sample</h3><p>Wrap the cuff around your upper arm and press start. It numbs the skin and takes a piece of muscle about the size of a grain of rice.</p></div>
-    <div class="step"><span class="mono">Step 2</span><div class="ph"><img src="img/04a-feather.jpg" alt=""></div><h3>Mark</h3><p>The cuff leaves a small tattoo next to where the sample was taken. You choose a feather, a pair of wings or your donor number.</p></div>
-    <div class="step"><span class="mono">Step 3</span><div class="ph"><img src="img/05-capsule.jpg" alt=""></div><h3>Return</h3><p>Put the sealed cartridge into the return capsule and post it. It reaches our lab cold within two days.</p></div>
+    <div class="step"><span class="mono">Step 1</span><h3>Sample</h3><p>Wrap the cuff around your upper arm and press start. It numbs the skin and takes a piece of muscle about the size of a grain of rice.</p><div class="ph"><img src="img/03-cuff.jpg" alt=""></div></div>
+    <div class="step"><span class="mono">Step 2</span><h3>Mark</h3><p>The cuff leaves a small tattoo next to where the sample was taken. You choose a feather, a pair of wings or your donor number.</p><div class="ph"><img src="img/04a-feather.jpg" alt=""></div></div>
+    <div class="step"><span class="mono">Step 3</span><h3>Return</h3><p>Put the sealed cartridge into the return capsule and post it. It reaches our lab cold within two days.</p><div class="ph"><img src="img/05-capsule.jpg" alt=""></div></div>
   </div>
   <div class="procedure rv">
     <div>
@@ -313,7 +305,6 @@ label{display:block;margin-bottom:6px}
         <li style="cursor:default"><i>C</i><div><b>Antiseptic wipe</b></div></li>
         <li style="cursor:default"><i>D</i><div><b>Prepaid return capsule</b></div></li>
       </ol>
-      <div class="cta" style="margin-top:26px"><button class="btn" data-open><span>Request a kit</span><span class="arr">→</span></button></div>
     </div>
   </div>
 </div></main>
@@ -368,11 +359,18 @@ label{display:block;margin-bottom:6px}
 <main class="panel" id="p-faq"><div class="wrap">
   <div class="head rv"><span class="mono">06 · Questions</span><h2>Things people ask us.</h2></div>
   <div class="rv">
-  <details><summary>Does it hurt?</summary><p>The skin is numbed first. Most donors feel some pressure and then the buzz of the tattoo module. It is over in a few minutes.</p></details>
-  <details><summary>Is it still me after it's grown?</summary><p>The sample we take is about half a gram. After it has been grown, less than one thousandth of a percent of what a vulture eats was ever inside your body. Every cell still carries your DNA and your donor number.</p></details>
-  <details><summary>Will the vulture know my name?</summary><p>No. Your name is on the wall and in your notices. The vulture only knows the meal.</p></details>
-  <details><summary>Can I choose which bird eats it?</summary><p>You choose the station. We can't assign a particular bird. They eat in groups and in their own order.</p></details>
-  <details><summary>Can I give more than once?</summary><p>Yes, once every twelve months. Each donation opens a new cell line and leaves a new mark.</p></details>
+  <details><summary>Does it hurt?</summary><p>Less than most people expect. The cuff numbs the skin for about three minutes before it does anything else, so what you feel during sampling is mostly pressure. The tattoo module that follows feels like a fine-line tattoo on a numbed arm. The site can be sore for a day or two afterwards, much like after a vaccination.</p></details>
+  <details><summary>How much of me do you actually take?</summary><p>About half a gram of skeletal muscle. That's roughly the size of a grain of rice. Your body replaces it within a few weeks and you will not notice any difference in strength or movement.</p></details>
+  <details><summary>Will there be a scar?</summary><p>Usually a faint line about a centimetre long. The memorial mark is placed right next to it. We don't try to hide the line completely, because it is the only trace of what you gave. Most donors say they stop noticing it after a few months.</p></details>
+  <details><summary>Is it still me after it's grown?</summary><p>That depends on what you think makes something yours. In strict physical terms, almost none of it is. Your half gram is multiplied into about 160 kilograms, so in any single batch less than one thousandth of a percent was ever inside your body. But every one of those cells grew from yours and carries your DNA. We keep your donor number on every pack because we think that connection matters, even if it's hard to measure.</p></details>
+  <details><summary>Will the vulture know my name?</summary><p>No. A vulture recognises food, other vultures and the shape of the place where it is usually fed. It will never know that a person was involved. Your name lives on the wall at the station and in the notices we send you. The relationship is real, but it only runs in one direction, and we think it's important to be honest about that.</p></details>
+  <details><summary>Why vultures and not some other animal?</summary><p>Vultures are built to eat what others leave behind. They clean up carcasses that would otherwise rot and spread disease. That role has almost disappeared in places like Korea, because people now remove dead animals before vultures can reach them. The birds that still visit each winter depend on food that humans bring. They are also among the species that have suffered most from what we put in that food.</p></details>
+  <details><summary>Why not just donate meat or money?</summary><p>You can, and many people already do. Feeding stations always need both. Eternal Flight is for people who want something more direct. Meat from a butcher comes from an animal you never knew. Money turns into meat you never see. Your own tissue is something you can trace from your arm to a particular field on a particular day.</p></details>
+  <details><summary>Is it safe for the birds?</summary><p>That's the whole reason for the screening and the testing. Every batch is checked for anti-inflammatory drugs, antibiotics and heavy metals before it leaves the lab, and nothing is released if any residue is found. Cultivated tissue is also free of the bone fragments and lead shot that sometimes end up in donated carcasses. We adjust fat and calcium levels so the food matches what a wild vulture would get from a normal meal.</p></details>
+  <details><summary>Can I choose which bird eats it?</summary><p>You choose the station. We can't assign an individual bird. Vultures feed in groups with their own order of who eats first, and older birds often push the young ones aside. We think it's better not to interfere with that.</p></details>
+  <details><summary>Can I give more than once?</summary><p>Yes, once every twelve months. Each donation opens a new cell line and leaves a new mark beside the last one. Some regular donors end up with a short row of feathers on their arm, one for each winter.</p></details>
+  <details><summary>What happens if I die before my line runs out?</summary><p>Your cells keep growing and your batches keep being served until the line reaches its natural limit. Your notices can be sent to someone you name in advance. Your name stays on the wall either way.</p></details>
+  <details><summary>Can I change my mind?</summary><p>You can cancel at any point before the cartridge is posted. Once your sample reaches the lab and the line has started, we can still stop it, but we can't give anything back. Everything grown up to that point will be destroyed rather than served.</p></details>
   </div>
 </div></main>
 
@@ -442,7 +440,7 @@ function go(id,push=true){
   window.scrollTo({top:0});
   $$('#p-'+id+' .rv').forEach(e=>e.classList.remove('in'));
   requestAnimationFrame(()=>observe(id));
-  if(id==='home')countUp();
+  
 }
 $$('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
 window.addEventListener('resize',()=>{const t=$('.tab.on');if(t){ink.style.left=t.offsetLeft+'px';ink.style.width=t.offsetWidth+'px'}});
