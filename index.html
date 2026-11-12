@@ -269,6 +269,12 @@ details p{color:var(--mute);margin-top:10px;font-size:13px}
 .nores{display:none;color:var(--mute);padding:20px 0}
 footer{border-top:1px solid var(--line);padding:34px 0 56px;font-size:11.5px;color:var(--dim)}
 footer .wrap{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap}
+.lang{display:flex;border:1px solid var(--hard)}
+.lang button{background:none;border:0;padding:6px 9px;font-size:11px;color:var(--mute);cursor:pointer}
+.lang button.on{background:var(--ink);color:var(--bg)}
+#gt,.skiptranslate,iframe.goog-te-banner-frame,#goog-gt-tt,.goog-te-balloon-frame{display:none!important}
+body{top:0!important}
+font[style]{background:none!important;box-shadow:none!important}
 /* ---------- toast ---------- */
 .toast{position:fixed;left:24px;bottom:24px;z-index:40;background:#0d0d0d;border:1px solid var(--line);padding:12px 16px;font-size:12px;max-width:340px;transform:translateY(20px);opacity:0;transition:transform .45s cubic-bezier(.2,.7,.2,1),opacity .45s;pointer-events:none}
 .toast.on{transform:none;opacity:1}
@@ -312,6 +318,7 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
     <i class="ink" id="ink"></i>
   </nav>
   <button class="textlink toDetails" data-details>See the details</button>
+  <div class="lang notranslate" role="group" aria-label="Language"><button data-lang="en" class="on">EN</button><button data-lang="ko">KR</button></div>
   <button class="btn" data-open><span>Request a kit</span></button>
   <i class="progress" id="progress"></i>
 </div></div>
@@ -405,7 +412,7 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
 
     <div class="cfg" id="cfg">
       <div class="cfg-stage">
-        <canvas id="armc" aria-label="3D preview of an upper arm with your chosen mark tattooed over the sampling cut"></canvas>
+        <canvas class="notranslate" id="armc" aria-label="3D preview of an upper arm with your chosen mark tattooed over the sampling cut"></canvas>
         <div class="cfg-hint" id="cfghint">Drag to turn the arm. Scroll or pinch to zoom.</div>
         <div class="cfg-day" id="cfgday">Day 1</div>
         <div class="cfg-loading" id="cfgload">Loading the preview…</div>
@@ -487,7 +494,7 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
 
   <section class="s" id="donors">
     <div class="shead"><span class="label">Donors</span><h2>People who are donating right now.</h2></div>
-    <div class="fb">
+    <div class="fb notranslate">
       <div class="fb-top">
         <div class="fb-stat"><span>Waiting for a kit</span><div class="fc" id="st-w"></div></div>
         <div class="fb-stat"><span>Cells growing in the lab</span><div class="fc" id="st-c"></div></div>
@@ -1158,5 +1165,26 @@ const vis=watch(box);(function loop(){requestAnimationFrame(loop);if(vis())frame
 })();
 </script>
 
+
+<div id="gt"></div>
+<script>
+/* KR toggle: machine translation through Google's website translator.
+   Nothing on this site is stored; only the page text goes to Google for translation. */
+(function(){
+  const want=()=>/googtrans=\/en\/ko/.test(document.cookie)?'ko':'en';
+  const mark=l=>document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('on',b.dataset.lang===l));
+  mark(want());
+  window.gtInit=function(){new google.translate.TranslateElement({pageLanguage:'en',includedLanguages:'ko',autoDisplay:false},'gt')};
+  function setLang(l){
+    const host=location.hostname,exp=l==='en'?'; expires=Thu, 01 Jan 1970 00:00:00 GMT':'';
+    ['',' ; domain='+host,' ; domain=.'+host].forEach(d=>document.cookie='googtrans=/en/'+(l==='en'?'en':'ko')+'; path=/'+d.replace(' ;',';')+exp);
+    const sel=document.querySelector('.goog-te-combo');
+    if(sel&&l==='ko'){sel.value='ko';sel.dispatchEvent(new Event('change'));mark('ko')}
+    else location.reload();
+  }
+  document.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{if(b.dataset.lang!==want()||b.dataset.lang==='ko')setLang(b.dataset.lang)});
+  const s=document.createElement('script');s.src='https://translate.google.com/translate_a/element.js?cb=gtInit';s.async=true;document.body.appendChild(s);
+})();
+</script>
 </body>
 </html>
