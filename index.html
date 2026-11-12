@@ -3,473 +3,480 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Eternal Flight — Tissue Donation for Vultures</title>
+<title>Eternal Flight — Tissue donation for wild vultures</title>
 <meta name="description" content="Grow a small part of yourself into food for wild vultures.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0b0b0b;--ink:#f2f2ef;--mute:#8d8d88;--dim:#4a4a47;--line:rgba(242,242,239,.14);--hard:rgba(242,242,239,.6);--red:#f2f2ef}
+:root{--bg:#000;--ink:#f0f0ec;--mute:#8e8e89;--dim:#55554f;--line:rgba(240,240,236,.13);--hard:rgba(240,240,236,.55);--tw:17.75px}
 *{box-sizing:border-box;margin:0;padding:0}
+html{scroll-padding-top:10px}
 html,body{background:var(--bg);color:var(--ink)}
 body{font:14px/1.7 "IBM Plex Mono",ui-monospace,monospace;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 ::selection{background:var(--ink);color:var(--bg)}
-img{display:block;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.05) brightness(.9);transition:filter .6s,transform 1.2s cubic-bezier(.2,.7,.2,1)}
-.ph{overflow:hidden;background:#151515;position:relative}
-.ph:hover img{filter:grayscale(0) brightness(1);transform:scale(1.03)}
-h1,h2,h3{font-weight:300;letter-spacing:-.035em;line-height:1.02}
-h1{font-size:clamp(38px,5.4vw,80px);letter-spacing:-.06em}
-h2{font-size:clamp(26px,3.2vw,44px);margin-bottom:24px;letter-spacing:-.05em}
-h3{font-size:19px;font-weight:400;letter-spacing:-.01em;margin-bottom:8px}
-p{max-width:58ch}
-.mono,label,.cap{font:11px/1.5 "IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+:focus-visible{outline:1px solid var(--ink);outline-offset:3px}
+button{font:inherit;color:inherit}
+img{display:block;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.04) brightness(.9);transition:filter .5s}
+.ph{overflow:hidden;background:#111;position:relative}
+.ph:hover img{filter:grayscale(.2) brightness(1)}
+h1,h2,h3{font-weight:300;letter-spacing:-.05em;line-height:1.08}
+h1{font-size:clamp(34px,4.6vw,64px)}
+h2{font-size:clamp(24px,2.7vw,38px);margin-bottom:18px}
+h3{font-size:16px;font-weight:400;letter-spacing:-.02em;margin-bottom:6px}
+p{max-width:62ch}
 .mute{color:var(--mute)}
-.wrap{max-width:1340px;margin:0 auto;padding:0 32px}
-a{color:inherit}
-/* ---------- top bar & tabs ---------- */
-.bar{position:sticky;top:0;z-index:30;background:rgba(11,11,11,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-.bar .wrap{display:flex;align-items:center;gap:40px;height:60px}
-.logo{font:500 13px "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase;display:flex;gap:10px;align-items:center;white-space:nowrap;cursor:pointer}
-.logo svg{transition:transform 1s}.logo:hover svg{transform:rotate(180deg)}
-.tabs{display:flex;gap:2px;position:relative;overflow-x:auto;scrollbar-width:none;flex:1}
-.tabs::-webkit-scrollbar{display:none}
-.tab{background:none;border:0;color:var(--mute);font:11px "IBM Plex Mono",monospace;letter-spacing:.07em;text-transform:uppercase;padding:21px 14px;cursor:pointer;white-space:nowrap;transition:color .25s}
-.tab:hover,.tab.on{color:var(--ink)}
-.tab b{font-weight:400;color:var(--dim);margin-right:6px;transition:color .25s}.tab.on b{color:var(--ink)}
-.ink{position:absolute;bottom:0;height:1px;background:var(--ink);transition:left .45s cubic-bezier(.6,0,.2,1),width .45s cubic-bezier(.6,0,.2,1)}
-.btn{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--bg);border:1px solid var(--ink);padding:13px 20px;font:12px "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;text-decoration:none;position:relative;overflow:hidden;white-space:nowrap}
+.small{font-size:12.5px}
+.label{font-size:11px;color:var(--mute);letter-spacing:.02em}
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+@media(max-width:600px){.wrap{padding:0 18px}}
+/* ---------- bar ---------- */
+.bar{position:sticky;top:0;z-index:30;background:rgba(0,0,0,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:32px;height:58px}
+.logo{display:flex;gap:10px;align-items:center;font-size:13px;letter-spacing:.06em;white-space:nowrap;cursor:pointer;background:none;border:0}
+.logo svg{transition:transform .9s}.logo:hover svg{transform:rotate(180deg)}
+.links{display:flex;gap:4px;flex:1;overflow-x:auto;scrollbar-width:none;position:relative}
+.links::-webkit-scrollbar{display:none}
+.links a{color:var(--mute);text-decoration:none;font-size:12px;padding:19px 10px;white-space:nowrap;transition:color .2s}
+.links a:hover,.links a.on{color:var(--ink)}
+.ink{position:absolute;bottom:0;height:1px;background:var(--ink);transition:left .4s cubic-bezier(.6,0,.2,1),width .4s cubic-bezier(.6,0,.2,1)}
+.progress{position:absolute;left:0;bottom:-1px;height:1px;background:var(--ink);width:0}
+body.landing .links,body.landing .progress{display:none}
+body.landing .bar .wrap{justify-content:space-between}
+.textlink{background:none;border:0;border-bottom:1px solid var(--dim);font-size:12px;cursor:pointer;padding:2px 0;white-space:nowrap;transition:border-color .2s}
+.textlink:hover{border-color:var(--ink)}
+.toDetails{display:none}body.landing .toDetails{display:block;margin-left:auto}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--bg);border:1px solid var(--ink);padding:12px 18px;font-size:12px;cursor:pointer;text-decoration:none;position:relative;overflow:hidden;white-space:nowrap}
 .btn span{position:relative;z-index:1}
-.btn::after{content:"";position:absolute;inset:0;background:var(--bg);transform:translateY(101%);transition:transform .35s cubic-bezier(.6,0,.2,1)}
+.btn::after{content:"";position:absolute;inset:0;background:var(--bg);transform:translateY(101%);transition:transform .3s cubic-bezier(.6,0,.2,1)}
 .btn:hover{color:var(--ink)}.btn:hover::after{transform:none}
-.btn .arr{position:relative;z-index:1;transition:transform .35s}.btn:hover .arr{transform:translateX(4px)}
 .btn.ghost{background:transparent;color:var(--ink)}.btn.ghost::after{background:var(--ink)}.btn.ghost:hover{color:var(--bg)}
-.bar .btn{padding:9px 14px;font-size:11px}
-@media(max-width:760px){.bar .wrap{gap:14px}.logo span{display:none}}
-/* ---------- panels ---------- */
-.panel{display:none;padding:72px 0 120px;min-height:calc(100vh - 60px)}
-.panel.on{display:block}
-.rv{opacity:0;transform:translateY(18px);transition:opacity .8s,transform .8s cubic-bezier(.2,.7,.2,1)}
-.rv.in{opacity:1;transform:none}
-.head{display:grid;grid-template-columns:3fr 9fr;gap:32px;margin-bottom:56px}
-.head .mono{padding-top:10px}
-@media(max-width:860px){.head{grid-template-columns:1fr}}
-.rule{border-top:1px solid var(--hard)}
-.cols{display:grid;gap:0;border-top:1px solid var(--hard)}
-.cols>div{padding:20px 28px 0 0}
-.cols>div+div{padding-left:28px;border-left:1px solid var(--line)}
-@media(max-width:860px){.cols{grid-template-columns:1fr!important}.cols>div+div{border-left:0;padding-left:0;border-top:1px solid var(--line);margin-top:24px}}
-/* ---------- home ---------- */
-.hero{display:grid;grid-template-columns:6fr 6fr;gap:40px;align-items:end;margin-bottom:110px}
-.hero h1{margin:26px 0 30px}
-.hero p{font-size:18px;color:#c9c9c4;margin-bottom:36px;max-width:44ch}
+.bar .btn{padding:8px 13px}
+@media(max-width:700px){.bar .wrap{gap:12px}.logo span{display:none}}
+/* ---------- views ---------- */
+.view{display:none}.view.on{display:block}
+section.s{padding:100px 0;border-top:1px solid var(--line)}
+section.s:first-child{border-top:0;padding-top:72px}
+.shead{display:grid;grid-template-columns:3fr 9fr;gap:32px;margin-bottom:48px}
+.shead .label{padding-top:8px}
+.shead h2{max-width:24ch}
+@media(max-width:860px){.shead{grid-template-columns:1fr;gap:10px}}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+@media(max-width:860px){.grid3{grid-template-columns:1fr}}
+/* ---------- landing ---------- */
+.hero{display:grid;grid-template-columns:5fr 6fr;gap:56px;align-items:center;padding:80px 0 40px}
+.hero h1{margin-bottom:26px;max-width:12ch}
+.hero p{color:#c8c8c3;max-width:46ch}
 .hero .ph{aspect-ratio:3/2}
-.hero .ph img{object-position:center 30%}
-.hero p.cap,.cap{font-size:11px;color:var(--mute);margin-top:12px;text-transform:none;letter-spacing:.02em}
-@media(max-width:900px){.hero{grid-template-columns:1fr}}
-.big-stat{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--hard);margin:0 0 110px}
-.big-stat>div{padding:22px 28px 0 0}
-.big-stat>div+div{padding-left:28px;border-left:1px solid var(--line)}
-.big-stat b{display:block;font:300 clamp(48px,6vw,88px)/1 "IBM Plex Mono",monospace;letter-spacing:-.05em;margin:14px 0 14px}
-.big-stat b em{font-style:normal;color:var(--red)}
-.big-stat p{color:var(--mute);font-size:14px}
-@media(max-width:860px){.big-stat{grid-template-columns:1fr}.big-stat>div+div{border-left:0;padding-left:0;border-top:1px solid var(--line);margin-top:22px}}
-.story{display:grid;grid-template-columns:3fr 5fr 4fr;gap:32px;padding:34px 0;border-top:1px solid var(--line)}
-.story:first-of-type{border-top:1px solid var(--hard)}
-.story p{color:#c9c9c4;margin-bottom:14px}
-.story .ph{aspect-ratio:3/2}
-.story .src{font:10.5px "IBM Plex Mono",monospace;color:var(--dim);letter-spacing:.03em;margin-top:10px}
-@media(max-width:900px){.story{grid-template-columns:1fr}}
-.pitch{margin-top:110px;display:grid;grid-template-columns:4fr 8fr;gap:48px;align-items:start}
+.hero .ph img{animation:settle 2.2s cubic-bezier(.2,.7,.2,1) both}
+@keyframes settle{from{transform:scale(1.06);filter:grayscale(1) brightness(.5)}}
+.hero-actions{display:flex;gap:18px;align-items:center;margin-top:34px;flex-wrap:wrap}
+@media(max-width:900px){.hero{grid-template-columns:1fr;padding-top:48px}}
+.cue{display:flex;align-items:center;gap:14px;margin:30px 0 70px;background:none;border:0;cursor:pointer;color:var(--mute);font-size:12px}
+.cue i{display:block;width:1px;height:40px;background:var(--line);position:relative;overflow:hidden}
+.cue i::after{content:"";position:absolute;left:0;top:-40px;width:1px;height:40px;background:var(--ink);animation:drip 1.8s cubic-bezier(.6,0,.3,1) infinite}
+@keyframes drip{to{top:40px}}
+.cue:hover{color:var(--ink)}
+.story{display:grid;grid-template-columns:3fr 6fr 3fr;gap:32px;padding:30px 0;border-top:1px solid var(--line);align-items:start}
+.story p{color:#c8c8c3;margin-bottom:12px}
+.story .ph{aspect-ratio:4/3}
+.src{font-size:11px;color:var(--dim)}
+@media(max-width:900px){.story{grid-template-columns:1fr}.story .ph{max-width:420px}}
+.pitch{display:grid;grid-template-columns:3fr 9fr;gap:48px;margin-top:100px;align-items:start}
 .pitch-side{position:sticky;top:90px}
-.pitch h2{max-width:18ch}
-.pitch ol{list-style:none;counter-reset:p;border-top:1px solid var(--hard);margin-top:34px}
-.pitch li{counter-increment:p;display:grid;grid-template-columns:60px 1fr;padding:22px 0;border-bottom:1px solid var(--line);transition:padding .35s,background .35s}
-.pitch li:hover{padding-left:14px;background:rgba(255,255,255,.03)}
-.pitch li::before{content:counter(p,decimal-leading-zero);font:11px "IBM Plex Mono",monospace;color:var(--mute);padding-top:8px}
-.pitch li h3{font-size:24px;font-weight:300;letter-spacing:-.02em}
-.pitch li p{color:var(--mute);font-size:14px}
-.cta{margin-top:56px;display:flex;gap:10px;flex-wrap:wrap}
+.pitch-side .ph{aspect-ratio:3/4;max-width:300px;margin-top:16px}
+.pitch-side .label{display:block;margin-top:10px;max-width:300px}
+.reasons{list-style:none;border-top:1px solid var(--hard);margin-top:30px}
+.reasons li{display:grid;grid-template-columns:44px 1fr;padding:20px 0;border-bottom:1px solid var(--line)}
+.reasons li>span{color:var(--dim);font-size:12px;padding-top:3px}
+.reasons p{color:var(--mute);font-size:13px}
 @media(max-width:860px){.pitch{grid-template-columns:1fr}.pitch-side{position:static}}
-.hero-full{position:relative;height:calc(100vh - 60px);min-height:560px;margin:0 0 110px;overflow:hidden;display:flex;align-items:flex-end}
-.hero-full>img{position:absolute;inset:0;filter:grayscale(1) contrast(1.05) brightness(.82);transform:scale(1.04);animation:heroIn 2.4s cubic-bezier(.2,.7,.2,1) forwards}
-@keyframes heroIn{to{transform:none}}
-.hero-full::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,11,11,.55) 0%,rgba(11,11,11,0) 30%,rgba(11,11,11,0) 45%,rgba(11,11,11,.85) 100%)}
-.hero-full .wrap{position:relative;z-index:2;width:100%;padding-bottom:110px;display:flex;justify-content:flex-end}
-.hero-full .wrap>div{max-width:600px}
-.hero-full .mono{color:#d8d8d4}
-.hero-full::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(11,11,11,0) 35%,rgba(11,11,11,.6) 100%)}
-.hero-full h1{margin:20px 0 24px;max-width:13ch}
-.hero-full p{font-size:16px;color:#e4e4e0;max-width:56ch}
-body.landing .tabs{visibility:hidden}
-.navlink{display:none;background:none;border:0;color:var(--ink);font:11px "IBM Plex Mono",monospace;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;white-space:nowrap;padding:8px 0;border-bottom:1px solid transparent;transition:border-color .25s}
-.navlink:hover{border-color:var(--ink)}
-body.landing .navlink{display:block}
-.scrollcue{position:absolute;left:50%;bottom:26px;z-index:3;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;font:10px "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase;color:#d8d8d4;cursor:pointer;background:none;border:0}
-.scrollcue i{display:block;width:1px;height:46px;background:rgba(242,242,239,.25);position:relative;overflow:hidden}
-.scrollcue i::after{content:"";position:absolute;left:0;top:-46px;width:1px;height:46px;background:#f2f2ef;animation:drip 1.8s cubic-bezier(.6,0,.3,1) infinite}
-@keyframes drip{to{top:46px}}
-.more{margin-top:120px;border-top:1px solid var(--hard);padding-top:40px;display:grid;grid-template-columns:4fr 8fr;gap:48px;align-items:end}
-.more h2{margin:0}
-@media(max-width:860px){.more{grid-template-columns:1fr}}
+.next{margin:110px 0 0;padding:40px 0 100px;border-top:1px solid var(--hard);display:grid;grid-template-columns:3fr 9fr;gap:32px}
+@media(max-width:860px){.next{grid-template-columns:1fr}}
 /* ---------- how ---------- */
-.step{display:flex;flex-direction:column}.step h3{margin-top:14px}.step .ph{aspect-ratio:4/5;margin-top:auto;padding-top:0}.step p{margin-bottom:24px;min-height:96px}.cols>div.step{padding:20px 14px 0 14px}.cols>div.step:first-child{padding-left:0;padding-right:28px}.cols>div.step:last-child{padding-right:0;padding-left:28px}
-.step p{color:var(--mute);font-size:14px}
-.procedure{margin-top:96px;display:grid;grid-template-columns:1fr 1fr;gap:56px;border-top:1px solid var(--hard);padding-top:26px}
-.procedure ol{list-style:none;margin-top:20px}
-.procedure li{display:grid;grid-template-columns:48px 1fr;padding:14px 0;border-top:1px solid var(--line);font-size:14px;cursor:pointer;transition:color .2s}
-.procedure li i{font:normal 11px "IBM Plex Mono",monospace;color:var(--dim);padding-top:3px}
-.procedure li b{font-weight:400;display:block}
-.procedure li span{color:var(--mute);display:block;max-height:0;overflow:hidden;transition:max-height .4s,margin .4s}
-.procedure li.on span{max-height:80px;margin-top:4px}
-.procedure li.on i{color:var(--red)}
-.screen{border:1px solid var(--hard);padding:22px;font:12px/1.8 "IBM Plex Mono",monospace;margin-top:24px;min-height:150px;position:relative}
-.screen .cur{display:inline-block;width:7px;height:13px;background:var(--ink);vertical-align:-2px;animation:blink 1s steps(2) infinite}
+.box{display:grid;grid-template-columns:7fr 5fr;gap:40px;align-items:start}
+.box .ph{aspect-ratio:3/2}
+.kitlist{list-style:none;border-top:1px solid var(--hard)}
+.kitlist li{padding:14px 0;border-bottom:1px solid var(--line);cursor:default;transition:padding .25s}
+.kitlist li:hover{padding-left:8px}
+.kitlist b{font-weight:400;display:block}
+.kitlist span{color:var(--mute);font-size:12.5px}
+@media(max-width:860px){.box{grid-template-columns:1fr}}
+.steps{margin-top:80px;border-top:1px solid var(--hard)}
+.steps .grid3>div{padding-top:20px;display:flex;flex-direction:column}
+.steps .label{margin-bottom:8px}
+.steps p{color:var(--mute);font-size:13px;margin-bottom:18px;min-height:88px}
+.steps .ph{aspect-ratio:4/3;margin-top:auto}
+.mark{display:grid;grid-template-columns:5fr 7fr;gap:48px;align-items:center;margin-top:90px;padding-top:30px;border-top:1px solid var(--hard)}
+.marks{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.marks button{background:none;border:1px solid transparent;padding:0;cursor:pointer;text-align:left;transition:border-color .2s}
+.marks button .ph{aspect-ratio:1}
+.marks button span{display:block;font-size:11px;color:var(--mute);padding:6px 0 0}
+.marks button.on{border-color:var(--ink)}
+.marks button.on span{color:var(--ink)}
+@media(max-width:860px){.mark{grid-template-columns:1fr}}
+.cuff{display:grid;grid-template-columns:6fr 6fr;gap:48px;margin-top:90px;padding-top:30px;border-top:1px solid var(--hard)}
+.cuff ol{list-style:none;margin-top:14px}
+.cuff li{display:grid;grid-template-columns:40px 1fr;padding:12px 0;border-top:1px solid var(--line);cursor:pointer}
+.cuff li i{font-style:normal;font-size:11px;color:var(--dim);padding-top:3px}
+.cuff li b{font-weight:400}
+.cuff li span{display:block;color:var(--mute);font-size:12.5px;max-height:0;overflow:hidden;transition:max-height .35s,margin .35s}
+.cuff li.on span{max-height:80px;margin-top:4px}
+.cuff li.on i{color:var(--ink)}
+.device{border:1px solid var(--hard);padding:26px;min-height:200px;display:flex;flex-direction:column;justify-content:space-between;background:#070707}
+.screen{font-size:13px;line-height:1.9;min-height:90px}
+.cur{display:inline-block;width:7px;height:13px;background:var(--ink);vertical-align:-2px;animation:blink 1s steps(2) infinite}
 @keyframes blink{50%{opacity:0}}
-.tatt{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);margin-top:22px}
-.tatt .ph{aspect-ratio:3/2}
-.tatt .tl{position:absolute;left:0;bottom:0;background:var(--bg);padding:4px 8px;font:10px "IBM Plex Mono",monospace;letter-spacing:.06em;z-index:2}
-@media(max-width:860px){.procedure{grid-template-columns:1fr}}
-.keep{display:grid;grid-template-columns:5fr 7fr;gap:48px;align-items:center;border-top:1px solid var(--hard);padding:30px 0 96px}
-.keep .tatt .ph{aspect-ratio:3/4}
-@media(max-width:860px){.keep{grid-template-columns:1fr}}
-.omni{margin-bottom:120px}
-.omni-text{display:grid;grid-template-columns:3fr 9fr;gap:32px;margin-bottom:40px}
-.omni-text .mono{padding-top:12px}
-.omni-text h2{max-width:20ch}
-.omni-text p{grid-column:2}
-.omni-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.omni-grid .ph{aspect-ratio:2/3;background:transparent;-webkit-mask-image:radial-gradient(ellipse 72% 78% at 50% 48%,#000 55%,transparent 100%);mask-image:radial-gradient(ellipse 72% 78% at 50% 48%,#000 55%,transparent 100%)}
-.omni-grid{gap:0}
-.omni-grid figure:nth-child(2){transform:translateY(40px)}
-.omni-grid img{filter:grayscale(1) contrast(1.05) brightness(.92)}
-.box{margin-bottom:110px}
-@media(max-width:860px){.omni-text{grid-template-columns:1fr}.omni-text p{grid-column:1}.omni-grid{grid-template-columns:1fr}.omni-grid figure:nth-child(2){transform:none}}
+.devbar{height:2px;background:var(--line);margin-top:18px;position:relative}
+.devbar i{position:absolute;inset:0;background:var(--ink);transform-origin:left;transform:scaleX(0);transition:transform .6s}
+.devnav{display:flex;justify-content:space-between;margin-top:14px}
+@media(max-width:860px){.cuff{grid-template-columns:1fr}}
+.donors-omni{margin-top:100px;padding-top:30px;border-top:1px solid var(--hard)}
+.omni{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px}
+.omni .ph{aspect-ratio:4/5;-webkit-mask-image:radial-gradient(ellipse 80% 82% at 50% 46%,#000 58%,transparent 100%);mask-image:radial-gradient(ellipse 80% 82% at 50% 46%,#000 58%,transparent 100%);background:transparent}
+.omni figcaption{font-size:11.5px;color:var(--mute);margin-top:8px;max-width:34ch}
+@media(max-width:860px){.omni{grid-template-columns:1fr 1fr}.omni figure:last-child{display:none}}
 /* ---------- process ---------- */
 .rail{display:flex;border-top:1px solid var(--hard);border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
-.rail button{flex:1;min-width:120px;background:none;border:0;border-right:1px solid var(--line);color:var(--mute);text-align:left;padding:16px 14px;cursor:pointer;font:11px "IBM Plex Mono",monospace;letter-spacing:.05em;text-transform:uppercase;position:relative;transition:color .2s}
+.rail button{flex:1;min-width:118px;background:none;border:0;border-right:1px solid var(--line);color:var(--mute);text-align:left;padding:14px 12px;cursor:pointer;font-size:11px;position:relative}
 .rail button:last-child{border-right:0}
-.rail button b{display:block;font:300 22px "IBM Plex Mono",monospace;letter-spacing:-.02em;text-transform:none;color:var(--ink);margin-top:6px;opacity:.45;transition:opacity .2s}
-.rail button.on,.rail button:hover{color:var(--ink)}.rail button.on b,.rail button:hover b{opacity:1}
-.rail button::after{content:"";position:absolute;left:0;bottom:-1px;height:2px;width:0;background:var(--red);transition:width .5s}
-.rail button.on::after{width:100%}
-.stage{display:grid;grid-template-columns:5fr 7fr;gap:48px;padding-top:42px;min-height:440px}
-.stage .ph{aspect-ratio:3/2}
-.stage ul{list-style:none;margin-top:22px;border-top:1px solid var(--line)}
-.stage li{padding:10px 0;border-bottom:1px solid var(--line);font-size:14px;color:#c9c9c4;display:flex;justify-content:space-between;gap:20px}
-.stage li span:last-child{font:12px "IBM Plex Mono",monospace;color:var(--mute);text-align:right}
-.stage .note{margin-top:20px;font:12px/1.6 "IBM Plex Mono",monospace;border-left:1px solid var(--red);padding-left:12px;max-width:52ch}
-.fade{animation:fade .6s}
-@keyframes fade{from{opacity:0;transform:translateY(8px)}}
-.empty{border:1px solid var(--line);display:flex;align-items:center;justify-content:center;aspect-ratio:3/2;font:11px "IBM Plex Mono",monospace;color:var(--dim);text-align:center;padding:20px}
+.rail button b{display:block;font-weight:300;font-size:17px;letter-spacing:-.04em;color:var(--ink);margin-top:4px;opacity:.45;transition:opacity .2s}
+.rail button.on b,.rail button:hover b{opacity:1}
+.rail button.on{color:var(--ink)}
+.rail button i{position:absolute;left:0;bottom:-1px;height:1px;width:0;background:var(--ink)}
+.rail button.done i{width:100%}
+.stage{display:grid;grid-template-columns:6fr 5fr;gap:48px;padding-top:36px;min-height:380px}
+.stage .ph,.stage .empty{aspect-ratio:4/3}
+.stage ul{list-style:none;margin-top:18px;border-top:1px solid var(--line)}
+.stage li{padding:9px 0;border-bottom:1px solid var(--line);font-size:13px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.stage li span:first-child{color:var(--mute)}
+.note{margin-top:18px;font-size:12.5px;border-left:1px solid var(--ink);padding-left:12px}
+.empty{border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--dim);text-align:center;padding:20px}
+.fade{animation:fade .5s}@keyframes fade{from{opacity:0;transform:translateY(6px)}}
+.autoplay{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
 @media(max-width:900px){.stage{grid-template-columns:1fr}}
-/* ---------- queue ---------- */
-.board{border-top:1px solid var(--hard);border-bottom:1px solid var(--hard);font-family:"IBM Plex Mono",monospace}
-.board .top{display:grid;grid-template-columns:repeat(3,1fr) auto;padding:18px 0;border-bottom:1px solid var(--hard)}
-.board .top b{font:300 40px "IBM Plex Mono",monospace;letter-spacing:-.04em;display:block;margin-top:4px}
-.board .top span{font-size:10.5px;color:var(--mute);letter-spacing:.08em;text-transform:uppercase}
-.live{display:inline-flex;align-items:center;gap:8px;font-size:10.5px;letter-spacing:.1em;align-self:start}
-.live::before{content:"";width:7px;height:7px;background:var(--red);animation:blink 1.2s steps(2) infinite}
-.tbl{width:100%;border-collapse:collapse;font-size:12px}
-.tbl th{text-align:left;font-weight:400;color:var(--mute);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:12px 10px 10px 0}
-.tbl td{padding:11px 10px 11px 0;border-top:1px solid var(--line);white-space:nowrap}
-.tbl tbody tr{transition:background .2s}.tbl tbody tr:hover{background:rgba(255,255,255,.04)}
-.tbl tr.flash td{animation:flash 1.6s}
-@keyframes flash{0%{background:rgba(255,255,255,.12)}100%{background:transparent}}
-.st{font-size:10.5px;letter-spacing:.05em;text-transform:uppercase}
-.st::before{content:"";display:inline-block;width:6px;height:6px;margin-right:8px;border:1px solid currentColor;vertical-align:1px}
-.st.s4{color:var(--ink)}.st.s4::before{background:var(--ink)}.st.s0,.st.s1{color:var(--mute)}
-.st.s2::before,.st.s3::before{background:linear-gradient(90deg,currentColor 50%,transparent 50%)}
-.scroll{overflow-x:auto}
-@media(max-width:700px){.hide-m{display:none}.board .top{grid-template-columns:1fr 1fr}}
+/* ---------- stations ---------- */
+.stations{display:grid;grid-template-columns:5fr 7fr;gap:48px;align-items:start}
+.slist{list-style:none;border-top:1px solid var(--hard)}
+.slist button{width:100%;background:none;border:0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:12px;padding:13px 0;text-align:left;cursor:pointer;color:var(--mute);transition:color .2s,padding .25s}
+.slist button:hover{color:var(--ink);padding-left:8px}
+.slist button.on{color:var(--ink);padding-left:8px}
+.slist small{font-size:11px;color:var(--dim)}
+.sdetail{border:1px solid var(--line);padding:30px;min-height:420px}
+.sdetail dl{display:grid;grid-template-columns:1fr 1fr;gap:18px 28px;margin-top:22px;border-top:1px solid var(--line);padding-top:20px}
+.sdetail dt{font-size:11px;color:var(--mute)}
+.sdetail dd{font-size:15px}
+.meter{height:2px;background:var(--line);margin-top:24px}
+.meter i{display:block;height:100%;background:var(--ink);width:0;transition:width 1s cubic-bezier(.2,.7,.2,1)}
+@media(max-width:900px){.stations{grid-template-columns:1fr}}
 /* ---------- flap board ---------- */
-.fb{--tw:17.75px;background:#050505;border:1px solid #232323;padding:26px 26px 18px;font-family:"IBM Plex Mono",monospace;box-shadow:0 30px 80px rgba(0,0,0,.6) inset}
-.fb-top{display:flex;gap:40px;flex-wrap:wrap;padding-bottom:22px;margin-bottom:12px;border-bottom:1px solid #1d1d1d}
-.fb-stat span{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin-bottom:8px}
-.fb-stat .t{font-size:24px}
+.fb{background:#050505;border:1px solid #232323;padding:24px 24px 16px}
+.fb-top{display:flex;gap:36px;flex-wrap:wrap;padding-bottom:20px;margin-bottom:12px;border-bottom:1px solid #1d1d1d}
+.fb-stat span{display:block;font-size:11px;color:var(--mute);margin-bottom:8px}
+.fb-stat .t{font-size:22px}
+.live::before{content:"";display:inline-block;width:6px;height:6px;background:var(--ink);margin-right:7px;animation:blink 1.2s steps(2) infinite}
 .fb-scroll{overflow-x:auto}
 .fb-grid{min-width:max-content}
 .fr{display:flex;gap:22px;padding:4px 0}
 .fh{padding-bottom:10px}
-.fl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+.fl{font-size:11px;color:var(--mute)}
 .fc{display:flex;gap:2px}
-.t{display:inline-flex;align-items:center;justify-content:center;width:1.05em;height:1.6em;font-size:15px;font-weight:500;color:#cfcfca;background:linear-gradient(180deg,#1b1b1b 0,#151515 50%,#111 50%,#0d0d0d 100%);border-radius:2px;position:relative;box-shadow:0 1px 0 #000,inset 0 1px 0 rgba(255,255,255,.04);transform-origin:50% 50%}
+.t{display:inline-flex;align-items:center;justify-content:center;width:1.05em;height:1.6em;font-size:15px;font-weight:500;color:#cfcfca;background:linear-gradient(180deg,#1b1b1b 0,#151515 50%,#111 50%,#0d0d0d 100%);border-radius:2px;position:relative;box-shadow:0 1px 0 #000}
 .t::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.9)}
 .t.f{animation:flap .11s ease-in}
-@keyframes flap{0%{transform:perspective(200px) rotateX(-80deg);filter:brightness(1.6)}100%{transform:none}}
+@keyframes flap{0%{transform:perspective(200px) rotateX(-80deg);filter:brightness(1.6)}}
 .fr.done .fc:last-child .t,.fr.done .fc:first-child .t{color:#fff;text-shadow:0 0 8px rgba(255,255,255,.35)}
-.fb-foot{margin-top:16px;padding-top:14px;border-top:1px solid #1d1d1d;font-size:11px;color:var(--dim);max-width:none}
+.fb-foot{margin-top:14px;padding-top:12px;border-top:1px solid #1d1d1d;font-size:11px;color:var(--dim);max-width:none}
 @media(max-width:900px){.hm2{display:none!important}}
-@media(max-width:640px){.hm{display:none!important}.t{font-size:12px}.fb{padding:16px;--tw:14.6px}}
+@media(max-width:640px){.hm{display:none!important}.t{font-size:12px}.fb{padding:14px}:root{--tw:14.6px}}
 /* ---------- track ---------- */
-.track{display:grid;grid-template-columns:5fr 7fr;gap:56px;align-items:start}
+.track{display:grid;grid-template-columns:5fr 7fr;gap:48px;align-items:start}
 .track form{display:flex}
 .track input{flex:1;border-right:0}
-.result{border-top:1px solid var(--hard);border-bottom:1px solid var(--hard);padding:22px 0;min-height:320px;font-family:"IBM Plex Mono",monospace}
-.result .row{display:flex;justify-content:space-between;padding:11px 0;border-top:1px solid var(--line);font-size:12px}
-.result .row span:first-child{color:var(--mute);text-transform:uppercase;letter-spacing:.05em}
-.result .big{font:300 60px "IBM Plex Mono",monospace;letter-spacing:-.05em;margin:14px 0 4px}
-.prog2{height:1px;background:var(--line);margin:22px 0 8px}
-.prog2 i{display:block;height:1px;background:var(--red);width:0;transition:width 1.8s cubic-bezier(.2,.7,.2,1)}
+.result{border-top:1px solid var(--hard);border-bottom:1px solid var(--hard);padding:20px 0;min-height:300px}
+.result .row{display:flex;justify-content:space-between;gap:20px;padding:10px 0;border-top:1px solid var(--line);font-size:12.5px}
+.result .row span:first-child{color:var(--mute)}
+.result .big{font-weight:300;font-size:46px;letter-spacing:-.06em;margin:10px 0 2px}
+.prog2{height:1px;background:var(--line);margin:20px 0 8px}
+.prog2 i{display:block;height:1px;background:var(--ink);width:0;transition:width 1.6s cubic-bezier(.2,.7,.2,1)}
+.copy{background:none;border:0;border-bottom:1px dotted var(--dim);cursor:pointer;font-size:12px}
 @media(max-width:860px){.track{grid-template-columns:1fr}}
-input,select{font:14px "IBM Plex Mono",monospace;padding:14px;border:1px solid var(--hard);background:transparent;color:var(--ink);width:100%;border-radius:0;transition:border-color .2s,background .2s}
+input,select{font:13px "IBM Plex Mono",monospace;padding:13px;border:1px solid var(--hard);background:transparent;color:var(--ink);width:100%;border-radius:0;transition:border-color .2s,background .2s}
 input::placeholder{color:var(--dim)}
 input:focus,select:focus{outline:none;border-color:var(--ink);background:rgba(255,255,255,.04)}
 select option{background:#111}
-.tags{color:var(--ink);border:1px solid var(--hard);padding:3px 7px;display:inline-block;font:10.5px "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase}
+.screen-cards{margin-top:80px;border-top:1px solid var(--hard)}
+.screen-cards .grid3>div{padding-top:18px}
+.tag{display:inline-block;font-size:11px;border:1px solid var(--hard);padding:2px 8px;margin-bottom:10px}
 /* ---------- wall ---------- */
-.wall{position:relative;overflow:hidden;height:580px;border:1px solid var(--line)}
-.wall img{filter:grayscale(1) blur(3px) brightness(.35)}
-.names{position:absolute;inset:0;padding:40px;display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:3px 24px;align-content:start;font:11.5px "IBM Plex Mono",monospace;letter-spacing:.05em;text-transform:uppercase;overflow:hidden;mask-image:linear-gradient(180deg,#000 70%,transparent)}
-.names span{color:var(--mute);transition:color .2s;cursor:default}.names span:hover{color:var(--ink)}
+.wallbar{display:flex;gap:16px;align-items:center;margin-bottom:16px}
+.wallbar input{max-width:320px}
+.wall{position:relative;overflow:hidden;height:440px;border:1px solid var(--line)}
+.wall img{filter:grayscale(1) blur(3px) brightness(.3)}
+.names{position:absolute;inset:0;padding:30px;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:2px 22px;align-content:start;font-size:11.5px;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 75%,transparent);mask-image:linear-gradient(180deg,#000 75%,transparent)}
+.names span{color:var(--mute);transition:color .2s,opacity .3s}
+.names span:hover{color:var(--ink)}
+.names.filtering span{opacity:.18}
+.names.filtering span.hit{opacity:1;color:var(--ink)}
 .names span.new{color:var(--ink);text-decoration:underline;text-underline-offset:4px}
-details{border-top:1px solid var(--line);padding:22px 0}
+/* ---------- faq ---------- */
+.faqbar{margin-bottom:10px;max-width:420px}
+details{border-top:1px solid var(--line);padding:18px 0}
 details:last-of-type{border-bottom:1px solid var(--hard)}
-summary{cursor:pointer;font:300 24px "IBM Plex Mono",monospace;letter-spacing:-.02em;list-style:none;display:flex;justify-content:space-between;transition:padding .3s}
-summary:hover{padding-left:10px}
+summary{cursor:pointer;font-size:17px;font-weight:300;letter-spacing:-.03em;list-style:none;display:flex;justify-content:space-between;gap:20px;transition:padding .25s}
+summary:hover{padding-left:8px}
 summary::-webkit-details-marker{display:none}
-summary::after{content:"+";font:16px "IBM Plex Mono",monospace;color:var(--mute);transition:transform .3s}
+summary::after{content:"+";color:var(--mute);transition:transform .3s}
 details[open] summary::after{transform:rotate(45deg)}
-details p{color:var(--mute);margin-top:12px;font-size:14px}
-footer{border-top:1px solid var(--line);padding:36px 0 56px;font:11px/1.7 "IBM Plex Mono",monospace;color:var(--dim)}
+details p{color:var(--mute);margin-top:10px;font-size:13px}
+.nores{display:none;color:var(--mute);padding:20px 0}
+footer{border-top:1px solid var(--line);padding:34px 0 56px;font-size:11.5px;color:var(--dim)}
 footer .wrap{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap}
+/* ---------- toast ---------- */
+.toast{position:fixed;left:24px;bottom:24px;z-index:40;background:#0d0d0d;border:1px solid var(--line);padding:12px 16px;font-size:12px;max-width:340px;transform:translateY(20px);opacity:0;transition:transform .45s cubic-bezier(.2,.7,.2,1),opacity .45s;pointer-events:none}
+.toast.on{transform:none;opacity:1}
+.toast small{display:block;color:var(--dim);font-size:11px}
+body.landing .toast{display:none}
 /* ---------- modal ---------- */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px;opacity:0;pointer-events:none;transition:opacity .3s}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px;opacity:0;pointer-events:none;transition:opacity .3s}
 .modal.on{opacity:1;pointer-events:auto}
-.dlg{background:var(--bg);border:1px solid var(--hard);width:100%;max-width:660px;max-height:92vh;overflow:auto;padding:34px;transform:translateY(16px);transition:transform .4s cubic-bezier(.2,.7,.2,1)}
+.dlg{background:#050505;border:1px solid var(--hard);width:100%;max-width:640px;max-height:92vh;overflow:auto;padding:32px;transform:translateY(14px);transition:transform .4s cubic-bezier(.2,.7,.2,1)}
 .modal.on .dlg{transform:none}
 .dlg header{display:flex;justify-content:space-between;align-items:center}
-.x{background:none;border:0;font:22px "IBM Plex Mono",monospace;cursor:pointer;color:var(--ink);transition:transform .3s}.x:hover{transform:rotate(90deg)}
-.pg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin:20px 0 28px}.pg i{height:1px;background:var(--line);position:relative}.pg i::after{content:"";position:absolute;inset:0;background:var(--ink);transform:scaleX(0);transform-origin:left;transition:transform .5s}.pg i.on::after{transform:none}
+.x{background:none;border:0;font-size:22px;cursor:pointer;transition:transform .3s}.x:hover{transform:rotate(90deg)}
+.pg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin:18px 0 26px}.pg i{height:1px;background:var(--line);position:relative}.pg i::after{content:"";position:absolute;inset:0;background:var(--ink);transform:scaleX(0);transform-origin:left;transition:transform .5s}.pg i.on::after{transform:none}
 .f{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .f .full{grid-column:1/-1}
-label{display:block;margin-bottom:6px}
+label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
 .opts{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--hard)}
-.opt{padding:12px;cursor:pointer;font:11px "IBM Plex Mono",monospace;text-align:center;margin:0;color:var(--mute);text-transform:uppercase;transition:background .2s,color .2s}
+.opt{padding:12px;cursor:pointer;font-size:12px;text-align:center;margin:0;color:var(--mute);transition:background .2s,color .2s}
 .opt:hover{color:var(--ink)}
 .opt+.opt{border-left:1px solid var(--hard)}
-.opt input{display:none}
+.opt input{position:absolute;opacity:0;width:1px;height:1px}
 .opt:has(input:checked){background:var(--ink);color:var(--bg)}
+.opt:has(input:focus-visible){outline:1px solid var(--ink);outline-offset:2px}
 .opt img{aspect-ratio:1;margin-bottom:8px}
-.chk{display:flex;gap:12px;align-items:flex-start;padding:13px 0;border-top:1px solid var(--line);font:14px "IBM Plex Mono",monospace;text-transform:none;letter-spacing:0;color:var(--ink);margin:0;cursor:pointer}
-.chk input{width:15px;height:15px;margin-top:4px;flex:none;accent-color:#f2f2ef}
-.warn{color:var(--ink);font:12px "IBM Plex Mono",monospace;max-height:0;overflow:hidden;transition:max-height .4s,margin .4s}
+.chk{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line);font-size:13px;color:var(--ink);margin:0;cursor:pointer}
+.chk input{width:15px;height:15px;margin-top:4px;flex:none;accent-color:#f0f0ec}
+.warn{font-size:12px;max-height:0;overflow:hidden;transition:max-height .4s,margin .4s}
 .warn.on{max-height:60px;margin-top:10px}
-.foot{display:flex;justify-content:space-between;margin-top:30px}
-.id{font:400 28px "IBM Plex Mono",monospace;margin:20px 0;padding:18px 0;border-top:1px solid var(--hard);border-bottom:1px solid var(--hard);letter-spacing:.04em}
-@media(max-width:560px){.f,.opts{grid-template-columns:1fr}.opt+.opt{border-left:0;border-top:1px solid var(--hard)}.dlg{padding:22px}}
+.foot{display:flex;justify-content:space-between;margin-top:28px}
+.id{font-size:26px;margin:18px 0;padding:16px 0;border-top:1px solid var(--hard);border-bottom:1px solid var(--hard);letter-spacing:.04em;display:flex;justify-content:space-between;align-items:center}
+@media(max-width:560px){.f,.opts{grid-template-columns:1fr}.opt+.opt{border-left:0;border-top:1px solid var(--hard)}.dlg{padding:20px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
-<body>
+<body class="landing">
 
 <div class="bar"><div class="wrap">
-  <div class="logo" data-go="home"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor"><circle cx="9" cy="9" r="8"/><path d="M2 11c4-1 9-4 14-8"/></svg><span>Eternal Flight</span></div>
-  <nav class="tabs" id="tabs">
-    <button class="tab" data-go="how"><b>01</b>How it works</button>
-    <button class="tab" data-go="process"><b>02</b>Process</button>
-    <button class="tab" data-go="queue"><b>03</b>Donors</button>
-    <button class="tab" data-go="track"><b>04</b>Track your tissue</button>
-    <button class="tab" data-go="wall"><b>05</b>Memorial wall</button>
-    <button class="tab" data-go="faq"><b>06</b>Questions</button>
+  <button class="logo" data-home aria-label="Eternal Flight home"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor"><circle cx="9" cy="9" r="8"/><path d="M2 11c4-1 9-4 14-8"/></svg><span>Eternal Flight</span></button>
+  <nav class="links" id="links" aria-label="Sections">
+    <a href="#how">How it works</a><a href="#process">Process</a><a href="#stations">Stations</a><a href="#donors">Donors</a><a href="#track">Track your tissue</a><a href="#memorial">Memorial wall</a><a href="#faq">Questions</a>
     <i class="ink" id="ink"></i>
   </nav>
-  <button class="navlink" data-go="how">See the details →</button>
+  <button class="textlink toDetails" data-details>See the details</button>
   <button class="btn" data-open><span>Request a kit</span></button>
+  <i class="progress" id="progress"></i>
 </div></div>
 
-<!-- ================= 00 HOME ================= -->
-<main class="panel" id="p-home" style="padding-top:0">
-  <section class="hero-full">
-    <img src="img/15-hero.jpg" alt="The Eternal Flight sampling cuff and cartridge on a rock above a snowy valley, with a vulture flying overhead">
-    <div class="wrap"><div class="rv">
-      <span class="mono">A tissue donation service for wild vultures</span>
+<!-- =================== LANDING =================== -->
+<main class="view on" id="landing"><div class="wrap">
+  <section class="hero">
+    <div>
       <h1>Become part of something that flies.</h1>
-      <p>We take a tiny sample of muscle from your arm and grow it in a lab until there is enough to feed wild vultures. We then send it to feeding stations on four continents. Each one is close to a place where vultures breed or spend the winter, and where they can no longer find enough food on their own.</p>
-    </div></div>
-  <button class="scrollcue" id="cue" aria-label="Scroll down to read more">Scroll to read<i></i></button>
+      <p>We take a tiny sample of muscle from your arm and grow it in a lab until there is enough to feed wild vultures. Then we send it to feeding stations on four continents, each one close to a place where vultures breed or spend the winter and can no longer find enough food on their own.</p>
+      <div class="hero-actions"><button class="btn" data-open><span>Request a kit</span></button><button class="textlink" data-details>See how it works</button></div>
+    </div>
+    <div class="ph"><img src="img/15-hero.jpg" alt="The sampling cuff and cartridge on a rock above a snowy valley, with a vulture flying overhead"></div>
   </section>
-  <div class="wrap">
+  <button class="cue" id="cue"><i></i>Scroll to read why vultures need help</button>
 
-  <div class="head rv"><span class="mono">Why vultures need help</span><h2>Vultures live on what we leave behind. These days we leave them almost nothing.</h2></div>
+  <div class="shead" id="why"><span class="label">Why vultures need help</span><h2>Vultures live on what we leave behind. These days we leave them almost nothing.</h2></div>
 
-  <article class="story rv">
-    <div><span class="mono">Part 1 of 3</span><h3 style="margin-top:10px">A medicine that worked too well</h3></div>
+  <article class="story">
+    <div><span class="label">Part 1 of 3</span><h3 style="margin-top:8px">A medicine that worked too well</h3></div>
     <div><p>In the 1990s, vets across South Asia began giving cattle diclofenac, a cheap anti-inflammatory drug. When the cattle died their bodies were left in the open, as they always had been, and vultures ate them.</p><p>The drug was harmless to cows and fatal to vultures. It destroyed their kidneys within days. By the time scientists traced the cause, some species had lost almost all of their population.</p><p class="src">Oaks, J.L. et al. (2004). Diclofenac residues as the cause of vulture population decline in Pakistan. Nature, 427, 630–633.</p></div>
     <div class="ph"><img src="img/01-hero.jpg" alt="A cinereous vulture in flight"></div>
   </article>
-
-  <article class="story rv">
-    <div><span class="mono">Part 2 of 3</span><h3 style="margin-top:10px">Nothing left to find</h3></div>
+  <article class="story">
+    <div><span class="label">Part 2 of 3</span><h3 style="margin-top:8px">Nothing left to find</h3></div>
     <div><p>Vultures do not hunt. They eat what has already died. In much of the modern world dead livestock are collected and destroyed, roadkill is cleared within hours, and fields are kept clean. Europe tightened its rules on carcass disposal after the BSE crisis, and countries from Spain to Korea followed similar paths.</p><p>So in many places vultures are now fed by people. Conservation groups, farmers and volunteers run feeding sites, sometimes called vulture restaurants, in the mountains of Spain, the plains of Nepal and the snowy fields of Korea. When the meat runs out, the birds go hungry.</p><p class="src">Several vulture species are now listed as threatened or critically endangered on the IUCN Red List.</p></div>
-    <div class="ph"><img src="img/11-cart.jpg" alt="Volunteer pushing a feeding cart across a snowy field"></div>
+    <div class="ph"><img src="img/11-cart.jpg" alt="A volunteer pushing a wheelbarrow of meat across a snowy field toward waiting vultures"></div>
   </article>
-
-  <article class="story rv">
-    <div><span class="mono">Part 3 of 3</span><h3 style="margin-top:10px">What we put in the food</h3></div>
+  <article class="story">
+    <div><span class="label">Part 3 of 3</span><h3 style="margin-top:8px">What we put in the food</h3></div>
     <div><p>Even the food that people put out for them can be dangerous. Lead fragments from hunting ammunition, leftover veterinary drugs and poisoned bait set for other animals still turn up in the carcasses vultures eat.</p><p>A vulture has no way of knowing where its meal came from or what is inside it. It simply eats what it finds.</p></div>
-    <div class="ph"><img src="img/08-feed.jpg" alt="Packaged meat"></div>
+    <div class="ph"><img src="img/08-feed.jpg" alt="Packs of meat on a steel tray"></div>
   </article>
 
-  <section class="pitch rv">
-    <div class="pitch-side"><span class="mono" style="display:block;padding-top:12px;margin-bottom:20px">Why you</span><div class="ph" style="aspect-ratio:3/4"><img src="img/14-whyyou.jpg" alt="Donor standing in a snowy field with a feather tattoo"></div><p class="cap">Ji-woo, 29. Donates to the Ikh Nart station in Mongolia. This year she received her third mark.</p></div>
+  <section class="pitch">
+    <div class="pitch-side"><span class="label">Why you</span><div class="ph"><img src="img/14-whyyou.jpg" alt="A donor standing in a snowy field, showing a feather tattoo on her arm"></div><span class="label">Ji-woo, 29, donates to the Ikh Nart station in Mongolia. This year she received her third mark.</span></div>
     <div>
       <h2>You already have exactly what they need.</h2>
-      <p class="mute" style="font-size:17px">The food we grow from your muscle is clean, and we can trace every piece of it back to you. It comes from a living person who chose to give it. No animal has to die to make it, and you don't have to wait until the end of your own life to help.</p>
-      <ol>
-        <li><div><h3>Clean food they can trust</h3><p>Every batch is screened for painkillers, antibiotics and lead before it leaves the lab. Nobody can promise that about a dead animal left out in a field.</p></div></li>
-        <li><div><h3>Help now, while you are alive</h3><p>Most of us will be buried or cremated, and nothing will come of our bodies. You can do something different today. Half a gram of your muscle is enough to grow food for many meals.</p></div></li>
-        <li><div><h3>A relationship you can follow</h3><p>We tell you which station received your tissue, the day it was served and which batch it was part of. Your name is also carved into a stone wall next to the feeding ground.</p></div></li>
-        <li><div><h3>A part of you that flies</h3><p>When a vulture eats, the protein from its food becomes part of its own body. Some of what grew from your cells will end up in the muscles that move its wings as it flies over mountains and across borders.</p></div></li>
+      <p class="mute">The food we grow from your muscle is clean, and we can trace every piece of it back to you. It comes from a living person who chose to give it. No animal has to die to make it, and you don't have to wait until the end of your own life to help.</p>
+      <ol class="reasons">
+        <li><span>1</span><div><h3>Clean food they can trust</h3><p>Every batch is screened for painkillers, antibiotics and lead before it leaves the lab. Nobody can promise that about a dead animal left out in a field.</p></div></li>
+        <li><span>2</span><div><h3>Help now, while you are alive</h3><p>Most of us will be buried or cremated, and nothing will come of our bodies. You can do something different today. Half a gram of your muscle is enough to grow food for many meals.</p></div></li>
+        <li><span>3</span><div><h3>A relationship you can follow</h3><p>We tell you which station received your tissue, the day it was served and which batch it was part of. Your name is also carved into a stone wall next to the feeding ground.</p></div></li>
+        <li><span>4</span><div><h3>A part of you that flies</h3><p>When a vulture eats, the protein from its food becomes part of its own body. Some of what grew from your cells will end up in the muscles that move its wings as it flies over mountains and across borders.</p></div></li>
       </ol>
     </div>
   </section>
-  <section class="more rv">
-    <span class="mono">Want to know more?</span>
-    <div>
-      <h2>See how the kit works, follow a donation from start to finish, and read what other donors have asked us.</h2>
-      <div class="cta" style="margin-top:32px"><button class="btn" data-go="how"><span>See the details</span><span class="arr">→</span></button></div>
-    </div>
+
+  <section class="next">
+    <span class="label">Want to know more?</span>
+    <div><h2>See how the kit works, follow a donation from start to finish, and read what other donors have asked us.</h2><div class="hero-actions"><button class="btn" data-details><span>See the details</span></button><button class="textlink" data-open>Request a kit</button></div></div>
   </section>
 </div></main>
 
-<!-- ================= 01 HOW ================= -->
-<main class="panel" id="p-how"><div class="wrap">
+<!-- =================== DETAILS =================== -->
+<main class="view" id="details"><div class="wrap">
 
-  <section class="box rv">
-    <div class="head" style="margin-bottom:40px"><span class="mono">How it works · In the box</span><div><h2>It starts with a box on your doorstep.</h2><p class="mute">Everything you need comes in one package. There is nothing to book and nowhere to go. You open it at your own table, whenever you are ready.</p></div></div>
-    <div class="ph" style="aspect-ratio:16/8"><img src="img/12-unboxing.jpg" alt="Opening the Eternal Flight donation kit"></div>
-    <div class="cols" style="grid-template-columns:repeat(4,1fr);margin-top:28px;border-top:0">
-      <div><span class="mono">A</span><h3 style="margin-top:8px">Sampling cuff</h3><p class="mute" style="font-size:13px">Takes the sample and then applies your mark. You use it only once.</p></div>
-      <div><span class="mono">B</span><h3 style="margin-top:8px">Specimen cartridge</h3><p class="mute" style="font-size:13px">Fits inside the cuff and seals itself once the sample is inside.</p></div>
-      <div><span class="mono">C</span><h3 style="margin-top:8px">Antiseptic wipe</h3><p class="mute" style="font-size:13px">For cleaning your arm before you begin.</p></div>
-      <div><span class="mono">D</span><h3 style="margin-top:8px">Return capsule</h3><p class="mute" style="font-size:13px">Keeps the sample cold on its way back to us. The postage is already paid.</p></div>
+  <section class="s" id="how">
+    <div class="shead"><span class="label">How it works</span><div><h2>It starts with a box on your doorstep.</h2><p class="mute">Everything you need comes in one package. There is nothing to book and nowhere to go. You open it at your own table, whenever you are ready.</p></div></div>
+    <div class="box">
+      <div class="ph"><img src="img/12-unboxing.jpg" alt="Hands opening the Eternal Flight donation kit"></div>
+      <ul class="kitlist">
+        <li><b>Sampling cuff</b><span>Takes the sample and then applies your mark. You use it only once.</span></li>
+        <li><b>Specimen cartridge</b><span>Fits inside the cuff and seals itself once the sample is inside.</span></li>
+        <li><b>Antiseptic wipe</b><span>For cleaning your arm before you begin.</span></li>
+        <li><b>Return capsule</b><span>Keeps the sample cold on its way back to us. The postage is already paid.</span></li>
+      </ul>
     </div>
-  </section>
 
-  <div class="head rv"><span class="mono">Three steps</span><div><h2>It takes about ten minutes at home.</h2><p class="mute">Once the box is open there are only three things to do. The cuff handles the hard parts and you never see a needle.</p></div></div>
-  <div class="cols rv" style="grid-template-columns:repeat(3,1fr)">
-    <div class="step"><span class="mono">Step 1</span><h3>Sample</h3><p>Wrap the cuff around your upper arm and press start. It numbs the skin and takes a piece of muscle about the size of a grain of rice.</p><div class="ph"><img src="img/03-cuff.jpg" alt=""></div></div>
-    <div class="step"><span class="mono">Step 2</span><h3>Mark</h3><p>The cuff leaves a small tattoo next to where the sample was taken. You choose a feather, a pair of wings or your donor number.</p><div class="ph"><img src="img/04a-feather.jpg" alt=""></div></div>
-    <div class="step"><span class="mono">Step 3</span><h3>Return</h3><p>Put the sealed cartridge into the return capsule and post it. It reaches our lab cold within two days.</p><div class="ph"><img src="img/05-capsule.jpg" alt=""></div></div>
-  </div>
+    <div class="steps">
+      <div class="grid3">
+        <div><span class="label">Step 1</span><h3>Sample</h3><p>Wrap the cuff around your upper arm and press start. It numbs the skin and takes a piece of muscle about the size of a grain of rice.</p><div class="ph"><img src="img/03-cuff.jpg" alt="The cuff worn on an upper arm"></div></div>
+        <div><span class="label">Step 2</span><h3>Mark</h3><p>The cuff leaves a small tattoo next to where the sample was taken. You choose a feather, a pair of wings or your donor number.</p><div class="ph"><img src="img/04a-feather.jpg" alt="A small feather tattoo on an upper arm"></div></div>
+        <div><span class="label">Step 3</span><h3>Return</h3><p>Put the sealed cartridge into the return capsule and post it. It reaches our lab, still cold, within two days.</p><div class="ph"><img src="img/05-capsule.jpg" alt="The return capsule in a padded envelope"></div></div>
+      </div>
+    </div>
 
-  <div class="keep rv" style="margin-top:110px">
-    <div>
-      <span class="mono">The mark</span>
-      <h2 style="margin-top:18px">Give once.<br>Wear it for life.</h2>
-      <p class="mute">Every donor leaves with a small mark on the arm. It sits right next to the line where your sample came out, and it tells anyone who asks that part of you is up there somewhere. Most people get asked about it within a week.</p>
-      <p class="mute" style="margin-top:14px">Come back next year and you get another one. Some of our donors have a whole row now.</p>
+    <div class="mark">
+      <div>
+        <h2>Give once.<br>Wear it for life.</h2>
+        <p class="mute">Every donor leaves with a small mark on the arm. It sits right next to the line where your sample came out, and it tells anyone who asks that part of you is up there somewhere. Most people get asked about it within a week.</p>
+        <p class="mute" style="margin-top:12px">Come back next year and you get another one. Some of our donors have a whole row now.</p>
+        <p class="small" id="markname" style="margin-top:18px">Feather. The most popular choice, picked by about half of our donors.</p>
+      </div>
+      <div class="marks" role="group" aria-label="Choose a mark to preview">
+        <button class="on" data-m="Feather. The most popular choice, picked by about half of our donors."><div class="ph"><img src="img/04a-feather.jpg" alt=""></div><span>Feather</span></button>
+        <button data-m="Wings. Slightly wider, and the one regular donors tend to choose for their second mark."><div class="ph"><img src="img/04b-wings.jpg" alt=""></div><span>Wings</span></button>
+        <button data-m="Donor number. Your own number, so you can always look up where your tissue went."><div class="ph"><img src="img/04c-number.jpg" alt=""></div><span>Donor number</span></button>
+      </div>
     </div>
-    <div class="tatt" style="margin-top:0">
-      <div class="ph"><img src="img/04a-feather.jpg" alt=""><span class="tl">Feather</span></div>
-      <div class="ph"><img src="img/04b-wings.jpg" alt=""><span class="tl">Wings</span></div>
-      <div class="ph"><img src="img/04c-number.jpg" alt=""><span class="tl">Donor no.</span></div>
-    </div>
-  </div>
 
-  <div class="procedure rv" style="margin-top:0">
-    <div>
-      <span class="mono">What the cuff does, step by step (tap each one)</span>
-      <p class="mute" style="margin-top:12px;font-size:13px">If you are curious, this is what happens on your arm while you wear the cuff.</p>
-      <ol id="proc">
-        <li data-s="PREPARE&#10;Screening complete.&#10;Clean outer upper arm."><i>01</i><div><b>Prepare</b><span>Finish the screening questions and wipe your upper arm with the antiseptic pad.</span></div></li>
-        <li data-s="FIT&#10;Tightening…&#10;Position confirmed."><i>02</i><div><b>Fit</b><span>Wrap the cuff around your arm and press start. It tightens itself and checks that it is in the right place.</span></div></li>
-        <li data-s="NUMB&#10;03:00&#10;You may feel a cool sensation."><i>03</i><div><b>Numb</b><span>A pad on the inside of the cuff numbs your skin. This takes about three minutes.</span></div></li>
-        <li data-s="SAMPLE&#10;████████░░░░ 64%&#10;Sample collected. Thank you for your flight."><i>04</i><div><b>Sample</b><span>A small needle you never see takes about half a gram of muscle and seals it inside the cartridge.</span></div></li>
-        <li data-s="MARK&#10;Applying FEATHER…&#10;Done."><i>05</i><div><b>Mark</b><span>The cuff draws a small, thin-lined tattoo next to the spot where the sample was taken.</span></div></li>
-        <li data-s="AFTERCARE&#10;Keep band on for 24 h.&#10;Detach cartridge."><i>06</i><div><b>Aftercare</b><span>Keep the waterproof bandage on for a day. After that, look after the mark the way you would look after any new tattoo.</span></div></li>
-      </ol>
+    <div class="cuff">
+      <div>
+        <h3>What the cuff does on your arm</h3>
+        <p class="mute small">Choose a step to see what the cuff's screen shows, or use the buttons under the screen.</p>
+        <ol id="proc">
+          <li data-s="Prepare&#10;Screening complete.&#10;Clean your outer upper arm."><i>1</i><div><b>Prepare</b><span>Finish the screening questions and wipe your upper arm with the antiseptic pad.</span></div></li>
+          <li data-s="Fit&#10;Tightening...&#10;Position confirmed."><i>2</i><div><b>Fit</b><span>Wrap the cuff around your arm and press start. It tightens itself and checks that it is in the right place.</span></div></li>
+          <li data-s="Numb&#10;03:00 remaining&#10;You may feel a cool sensation."><i>3</i><div><b>Numb</b><span>A pad on the inside of the cuff numbs your skin. This takes about three minutes.</span></div></li>
+          <li data-s="Sample&#10;Collecting...&#10;Sample collected. Thank you for your flight."><i>4</i><div><b>Sample</b><span>A small needle you never see takes about half a gram of muscle and seals it inside the cartridge.</span></div></li>
+          <li data-s="Mark&#10;Applying your feather...&#10;Done."><i>5</i><div><b>Mark</b><span>The cuff draws a small, thin-lined tattoo next to the spot where the sample was taken.</span></div></li>
+          <li data-s="Aftercare&#10;Keep the bandage on for 24 hours.&#10;You can now remove the cartridge."><i>6</i><div><b>Aftercare</b><span>Keep the waterproof bandage on for a day. After that, look after the mark the way you would look after any new tattoo.</span></div></li>
+        </ol>
+      </div>
+      <div>
+        <div class="device"><div class="screen" id="screen"></div><div><div class="devbar"><i id="devbar"></i></div><div class="devnav"><button class="textlink" id="prevS">Previous</button><span class="label" id="stepn">1 of 6</span><button class="textlink" id="nextS">Next</button></div></div></div>
+      </div>
     </div>
-    <div><div class="screen" id="screen"></div><div class="ph" style="aspect-ratio:3/2;margin-top:20px"><img src="img/03-cuff.jpg" alt=""></div></div>
-  </div>
-  <section class="omni rv" style="margin:120px 0 0;border-top:1px solid var(--hard);padding-top:30px">
-    <div class="omni-text">
-      <span class="mono">Our donors</span>
-      <h2 style="margin-top:18px">Somewhere above them, a small part of each of them is flying.</h2>
+
+    <div class="donors-omni">
+      <h2>Somewhere above them, a small part of each of them is flying.</h2>
       <p class="mute">A birder on a frozen riverbank. A father and daughter on a hill. A woman laughing with her neighbours after a long morning in the fields. They have never met. What they share is a small mark on the arm and a few hundred meals served this year to birds they will probably never see up close.</p>
-    </div>
-    <div class="omni-grid">
-      <figure><div class="ph"><img src="img/13a.jpg" alt=""></div><figcaption class="cap">Ha-eun, 34, lives in Seoul and donates to the Cheorwon station in Korea.</figcaption></figure>
-      <figure><div class="ph"><img src="img/13b.jpg" alt=""></div><figcaption class="cap">Min-jun, 41, lives in Busan and donates to the Ikh Nart station in Mongolia.</figcaption></figure>
-      <figure><div class="ph"><img src="img/13c.jpg" alt=""></div><figcaption class="cap">Soon-ja, 63, donor number 018427, donates to the Chitwan station in Nepal.</figcaption></figure>
+      <div class="omni">
+        <figure><div class="ph"><img src="img/13a.jpg" alt=""></div><figcaption>Ha-eun, 34, lives in Seoul and donates to the Cheorwon station in Korea.</figcaption></figure>
+        <figure><div class="ph"><img src="img/13b.jpg" alt=""></div><figcaption>Min-jun, 41, lives in Busan and donates to the Ikh Nart station in Mongolia.</figcaption></figure>
+        <figure><div class="ph"><img src="img/13c.jpg" alt=""></div><figcaption>Soon-ja, 63, donor number 018427, donates to the Chitwan station in Nepal.</figcaption></figure>
+      </div>
     </div>
   </section>
-</div></main>
 
-<!-- ================= 02 PROCESS ================= -->
-<main class="panel" id="p-process"><div class="wrap">
-  <div class="head rv"><span class="mono">From your arm to the sky</span><div><h2>It takes about seventy days for your tissue to reach a vulture.</h2><p class="mute">Your cells are grown on their own and are never mixed with anyone else's. Tap each stage to see what happens.</p></div></div>
-  <div class="rail rv" id="rail"></div>
-  <div class="stage" id="stage"></div>
-</div></main>
+  <section class="s" id="process">
+    <div class="shead"><span class="label">From your arm to the sky</span><div><h2>It takes about seventy days for your tissue to reach a vulture.</h2><p class="mute">Your cells are grown on their own and are never mixed with anyone else's. The stages below play in order. Choose one to stop and read it.</p></div></div>
+    <div class="rail" id="rail"></div>
+    <div class="stage" id="stage"></div>
+    <div class="autoplay"><span class="label" id="playstate">Playing through the stages</span><button class="textlink" id="playbtn">Pause</button></div>
+  </section>
 
-<!-- ================= 03 QUEUE ================= -->
-<main class="panel" id="p-queue"><div class="wrap">
-  <div class="head rv"><span class="mono">Donor queue</span><h2>People who are donating right now.</h2></div>
-  <div class="fb rv">
-    <div class="fb-top">
-      <div class="fb-stat"><span>Waiting for a kit</span><div class="fc" id="st-w"></div></div>
-      <div class="fb-stat"><span>Cells growing in the lab</span><div class="fc" id="st-c"></div></div>
-      <div class="fb-stat"><span>Served this month</span><div class="fc" id="st-f"></div></div>
-      <div class="fb-stat" style="margin-left:auto"><span class="live">Live · local time</span><div class="fc" id="st-t"></div></div>
+  <section class="s" id="stations">
+    <div class="shead"><span class="label">Feeding stations</span><div><h2>Seven stations on four continents.</h2><p class="mute">When you request a kit you choose where your tissue will go. Each station works with a local conservation team that runs the feeding site.</p></div></div>
+    <div class="stations"><ul class="slist" id="slist"></ul><div class="sdetail" id="sdetail"></div></div>
+  </section>
+
+  <section class="s" id="donors">
+    <div class="shead"><span class="label">Donors</span><h2>People who are donating right now.</h2></div>
+    <div class="fb">
+      <div class="fb-top">
+        <div class="fb-stat"><span>Waiting for a kit</span><div class="fc" id="st-w"></div></div>
+        <div class="fb-stat"><span>Cells growing in the lab</span><div class="fc" id="st-c"></div></div>
+        <div class="fb-stat"><span>Served this month</span><div class="fc" id="st-f"></div></div>
+        <div class="fb-stat" style="margin-left:auto"><span class="live">Local time</span><div class="fc" id="st-t"></div></div>
+      </div>
+      <div class="fb-scroll"><div class="fb-grid" id="fb"></div></div>
+      <p class="fb-foot">Updated every few seconds. Names are shortened to protect donors' privacy.</p>
     </div>
-    <div class="fb-scroll"><div class="fb-grid" id="fb"></div></div>
-    <p class="fb-foot">Updated every few seconds. Names are shortened to protect donors' privacy.</p>
-  </div>
-</div></main>
+  </section>
 
-<!-- ================= 04 TRACK ================= -->
-<main class="panel" id="p-track"><div class="wrap">
-  <div class="track rv">
-    <div>
-      <span class="mono">Track your tissue</span>
-      <h2 style="margin-top:26px">Where is your tissue now?</h2>
-      <p class="mute" style="margin-bottom:28px">Type in the donor number printed on your cartridge to see how much of your tissue has been served, and where.</p>
-      <form id="trackf"><input id="tid" placeholder="EF-2026-00413" autocomplete="off"><button class="btn"><span>Track</span></button></form>
-      <p class="mono" style="margin-top:14px;cursor:pointer" id="try">Try the example number EF-2026-00413 →</p>
+  <section class="s" id="track">
+    <div class="track">
+      <div>
+        <span class="label">Track your tissue</span>
+        <h2 style="margin-top:16px">Where is your tissue now?</h2>
+        <p class="mute" style="margin-bottom:24px">Type in the donor number printed on your cartridge to see how much of your tissue has been served, and where.</p>
+        <form id="trackf"><label for="tid" style="position:absolute;left:-9999px">Donor number</label><input id="tid" placeholder="EF-2026-00413" autocomplete="off"><button class="btn"><span>Track</span></button></form>
+        <p style="margin-top:12px"><button class="textlink" id="try">Try the example number EF-2026-00413</button></p>
+      </div>
+      <div class="result" id="res" aria-live="polite"><span class="mute small">Your results will appear here.</span></div>
     </div>
-    <div class="result" id="res"><span class="mono">Your results will appear here</span></div>
-  </div>
-  <div class="cols rv" style="grid-template-columns:repeat(3,1fr);margin-top:110px">
-    <div><span class="tags">Wait 14 days before donating</span><h3 style="margin-top:12px">Painkillers</h3><p class="mute" style="font-size:14px">Anti-inflammatory drugs like diclofenac or ibuprofen can stay in tissue. These are the same drugs that wiped out vultures in South Asia.</p></div>
-    <div><span class="tags">Wait 30 days before donating</span><h3 style="margin-top:12px">Antibiotics</h3><p class="mute" style="font-size:14px">If you have recently taken antibiotics, they can affect how your cells grow and can upset the birds' digestion.</p></div>
-    <div><span class="tags">Tell us before donating</span><h3 style="margin-top:12px">Lead</h3><p class="mute" style="font-size:14px">If you shoot, reload ammunition or work with lead, tell us. Lead poisoning kills scavenging birds every year.</p></div>
-  </div>
-</div></main>
+    <div class="screen-cards">
+      <div class="grid3">
+        <div><span class="tag">Wait 14 days before donating</span><h3>Painkillers</h3><p class="mute small">Anti-inflammatory drugs like diclofenac or ibuprofen can stay in tissue. These are the same drugs that wiped out vultures in South Asia.</p></div>
+        <div><span class="tag">Wait 30 days before donating</span><h3>Antibiotics</h3><p class="mute small">If you have recently taken antibiotics, they can affect how your cells grow and can upset the birds' digestion.</p></div>
+        <div><span class="tag">Tell us before donating</span><h3>Lead</h3><p class="mute small">If you shoot, reload ammunition or work with lead, tell us. Lead poisoning kills scavenging birds every year.</p></div>
+      </div>
+    </div>
+  </section>
 
-<!-- ================= 05 WALL ================= -->
-<main class="panel" id="p-wall"><div class="wrap">
-  <div class="head rv"><span class="mono">Memorial wall</span><div><h2>Your name stays where the vultures come to eat.</h2><p class="mute">Every feeding station has a low stone wall at its edge. After your first batch has been served, we carve your name into it.</p></div></div>
-  <div class="wall rv"><img src="img/10-wall.jpg" alt=""><div class="names" id="names"></div></div>
-</div></main>
+  <section class="s" id="memorial">
+    <div class="shead"><span class="label">Memorial wall</span><div><h2>Your name stays where the vultures come to eat.</h2><p class="mute">Every feeding station has a low stone wall at its edge. After your first batch has been served, we carve your name into it.</p></div></div>
+    <div class="wallbar"><label for="wq" style="position:absolute;left:-9999px">Find a name</label><input id="wq" placeholder="Find a name on the wall"><span class="label" id="wcount"></span></div>
+    <div class="wall"><img src="img/10-wall.jpg" alt=""><div class="names" id="names"></div></div>
+  </section>
 
-<!-- ================= 06 FAQ ================= -->
-<main class="panel" id="p-faq"><div class="wrap">
-  <div class="head rv"><span class="mono">Questions</span><h2>Things people ask us.</h2></div>
-  <div class="rv">
-  <details><summary>Does it hurt?</summary><p>Less than most people expect. The cuff numbs the skin for about three minutes before it does anything else, so what you feel during sampling is mostly pressure. The tattoo module that follows feels like a fine-line tattoo on a numbed arm. The site can be sore for a day or two afterwards, much like after a vaccination.</p></details>
-  <details><summary>How much of me do you actually take?</summary><p>About half a gram of skeletal muscle. That's roughly the size of a grain of rice. Your body replaces it within a few weeks and you will not notice any difference in strength or movement.</p></details>
-  <details><summary>Will there be a scar?</summary><p>Usually a faint line about a centimetre long. The memorial mark is placed right next to it. We don't try to hide the line completely, because it is the only trace of what you gave. Most donors say they stop noticing it after a few months.</p></details>
-  <details><summary>Is it still me after it's grown?</summary><p>That depends on what you think makes something yours. In strict physical terms, almost none of it is. Your half gram is multiplied into about 160 kilograms, so in any single batch less than one thousandth of a percent was ever inside your body. But every one of those cells grew from yours and carries your DNA. We keep your donor number on every pack because we think that connection matters, even if it's hard to measure.</p></details>
-  <details><summary>Will the vulture know my name?</summary><p>No. A vulture recognises food, other vultures and the shape of the place where it is usually fed. It will never know that a person was involved. Your name lives on the wall at the station and in the notices we send you. The relationship is real, but it only runs in one direction, and we think it's important to be honest about that.</p></details>
-  <details><summary>Why vultures and not some other animal?</summary><p>Vultures are built to eat what others leave behind. They clean up carcasses that would otherwise rot and spread disease. That role has almost disappeared across much of the world, because people now remove dead animals before vultures can reach them. In many regions the birds that remain depend on food that humans bring. They are also among the species that have suffered most from what we put in that food.</p></details>
-  <details><summary>Why not just donate meat or money?</summary><p>You can, and many people already do. Feeding stations always need both. Eternal Flight is for people who want something more direct. Meat from a butcher comes from an animal you never knew. Money turns into meat you never see. Your own tissue is something you can trace from your arm to a particular field on a particular day.</p></details>
-  <details><summary>Is it safe for the birds?</summary><p>That's the whole reason for the screening and the testing. Every batch is checked for anti-inflammatory drugs, antibiotics and heavy metals before it leaves the lab, and nothing is released if any residue is found. Cultivated tissue is also free of the bone fragments and lead shot that sometimes end up in donated carcasses. We adjust fat and calcium levels so the food matches what a wild vulture would get from a normal meal.</p></details>
-  <details><summary>Can I choose which bird eats it?</summary><p>You choose the station. We can't assign an individual bird. Vultures feed in groups with their own order of who eats first, and older birds often push the young ones aside. We think it's better not to interfere with that.</p></details>
-  <details><summary>Can I give more than once?</summary><p>Yes, once every twelve months. Each donation opens a new cell line and leaves a new mark beside the last one. Some regular donors end up with a short row of feathers on their arm, one for each year.</p></details>
-  <details><summary>What happens if I die before my line runs out?</summary><p>Your cells keep growing and your batches keep being served until the line reaches its natural limit. Your notices can be sent to someone you name in advance. Your name stays on the wall either way.</p></details>
-  <details><summary>Can I change my mind?</summary><p>You can cancel at any point before the cartridge is posted. Once your sample reaches the lab and the line has started, we can still stop it, but we can't give anything back. Everything grown up to that point will be destroyed rather than served.</p></details>
-  </div>
+  <section class="s" id="faq">
+    <div class="shead"><span class="label">Questions</span><div><h2>Things people ask us.</h2><div class="faqbar"><label for="fq" style="position:absolute;left:-9999px">Search questions</label><input id="fq" placeholder="Search the questions"></div></div></div>
+    <div id="faqs">
+<details><summary>Does it hurt?</summary><p>Less than most people expect. The cuff numbs the skin for about three minutes before it does anything else, so what you feel during sampling is mostly pressure. The tattoo module that follows feels like a fine-line tattoo on a numbed arm. The site can be sore for a day or two afterwards, much like after a vaccination.</p></details>
+<details><summary>How much of me do you actually take?</summary><p>About half a gram of skeletal muscle. That's roughly the size of a grain of rice. Your body replaces it within a few weeks and you will not notice any difference in strength or movement.</p></details>
+<details><summary>Will there be a scar?</summary><p>Usually a faint line about a centimetre long. The memorial mark is placed right next to it. We don't try to hide the line completely, because it is the only trace of what you gave. Most donors say they stop noticing it after a few months.</p></details>
+<details><summary>Is it still me after it's grown?</summary><p>That depends on what you think makes something yours. In strict physical terms, almost none of it is. Your half gram is multiplied into about 160 kilograms, so in any single batch less than one thousandth of a percent was ever inside your body. But every one of those cells grew from yours and carries your DNA. We keep your donor number on every pack because we think that connection matters, even if it's hard to measure.</p></details>
+<details><summary>Will the vulture know my name?</summary><p>No. A vulture recognises food, other vultures and the shape of the place where it is usually fed. It will never know that a person was involved. Your name lives on the wall at the station and in the notices we send you. The relationship is real, but it only runs in one direction, and we think it's important to be honest about that.</p></details>
+<details><summary>Why vultures and not some other animal?</summary><p>Vultures are built to eat what others leave behind. They clean up carcasses that would otherwise rot and spread disease. That role has almost disappeared across much of the world, because people now remove dead animals before vultures can reach them. In many regions the birds that remain depend on food that humans bring. They are also among the species that have suffered most from what we put in that food.</p></details>
+<details><summary>Why not just donate meat or money?</summary><p>You can, and many people already do. Feeding stations always need both. Eternal Flight is for people who want something more direct. Meat from a butcher comes from an animal you never knew. Money turns into meat you never see. Your own tissue is something you can trace from your arm to a particular field on a particular day.</p></details>
+<details><summary>Is it safe for the birds?</summary><p>That's the whole reason for the screening and the testing. Every batch is checked for anti-inflammatory drugs, antibiotics and heavy metals before it leaves the lab, and nothing is released if any residue is found. Cultivated tissue is also free of the bone fragments and lead shot that sometimes end up in donated carcasses. We adjust fat and calcium levels so the food matches what a wild vulture would get from a normal meal.</p></details>
+<details><summary>Can I choose which bird eats it?</summary><p>You choose the station. We can't assign an individual bird. Vultures feed in groups with their own order of who eats first, and older birds often push the young ones aside. We think it's better not to interfere with that.</p></details>
+<details><summary>Can I give more than once?</summary><p>Yes, once every twelve months. Each donation opens a new cell line and leaves a new mark beside the last one. Some regular donors end up with a short row of feathers on their arm, one for each year.</p></details>
+<details><summary>What happens if I die before my line runs out?</summary><p>Your cells keep growing and your batches keep being served until the line reaches its natural limit. Your notices can be sent to someone you name in advance. Your name stays on the wall either way.</p></details>
+<details><summary>Can I change my mind?</summary><p>You can cancel at any point before the cartridge is posted. Once your sample reaches the lab and the line has started, we can still stop it, but we can't give anything back. Everything grown up to that point will be destroyed rather than served.</p></details>
+    <p class="nores" id="nores">No questions match that search. Try a shorter word, or write to us when you request a kit.</p>
+    </div>
+  </section>
 </div></main>
 
 <footer><div class="wrap">
-  <div>Eternal Flight · 2026</div>
-  <p style="max-width:66ch">Eternal Flight is a speculative design project by Byoungjae Kim. It is not a real service. No tissue is collected and nothing you type on this site is sent or stored. Donors, numbers and partner stations shown here are fictional, although the places named are real vulture habitats. The background on vulture declines refers to real events.</p>
+  <div>Eternal Flight, 2026</div>
+  <p style="max-width:70ch">Eternal Flight is a speculative design project by Byoungjae Kim. It is not a real service. No tissue is collected and nothing you type on this site is sent or stored. Donors, numbers and partner stations shown here are fictional, although the places named are real vulture habitats. The background on vulture declines refers to real events.</p>
 </div></footer>
 
-<!-- ================= MODAL ================= -->
+<div class="toast" id="toast" role="status"></div>
+
+<!-- =================== MODAL =================== -->
 <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mt"><div class="dlg">
-  <header><span class="mono" id="mstep">Step 1 of 3</span><button class="x" data-close aria-label="Close">×</button></header>
-  <h2 id="mt" style="font-size:34px;margin:8px 0 0">Request a donation kit</h2>
+  <header><span class="label" id="mstep">Step 1 of 3</span><button class="x" data-close aria-label="Close">×</button></header>
+  <h2 id="mt" style="margin:8px 0 0">Request a donation kit</h2>
   <div class="pg"><i class="on"></i><i></i><i></i></div>
   <form id="reqf" autocomplete="on" onsubmit="return false">
     <div class="pane">
@@ -478,7 +485,7 @@ label{display:block;margin-bottom:6px}
         <div><label for="ln">Last name</label><input id="ln" name="family-name" autocomplete="family-name" required></div>
         <div class="full"><label for="em">Email</label><input id="em" type="email" name="email" autocomplete="email" required></div>
         <div class="full"><label for="a1">Shipping address</label><input id="a1" name="address-line1" autocomplete="address-line1" placeholder="Street address" required></div>
-        <div class="full"><input name="address-line2" autocomplete="address-line2" placeholder="Apartment, suite (optional)"></div>
+        <div class="full"><input name="address-line2" autocomplete="address-line2" placeholder="Apartment or suite (optional)" aria-label="Apartment or suite"></div>
         <div><label for="ci">City</label><input id="ci" name="address-level2" autocomplete="address-level2" required></div>
         <div><label for="pc">Postal code</label><input id="pc" name="postal-code" autocomplete="postal-code" required></div>
         <div class="full"><label for="co">Country</label><input id="co" name="country-name" autocomplete="country-name" required></div>
@@ -490,12 +497,12 @@ label{display:block;margin-bottom:6px}
       <label style="margin-top:22px">Which mark would you like?</label>
       <div class="opts"><label class="opt"><input type="radio" name="mark" checked><img src="img/04a-feather.jpg" alt="">Feather</label><label class="opt"><input type="radio" name="mark"><img src="img/04b-wings.jpg" alt="">Wings</label><label class="opt"><input type="radio" name="mark"><img src="img/04c-number.jpg" alt="">Donor number</label></div>
       <div class="f" style="margin-top:22px">
-        <div><label for="stn">Feeding station</label><select id="stn"><option>Ikh Nart, Mongolia — cinereous vulture</option><option>Monfragüe, Spain — cinereous &amp; griffon vulture</option><option>Grands Causses, France — griffon vulture</option><option>Eastern Rhodopes, Bulgaria — Egyptian vulture</option><option>Chitwan, Nepal — white-rumped vulture</option><option>Magaliesberg, South Africa — Cape vulture</option><option>Cheorwon, South Korea — cinereous vulture</option></select></div>
-        <div><label for="wn">Name to carve on the wall</label><input id="wn" autocomplete="name"></div>
+        <div class="full"><label for="stn">Feeding station</label><select id="stn"></select></div>
+        <div class="full"><label for="wn">Name to carve on the wall</label><input id="wn" autocomplete="name"></div>
       </div>
     </div>
     <div class="pane" hidden>
-      <p class="mute" style="font-size:14px;margin-bottom:8px">In the last 14 days, have you…</p>
+      <p class="mute small" style="margin-bottom:8px">In the last 14 days, have you…</p>
       <label class="chk"><input type="checkbox" class="risk">taken an anti-inflammatory painkiller such as diclofenac, ibuprofen or naproxen?</label>
       <label class="chk"><input type="checkbox" class="risk">finished a course of antibiotics?</label>
       <label class="chk"><input type="checkbox" class="risk">handled lead ammunition or other lead products?</label>
@@ -503,131 +510,171 @@ label{display:block;margin-bottom:6px}
       <label class="chk" style="margin-top:16px;border-top:1px solid var(--hard)"><input type="checkbox" id="consent">I understand my tissue will be grown and fed to wild vultures, and that it can't be returned.</label>
     </div>
     <div class="pane" hidden>
-      <span class="mono">Request received</span>
-      <h2 style="font-size:36px;margin-top:12px">Your kit is on its way.</h2>
-      <div class="id" id="newid">EF-2026-00000</div>
-      <p class="mute" style="font-size:14px">Keep this number. It's printed on your cartridge too.</p>
-      <p class="mono" style="margin-top:28px;color:var(--dim)">Nothing was sent or stored. Eternal Flight is a speculative artwork.</p>
+      <span class="label">Request received</span>
+      <h2 style="margin-top:10px">Your kit is on its way.</h2>
+      <div class="id"><span id="newid">EF-2026-00000</span><button type="button" class="copy" id="copyid">Copy</button></div>
+      <p class="mute small" id="donemsg">Keep this number. It's printed on your cartridge too.</p>
+      <p class="small" style="margin-top:26px;color:var(--dim)">Nothing was sent or stored. Eternal Flight is a speculative artwork.</p>
     </div>
-    <div class="foot" id="mfoot"><button type="button" class="btn ghost" id="back" style="visibility:hidden"><span>Back</span></button><button type="button" class="btn" id="next"><span id="nextl">Continue</span><span class="arr">→</span></button></div>
+    <div class="foot" id="mfoot"><button type="button" class="btn ghost" id="back" style="visibility:hidden"><span>Back</span></button><button type="button" class="btn" id="next"><span id="nextl">Continue</span></button></div>
   </form>
 </div></div>
 
 <script>
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-// ---------- tabs ----------
-const ink=$('#ink');
-function go(id,push=true){
-  if(!$('#p-'+id))id='home';
-  document.body.classList.toggle('landing',id==='home');
-  $$('.panel').forEach(p=>p.classList.toggle('on',p.id==='p-'+id));
-  $$('.tab').forEach(t=>t.classList.toggle('on',t.dataset.go===id));
-  const t=$(`.tab[data-go="${id}"]`);if(t){requestAnimationFrame(()=>{ink.style.left=t.offsetLeft+'px';ink.style.width=t.offsetWidth+'px'});t.scrollIntoView({block:'nearest',inline:'center'})}
-  if(push)history.replaceState(null,'','#'+id);
-  window.scrollTo({top:0});
-  $$('#p-'+id+' .rv').forEach(e=>e.classList.remove('in'));
-  requestAnimationFrame(()=>observe(id));
-  
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const STATIONS=[
+ {k:'Ikh Nart, MN',n:'Ikh Nart',c:'Mongolia',sp:'cinereous vultures',season:'Breeding colony, March to September',birds:'about 120 nesting pairs',since:2024,donors:1184,note:'Steppe and rocky outcrops where young cinereous vultures fledge before many of them fly south to Korea for the winter.'},
+ {k:'Monfragüe, ES',n:'Monfragüe',c:'Spain',sp:'cinereous and griffon vultures',season:'All year',birds:'several hundred birds',since:2024,donors:902,note:'River gorges and cork-oak hills in Extremadura with large breeding colonies of both species.'},
+ {k:'Grands Causses, FR',n:'Grands Causses',c:'France',sp:'griffon vultures',season:'All year',birds:'several hundred birds',since:2025,donors:611,note:'Limestone plateaus where vultures were reintroduced after disappearing from the region in the last century.'},
+ {k:'Rhodopes, BG',n:'Eastern Rhodopes',c:'Bulgaria',sp:'Egyptian vultures',season:'Summer breeding, April to September',birds:'a few dozen pairs',since:2025,donors:347,note:'Low mountains on the border with Greece. One of the last strongholds of Egyptian vultures in the Balkans.'},
+ {k:'Chitwan, NP',n:'Chitwan',c:'Nepal',sp:'white-rumped vultures',season:'All year',birds:'a recovering local population',since:2025,donors:529,note:'Lowland grasslands where community-run feeding sites helped vultures recover after the diclofenac collapse.'},
+ {k:'Magaliesberg, ZA',n:'Magaliesberg',c:'South Africa',sp:'Cape vultures',season:'All year',birds:'large cliff colonies',since:2026,donors:288,note:'Quartzite ridges west of Johannesburg where Cape vultures nest on steep cliff faces.'},
+ {k:'Cheorwon, KR',n:'Cheorwon',c:'South Korea',sp:'cinereous vultures',season:'Wintering, November to March',birds:'several hundred wintering birds',since:2024,donors:1410,note:'Farmland near the border where young vultures from Mongolia spend the winter and depend on donated food.'}];
+const stn=STATIONS.map(s=>s.k);
+
+/* ---------- view switching ---------- */
+function showView(v,anchor){
+  document.body.classList.toggle('landing',v==='landing');
+  $('#landing').classList.toggle('on',v==='landing');$('#details').classList.toggle('on',v==='details');
+  if(v==='details'){const t=anchor&&$(anchor);requestAnimationFrame(()=>{if(t)t.scrollIntoView();else window.scrollTo({top:0});spy()})}
+  else{window.scrollTo({top:0});history.replaceState(null,'',location.pathname)}
 }
-$$('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
-window.addEventListener('resize',()=>{const t=$('.tab.on');if(t){ink.style.left=t.offsetLeft+'px';ink.style.width=t.offsetWidth+'px'}});
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
-function observe(id){$$('#p-'+id+' .rv').forEach((e,i)=>{e.style.transitionDelay=Math.min(i*70,280)+'ms';io.observe(e)})}
-function countUp(){$$('[data-count]').forEach(el=>{const end=+el.dataset.count,em=el.querySelector('em').outerHTML,t0=performance.now();
-  (function f(t){const k=Math.min((t-t0)/1400,1),v=Math.round(end*(1-Math.pow(1-k,3)));el.innerHTML=v+em;if(k<1)requestAnimationFrame(f)})(t0)})}
+$$('[data-details]').forEach(b=>b.addEventListener('click',()=>{showView('details');history.replaceState(null,'','#how')}));
+$('[data-home]').addEventListener('click',()=>showView('landing'));
+$('#cue').onclick=()=>$('#why').scrollIntoView({behavior:'smooth'});
+$$('#links a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();$(a.getAttribute('href')).scrollIntoView({behavior:'smooth'});history.replaceState(null,'',a.getAttribute('href'))}));
 
-// ---------- how: procedure screen ----------
-const scr=$('#screen');let typer;
-function typeScreen(txt){clearInterval(typer);let i=0;scr.innerHTML='';typer=setInterval(()=>{i++;scr.innerHTML=txt.slice(0,i).replace(/\n/g,'<br>')+'<span class="cur"></span>';if(i>=txt.length)clearInterval(typer)},22)}
-$$('#proc li').forEach((li,k)=>li.addEventListener('click',()=>{$$('#proc li').forEach(x=>x.classList.remove('on'));li.classList.add('on');typeScreen(li.dataset.s)}));
-$('#proc li').click();
+/* ---------- scroll spy + progress ---------- */
+const ink=$('#ink'),secs=['how','process','stations','donors','track','memorial','faq'];
+function spy(){if(document.body.classList.contains('landing'))return;
+  const y=window.scrollY+140;let cur=secs[0];secs.forEach(id=>{if($('#'+id).offsetTop<=y)cur=id});
+  $$('#links a').forEach(a=>{const on=a.getAttribute('href')==='#'+cur;a.classList.toggle('on',on);if(on){ink.style.left=a.offsetLeft+'px';ink.style.width=a.offsetWidth+'px'}});
+  const d=$('#details'),max=d.offsetHeight-innerHeight;$('#progress').style.width=Math.max(0,Math.min(1,window.scrollY/max))*100+'%'}
+addEventListener('scroll',spy,{passive:true});addEventListener('resize',spy);
 
-// ---------- process stages ----------
+/* ---------- marks ---------- */
+$$('.marks button').forEach(b=>b.onclick=()=>{$$('.marks button').forEach(x=>x.classList.remove('on'));b.classList.add('on');$('#markname').textContent=b.dataset.m});
+
+/* ---------- cuff ---------- */
+const scr=$('#screen'),procs=$$('#proc li');let typer,cs=0;
+function typeScreen(txt){clearInterval(typer);let i=0;typer=setInterval(()=>{i++;scr.innerHTML=txt.slice(0,i).replace(/\n/g,'<br>')+'<span class="cur"></span>';if(i>=txt.length)clearInterval(typer)},20)}
+function cuffStep(k){cs=(k+6)%6;procs.forEach((x,j)=>x.classList.toggle('on',j===cs));typeScreen(procs[cs].dataset.s);$('#devbar').style.transform=`scaleX(${(cs+1)/6})`;$('#stepn').textContent=`${cs+1} of 6`}
+procs.forEach((li,k)=>li.onclick=()=>cuffStep(k));$('#prevS').onclick=()=>cuffStep(cs-1);$('#nextS').onclick=()=>cuffStep(cs+1);cuffStep(0);
+
+/* ---------- process (auto-advance) ---------- */
 const S=[
- {d:'Day 0–2',t:'Biopsy',p:'Your sealed cartridge travels to our lab, kept cold at 4 °C the whole way.',l:[['Size of the sample','about half a gram of muscle'],['Time in the post','less than two days'],['Temperature check','recorded every five minutes']],img:'05-capsule'},
- {d:'Day 2–5',t:'Isolation',p:'We separate out the muscle stem cells, called satellite cells, and check them for contamination.',l:[['What we test for','bacteria, mycoplasma and viruses'],['Your own cell line','started and labelled with your donor number']],img:'07-flasks'},
- {d:'Day 5–40',t:'Expansion',p:'The cells multiply in a serum-free medium. Human cells can only divide a limited number of times, so each donor can only ever produce so much.',l:[['How many times the cells divide','about thirty'],['What they grow in','a nutrient liquid with no animal serum']],n:'One donor\'s cells usually grow into about 160 kg of tissue. This is served over roughly two hundred separate meals.'},
- {d:'Day 40–55',t:'Scale-up',p:'Your line moves into its own bioreactor. A tag follows the vessel through every transfer, so your cells are never mixed with anyone else\'s.',l:[['Where the cells grow','a large tank used only for your cells'],['How we keep track','a label that moves with them every time']],img:'06-lab'},
- {d:'Day 55–65',t:'Differentiation',p:'The cells fuse into muscle fibres on an edible scaffold and slowly thicken into dense tissue.',l:[['What the cells grow on','an edible frame made from plants'],['What comes out','solid muscle tissue']]},
- {d:'Day 65–70',t:'Formulation',p:'We adjust the tissue to suit a vulture\'s diet and test it for drug residues before it can leave the lab.',l:[['What we add','fat and calcium, which wild vultures normally get from bones'],['Painkiller test','no trace may be found'],['Packaging','sealed airtight and labelled with your donor number and batch']],img:'08-feed'},
- {d:'Day 70+',t:'Feeding',p:'The packs are sent cold to your feeding station. On feeding days they are laid out in the field together with the other food.',l:[['Feeding stations','seven, on four continents'],['What we tell you','the date, the station and the batch']],img:'09-feeding',n:'We send you a message every time one of your batches is served.'}
-];
-const rail=$('#rail'),stage=$('#stage');
-rail.innerHTML=S.map((s,i)=>`<button data-i="${i}">${s.d}<b>${s.t}</b></button>`).join('');
-function showStage(i){$$('#rail button').forEach((b,k)=>b.classList.toggle('on',k===i));const s=S[i];
-  stage.innerHTML=`<div class="fade"><span class="mono">Stage ${i+1} of 7 · ${s.d}</span><h2 style="margin-top:16px">${s.t}</h2><p class="mute">${s.p}</p><ul>${s.l.map(x=>`<li><span>${x[0]}</span><span>${x[1]}</span></li>`).join('')}</ul>${s.n?`<p class="note">${s.n}</p>`:''}</div>
-  <div class="fade">${s.img?`<div class="ph"><img src="img/${s.img}.jpg" alt=""></div>`:`<div class="empty">There is nothing to photograph at this stage.<br>The cells are too small to see.</div>`}</div>`}
-$$('#rail button').forEach(b=>b.onclick=()=>showStage(+b.dataset.i));showStage(0);
-document.addEventListener('keydown',e=>{if(!$('#p-process').classList.contains('on')||$('#modal').classList.contains('on'))return;const c=$$('#rail button').findIndex(b=>b.classList.contains('on'));if(e.key==='ArrowRight')showStage(Math.min(c+1,6));if(e.key==='ArrowLeft')showStage(Math.max(c-1,0))});
+ {d:'Day 0 to 2',t:'Biopsy',p:'Your sealed cartridge travels to our lab, kept cold at 4 °C the whole way.',l:[['Size of the sample','about half a gram of muscle'],['Time in the post','less than two days'],['Temperature check','recorded every five minutes']],img:'05-capsule'},
+ {d:'Day 2 to 5',t:'Isolation',p:'We separate out the muscle stem cells, called satellite cells, and check them for contamination.',l:[['What we test for','bacteria, mycoplasma and viruses'],['Your own cell line','started and labelled with your donor number']],img:'07-flasks'},
+ {d:'Day 5 to 40',t:'Expansion',p:'The cells multiply in a nutrient liquid. Human cells can only divide a limited number of times, so each donor can only ever produce so much.',l:[['How many times the cells divide','about thirty'],['What they grow in','a nutrient liquid with no animal serum']],n:'One donor\'s cells usually grow into about 160 kg of tissue. This is served over roughly two hundred separate meals.'},
+ {d:'Day 40 to 55',t:'Scale-up',p:'Your cells move into their own large tank. A label follows the tank through every transfer, so your cells are never mixed with anyone else\'s.',l:[['Where the cells grow','a tank used only for your cells'],['How we keep track','a label that moves with them every time']],img:'06-lab'},
+ {d:'Day 55 to 65',t:'Differentiation',p:'The cells join together into muscle fibres on an edible frame and slowly thicken into solid tissue.',l:[['What the cells grow on','an edible frame made from plants'],['What comes out','solid muscle tissue']]},
+ {d:'Day 65 to 70',t:'Formulation',p:'We adjust the tissue to suit a vulture\'s diet and test it for drug residues before it can leave the lab.',l:[['What we add','fat and calcium, which wild vultures normally get from bones'],['Painkiller test','no trace may be found'],['Packaging','sealed airtight and labelled with your donor number and batch']],img:'08-feed'},
+ {d:'Day 70 onwards',t:'Feeding',p:'The packs are sent cold to your feeding station. On feeding days they are laid out in the field together with the other food.',l:[['Feeding stations','seven, on four continents'],['What we tell you','the date, the station and the batch']],img:'09-feeding',n:'We send you a message every time one of your batches is served.'}];
+const rail=$('#rail'),stage=$('#stage');let si=0,playing=true,ptimer,t0=0;const DUR=6500;
+rail.innerHTML=S.map((s,i)=>`<button data-i="${i}">${s.d}<b>${s.t}</b><i></i></button>`).join('');
+const rb=$$('#rail button');
+function showStage(i){si=i;rb.forEach((b,k)=>{b.classList.toggle('on',k===i);b.classList.toggle('done',k<i);b.querySelector('i').style.width=k<i?'100%':'0'});const s=S[i];
+  stage.innerHTML=`<div class="fade"><span class="label">Stage ${i+1} of 7, ${s.d.toLowerCase()}</span><h2 style="margin-top:12px">${s.t}</h2><p class="mute">${s.p}</p><ul>${s.l.map(x=>`<li><span>${x[0]}</span><span>${x[1]}</span></li>`).join('')}</ul>${s.n?`<p class="note">${s.n}</p>`:''}</div>
+  <div class="fade">${s.img?`<div class="ph"><img src="img/${s.img}.jpg" alt=""></div>`:`<div class="empty">There is nothing to photograph at this stage. The cells are too small to see.</div>`}</div>`;t0=performance.now()}
+function tick(t){if(playing&&$('#details').classList.contains('on')){const k=(t-t0)/DUR;rb[si].querySelector('i').style.width=Math.min(k,1)*100+'%';if(k>=1)showStage((si+1)%7)}requestAnimationFrame(tick)}
+function setPlay(p){playing=p;$('#playbtn').textContent=p?'Pause':'Play';$('#playstate').textContent=p?'Playing through the stages':'Paused';if(p)t0=performance.now()-(parseFloat(rb[si].querySelector('i').style.width)||0)/100*DUR}
+rb.forEach(b=>b.onclick=()=>{showStage(+b.dataset.i);setPlay(false)});$('#playbtn').onclick=()=>setPlay(!playing);
+showStage(0);requestAnimationFrame(tick);
 
-// ---------- modal (nothing leaves the browser) ----------
-const modal=$('#modal'),form=$('#reqf'),panes=$$('.pane'),pgs=$$('.pg i');let step=0;
+/* ---------- stations ---------- */
+$('#slist').innerHTML=STATIONS.map((s,i)=>`<li><button data-i="${i}"><span>${s.n}, ${s.c}</span><small>${s.sp}</small></button></li>`).join('');
+$('#stn').innerHTML=STATIONS.map(s=>`<option>${s.n}, ${s.c} (${s.sp})</option>`).join('');
+const sb=$$('#slist button');
+function showStationInfo(i){sb.forEach((b,k)=>b.classList.toggle('on',k===i));const s=STATIONS[i],max=1410;
+  $('#sdetail').innerHTML=`<div class="fade"><span class="label">${s.c}</span><h2 style="margin-top:10px">${s.n}</h2><p class="mute">${s.note}</p>
+  <dl><div><dt>Birds fed here</dt><dd>${s.sp[0].toUpperCase()+s.sp.slice(1)}</dd></div><div><dt>When birds are present</dt><dd>${s.season}</dd></div><div><dt>Local population</dt><dd>${s.birds}</dd></div><div><dt>Part of Eternal Flight since</dt><dd>${s.since}</dd></div></dl>
+  <div style="margin-top:24px;display:flex;justify-content:space-between" class="small"><span class="mute">Donors giving to this station</span><span>${s.donors.toLocaleString('en-US')}</span></div><div class="meter"><i id="sm"></i></div>
+  <p style="margin-top:24px"><button class="textlink" data-pick="${i}">Choose this station when I request a kit</button></p></div>`;
+  requestAnimationFrame(()=>setTimeout(()=>$('#sm').style.width=s.donors/max*100+'%',30));
+  $('[data-pick]').onclick=()=>{openModal();$('#stn').selectedIndex=i}}
+sb.forEach(b=>b.onclick=()=>showStationInfo(+b.dataset.i));showStationInfo(6);
+
+/* ---------- modal ---------- */
+const modal=$('#modal'),form=$('#reqf'),panes=$$('.pane'),pgs=$$('.pg i');let step=0,lastFocus;
 function show(i){step=i;panes.forEach((p,k)=>p.hidden=k!==i);pgs.forEach((b,k)=>b.classList.toggle('on',k<=Math.min(i,2)));
-  $('#mstep').textContent=i<3?`Step ${i+1} of 3`:'Complete';$('#back').style.visibility=i>0&&i<3?'visible':'hidden';
-  $('#mfoot').style.display=i===3?'none':'flex';$('#nextl').textContent=i===2?'Submit':'Continue'}
-$$('[data-open]').forEach(b=>b.addEventListener('click',()=>{form.reset();$('#warn').classList.remove('on');show(0);modal.classList.add('on');setTimeout(()=>$('#fn').focus(),300)}));
-const close=()=>modal.classList.remove('on');
-$$('[data-close]').forEach(b=>b.onclick=close);modal.onclick=e=>{if(e.target===modal)close()};
-document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+  $('#mstep').textContent=i<3?`Step ${i+1} of 3`:'Done';$('#back').style.visibility=i>0&&i<3?'visible':'hidden';$('#mfoot').style.display=i===3?'none':'flex';$('#nextl').textContent=i===2?'Request my kit':'Continue'}
+function openModal(){lastFocus=document.activeElement;form.reset();$('#warn').classList.remove('on');show(0);modal.classList.add('on');setTimeout(()=>$('#fn').focus(),250)}
+function closeModal(){modal.classList.remove('on');if(lastFocus)lastFocus.focus()}
+$$('[data-open]').forEach(b=>b.addEventListener('click',openModal));
+$$('[data-close]').forEach(b=>b.onclick=closeModal);modal.onclick=e=>{if(e.target===modal)closeModal()};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('on'))closeModal()});
 $('#back').onclick=()=>show(step-1);
 $$('.risk').forEach(c=>c.onchange=()=>$('#warn').classList.toggle('on',$$('.risk').some(x=>x.checked)));
 $('#next').onclick=()=>{
   for(const r of panes[step].querySelectorAll('input[required]'))if(!r.reportValidity())return;
   if(step===1&&!$('#wn').value)$('#wn').value=($('#fn').value+' '+$('#ln').value).trim();
-  if(step===2){const c=$('#consent');if(!c.checked){c.setCustomValidity('Please confirm to continue');c.reportValidity();c.onchange=()=>c.setCustomValidity('');return}
-    const wall=$('#wn').value;$('#newid').textContent='EF-2026-0'+(4800+Math.floor(Math.random()*900));form.reset();
-    if(wall){const s=document.createElement('span');s.className='new';s.textContent=wall;$('#names').prepend(s)}}
+  if(step===2){const c=$('#consent');if(!c.checked){c.setCustomValidity('Please tick this box to continue');c.reportValidity();c.onchange=()=>c.setCustomValidity('');return}
+    const held=$$('.risk').some(x=>x.checked),wall=$('#wn').value,st=$('#stn').value.split(' (')[0];
+    $('#newid').textContent='EF-2026-0'+(4800+Math.floor(Math.random()*900));
+    $('#donemsg').textContent=held?`We'll send your kit once it is safe for the birds. Your tissue will go to ${st}. Keep this number, it's printed on your cartridge too.`:`Your tissue will go to ${st}. Keep this number, it's printed on your cartridge too.`;
+    form.reset();
+    if(wall){const s=document.createElement('span');s.className='new';s.textContent=wall;$('#names').prepend(s);countNames()}}
   show(step+1)};
+$('#copyid').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText($('#newid').textContent).catch(()=>{});$('#copyid').textContent='Copied';setTimeout(()=>$('#copyid').textContent='Copy',1600)};
 
-// ---------- queue ----------
+/* ---------- flap board ---------- */
 const first=['J.','M.','S.','A.','H.','K.','L.','D.','Y.','E.','R.','T.','N.','C.','O.'];
 const last=['Park','Lin','Novak','Haddad','Sato','Moreau','Kim','Okafor','Silva','Berg','Rossi','Chen','Petrov','Nguyen','Lee','Khan','Weber','Ito','Costa','Lund'];
 const ctry=['KR','JP','DE','US','FR','BR','NG','SE','IT','CN','IN','VN','CA','PL','MN'];
-const site=['Upper arm','Thigh','Calf'],stn=['Ikh Nart, MN','Monfragüe, ES','Grands Causses, FR','Rhodopes, BG','Chitwan, NP','Magaliesberg, ZA','Cheorwon, KR'],ST=['Kit sent','Sample received','Cells growing','Being prepared','Served to vultures'];
-const sp=['cinereous vultures','cinereous and griffon vultures','griffon vultures','Egyptian vultures','white-rumped vultures','Cape vultures','cinereous vultures'];
-const pick=a=>a[Math.floor(Math.random()*a.length)];
-let seq=4710,rows=[];const mk=s=>({id:'EF-2026-0'+(++seq),n:pick(first)+' '+pick(last),c:pick(ctry),si:pick(site),st:pick(stn),s});
-for(let i=0;i<10;i++)rows.push(mk(Math.floor(Math.random()*5)));
 const ST2=['KIT SENT','SAMPLE RECEIVED','CELLS GROWING','BEING PREPARED','SERVED TO VULTURES'];
+let seq=4710,rows=[];const mk=s=>({id:'EF-2026-0'+(++seq),n:pick(first)+' '+pick(last),c:pick(ctry),st:pick(stn),s});
+for(let i=0;i<10;i++)rows.push(mk(Math.floor(Math.random()*5)));
 const COLS=[['Donor number',13,''],['Name',12,''],['From',4,'hm'],['Feeding station',17,'hm2'],['Status',18,'']];
 const CH='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-';
-const fb=$('#fb');
-function tiles(n){return Array.from({length:n},()=>'<span class="t" data-c=" ">&nbsp;</span>').join('')}
-fb.innerHTML='<div class="fr fh">'+COLS.map(c=>`<div class="fl ${c[2]}" style="width:calc(${c[1]} * var(--tw))">${c[0]}</div>`).join('')+'</div>'+
-  Array.from({length:10},()=>'<div class="fr">'+COLS.map(c=>`<div class="fc ${c[2]}">${tiles(c[1])}</div>`).join('')+'</div>').join('');
+const fb=$('#fb');const tiles=n=>Array.from({length:n},()=>'<span class="t" data-c=" ">&nbsp;</span>').join('');
+fb.innerHTML='<div class="fr fh">'+COLS.map(c=>`<div class="fl ${c[2]}" style="width:calc(${c[1]} * var(--tw))">${c[0]}</div>`).join('')+'</div>'+Array.from({length:10},()=>'<div class="fr">'+COLS.map(c=>`<div class="fc ${c[2]}">${tiles(c[1])}</div>`).join('')+'</div>').join('');
 function flipTo(el,ch){if(el.dataset.c===ch)return;el.dataset.c=ch;let k=0,n=3+Math.floor(Math.random()*7);clearInterval(el._t);
-  el._t=setInterval(()=>{el.classList.remove('f');void el.offsetWidth;el.classList.add('f');
-    if(++k>=n){clearInterval(el._t);el.innerHTML=ch===' '?'&nbsp;':ch}else el.textContent=CH[Math.floor(Math.random()*CH.length)]},55)}
+  el._t=setInterval(()=>{el.classList.remove('f');void el.offsetWidth;el.classList.add('f');if(++k>=n){clearInterval(el._t);el.innerHTML=ch===' '?'&nbsp;':ch}else el.textContent=CH[Math.floor(Math.random()*CH.length)]},55)}
 function setCell(cell,txt,len){txt=(txt||'').toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g,'').padEnd(len).slice(0,len);[...cell.children].forEach((t,i)=>setTimeout(()=>flipTo(t,txt[i]),i*18))}
-function rowVals(r){return[r.id,r.n,r.c,r.st,ST2[r.s]]}
-function paint(){[...fb.querySelectorAll('.fr:not(.fh)')].forEach((row,i)=>{const r=rows[i];[...row.children].forEach((c,k)=>setCell(c,rowVals(r)[k],COLS[k][1]));row.classList.toggle('done',r.s===4)})}
-function setNum(id,v,len){setCell($(id),String(v).padStart(len,' '),len)}
-$('#st-w').innerHTML=tiles(5);$('#st-c').innerHTML=tiles(5);$('#st-f').innerHTML=tiles(5);$('#st-t').innerHTML=tiles(5);
+function paint(){[...fb.querySelectorAll('.fr:not(.fh)')].forEach((row,i)=>{const r=rows[i],v=[r.id,r.n,r.c,r.st,ST2[r.s]];[...row.children].forEach((c,k)=>setCell(c,v[k],COLS[k][1]));row.classList.toggle('done',r.s===4)})}
+['#st-w','#st-c','#st-f','#st-t'].forEach(id=>$(id).innerHTML=tiles(5));
 let W=1284,C=418,F=312;
-function stats(){setNum('#st-w',W,5);setNum('#st-c',C,5);setNum('#st-f',F,5);const d=new Date();setCell($('#st-t'),String(d.getHours()).padStart(2,'0')+'-'+String(d.getMinutes()).padStart(2,'0'),5)}
+function stats(){setCell($('#st-w'),String(W).padStart(5),5);setCell($('#st-c'),String(C).padStart(5),5);setCell($('#st-f'),String(F).padStart(5),5);const d=new Date();setCell($('#st-t'),String(d.getHours()).padStart(2,'0')+'-'+String(d.getMinutes()).padStart(2,'0'),5)}
 paint();stats();
-setInterval(()=>{if(Math.random()<.45){rows.unshift(mk(0));rows.length=10;W++}else{const i=Math.floor(Math.random()*rows.length);if(rows[i].s<4){rows[i].s++;if(rows[i].s===2){C++;W--}if(rows[i].s===4){F++;C--}}}paint();stats()},3400);
+setInterval(()=>{if(!$('#details').classList.contains('on'))return;if(Math.random()<.45){rows.unshift(mk(0));rows.length=10;W++}else{const i=Math.floor(Math.random()*rows.length);if(rows[i].s<4){rows[i].s++;if(rows[i].s===2){C++;W--}if(rows[i].s===4){F++;C--}}}paint();stats()},3400);
 
-// ---------- track ----------
+/* ---------- track ---------- */
 $('#try').onclick=()=>{$('#tid').value='EF-2026-00413';$('#trackf').requestSubmit()};
 $('#trackf').onsubmit=e=>{e.preventDefault();
-  const v=($('#tid').value||'EF-2026-00413').trim().toUpperCase();let h=0;for(const ch of v)h=(h*31+ch.charCodeAt(0))>>>0;
-  const tot=180+h%60,done=20+h%(tot-20),st=stn[h%7],d=new Date(2026,11,1+h%20).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+  const v=($('#tid').value||'').trim().toUpperCase();
+  if(!/^EF-\d{4}-\d{5}$/.test(v)){$('#res').innerHTML='<p class="small">That doesn\'t look like a donor number. It should look like EF-2026-00413, with two dashes. You\'ll find it on the label of your cartridge.</p>';return}
+  let h=0;for(const ch of v)h=(h*31+ch.charCodeAt(0))>>>0;
+  const tot=180+h%60,done=20+h%(tot-20),s=STATIONS[h%7],d=new Date(2026,10,1+h%11).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
   const pct=(0.5/(tot*0.75*1000)*100).toFixed(4);
-  $('#res').innerHTML=`<span class="mono">${v}</span><div class="big" id="bn">Batch 0 of ${tot}</div><span class="mute" style="font-size:13px">served to wild ${sp[h%7]}</span>
-  <div class="prog2"><i id="pb"></i></div><span class="mono">${Math.round(done/tot*100)}% of everything grown from your cells has now been eaten</span>
-  <div style="margin-top:20px"><div class="row"><span>Most recent feeding</span><span>${d}</span></div><div class="row"><span>Feeding station</span><span>${st}</span></div>
-  <div class="row"><span>Weight of this batch</span><span>750 g</span></div><div class="row"><span>How much of this batch came from your original sample</span><span>${pct}%</span></div>
-  <div class="row"><span>Name on the memorial wall</span><span>Carved</span></div></div>`;
+  $('#res').innerHTML=`<span class="label">${v}</span><div class="big" id="bn">Batch 0 of ${tot}</div><span class="mute small">served to wild ${s.sp} at ${s.n}, ${s.c}</span>
+  <div class="prog2"><i id="pb"></i></div><span class="small">${Math.round(done/tot*100)}% of everything grown from your cells has now been eaten</span>
+  <div style="margin-top:18px"><div class="row"><span>Most recent feeding</span><span>${d}</span></div><div class="row"><span>Weight of this batch</span><span>750 g</span></div>
+  <div class="row"><span>How much of this batch came from your original sample</span><span>${pct}%</span></div><div class="row"><span>Name on the memorial wall</span><span>Carved</span></div></div>`;
   setTimeout(()=>$('#pb').style.width=(done/tot*100)+'%',60);
-  const t0=performance.now();(function f(t){const k=Math.min((t-t0)/1600,1);$('#bn').textContent=`Batch ${Math.round(done*(1-Math.pow(1-k,3)))} of ${tot}`;if(k<1)requestAnimationFrame(f)})(t0)};
+  const t0=performance.now();(function f(t){const k=Math.min((t-t0)/1500,1);const el=$('#bn');if(el)el.textContent=`Batch ${Math.round(done*(1-Math.pow(1-k,3)))} of ${tot}`;if(k<1)requestAnimationFrame(f)})(t0)};
 
-// ---------- wall ----------
-const fn=['Ji-won','Mina','Sofia','Amara','Haruto','Lukas','Elena','Daniel','Yuna','Omar','Ines','Tomas','Nadia','Chen','Oliver','Seo-yeon','Kofi','Lea','Ravi','Ana'];
-$('#names').innerHTML=Array.from({length:160},()=>`<span>${pick(fn)} ${pick(last)}</span>`).join('');
+/* ---------- wall ---------- */
+const fnm=['Ji-won','Mina','Sofia','Amara','Haruto','Lukas','Elena','Daniel','Yuna','Omar','Ines','Tomas','Nadia','Chen','Oliver','Seo-yeon','Kofi','Lea','Ravi','Ana'];
+$('#names').innerHTML=Array.from({length:180},()=>`<span>${pick(fnm)} ${pick(last)}</span>`).join('');
+function countNames(){const q=$('#wq').value.trim().toLowerCase(),sp=$$('#names span');$('#names').classList.toggle('filtering',!!q);let n=0;
+  sp.forEach(s=>{const hit=q&&s.textContent.toLowerCase().includes(q);s.classList.toggle('hit',hit);if(hit)n++});
+  $('#wcount').textContent=q?(n?`${n} ${n===1?'name':'names'} found`:'No names found. Check the spelling, or try just a first name.'):`${sp.length.toLocaleString('en-US')} names carved so far`}
+$('#wq').oninput=countNames;countNames();
 
-$('#cue').onclick=()=>window.scrollTo({top:$('.hero-full').offsetHeight+60,behavior:'smooth'});
-go(location.hash.slice(1)||'home',false);
+/* ---------- faq search ---------- */
+$('#fq').oninput=()=>{const q=$('#fq').value.trim().toLowerCase();let n=0;$$('#faqs details').forEach(d=>{const hit=!q||d.textContent.toLowerCase().includes(q);d.hidden=!hit;if(hit)n++;if(q&&hit)d.open=true});$('#nores').style.display=n?'none':'block'};
+
+/* ---------- toasts ---------- */
+const cities=['Lyon','Osaka','Seville','Toronto','Busan','Leipzig','Kathmandu','Cape Town','Melbourne','Porto','Ulaanbaatar','Daejeon'];
+const acts=['just requested a kit','received their first feeding notice','sent their sample back','came back for a second mark'];
+function toast(){if(document.body.classList.contains('landing')||modal.classList.contains('on'))return;const s=pick(STATIONS);
+  $('#toast').innerHTML=`Someone in ${pick(cities)} ${pick(acts)}.<small>Their tissue is going to ${s.n}, ${s.c}.</small>`;$('#toast').classList.add('on');setTimeout(()=>$('#toast').classList.remove('on'),4200)}
+setInterval(toast,16000);
+
+/* ---------- start ---------- */
+const startHash=location.hash.slice(1);
+if(secs.includes(startHash))showView('details','#'+startHash);
 </script>
 </body>
 </html>
