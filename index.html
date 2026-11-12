@@ -245,24 +245,6 @@ select option{background:#111}
 .screen-cards{margin-top:80px;border-top:1px solid var(--hard)}
 .screen-cards .grid3>div{padding-top:18px}
 .tag{display:inline-block;font-size:11px;border:1px solid var(--hard);padding:2px 8px;margin-bottom:10px}
-/* ---------- wall ---------- */
-.wallbar{display:flex;gap:16px;align-items:center;margin-bottom:16px}
-.wallbar input{max-width:320px}
-.wall{position:relative;overflow:hidden;height:440px;border:1px solid var(--line)}
-.wall img{filter:grayscale(1) blur(3px) brightness(.3)}
-.names{position:absolute;inset:0;padding:30px;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:2px 22px;align-content:start;font-size:11.5px;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 75%,transparent);mask-image:linear-gradient(180deg,#000 75%,transparent)}
-.names span{color:var(--mute);transition:color .2s,opacity .3s}
-.names span:hover{color:var(--ink)}
-.names.filtering span{opacity:.18}
-.names.filtering span.hit{opacity:1;color:var(--ink)}
-.names span.new{color:var(--ink);text-decoration:underline;text-underline-offset:4px}
-.strip{margin-top:56px;border-top:1px solid var(--hard);padding-top:16px}
-.ticker{position:relative;overflow:hidden;margin-top:12px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:12px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
-.tk{display:flex;gap:34px;width:max-content;animation:tick 120s linear infinite;font-size:12px;color:var(--mute)}
-.ticker:hover .tk{animation-play-state:paused}
-.tk span{white-space:nowrap}.tk span:hover{color:var(--ink)}
-.tk span.new{color:var(--ink);text-decoration:underline;text-underline-offset:4px}
-@keyframes tick{to{transform:translateX(-50%)}}
 /* ---------- faq ---------- */
 .faqbar{margin-bottom:10px;max-width:420px}
 details{border-top:1px solid var(--line);padding:18px 0}
@@ -367,7 +349,7 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
   .track{gap:28px}
   .result{min-height:0}
   .result .big{font-size:34px}
-  .strip{margin-top:36px}
+  
   .screen-cards{margin-top:48px}
   .screen-cards .grid3{gap:20px}
   summary{font-size:15px}
@@ -431,7 +413,7 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
       <ol class="reasons">
         <li><span>1</span><div><h3>Clean food they can trust</h3><p>Every batch is screened for painkillers, antibiotics and lead before it leaves the lab. Nobody can promise that about a dead animal left out in a field.</p></div></li>
         <li><span>2</span><div><h3>Help now, while you are alive</h3><p>Most of us will be buried or cremated, and nothing will come of our bodies. You can do something different today. Half a gram of your muscle is enough to grow food for many meals.</p></div></li>
-        <li><span>3</span><div><h3>A relationship you can follow</h3><p>We tell you which station received your tissue, the day it was served and which batch it was part of. Your name is also carved into a stone wall next to the feeding ground.</p></div></li>
+        <li><span>3</span><div><h3>A relationship you can follow</h3><p>We tell you which station received your tissue, the day it was served and which batch it was part of.</p></div></li>
         <li><span>4</span><div><h3>A part of you that flies</h3><p>When a vulture eats, the protein from its food becomes part of its own body. Some of what grew from your cells will end up in the muscles that move its wings as it flies over mountains and across borders.</p></div></li>
       </ol>
     </div>
@@ -587,10 +569,6 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
       </div>
       <div class="result" id="res" aria-live="polite"><span class="mute small">Your results will appear here.</span></div>
     </div>
-    <div class="strip">
-      <p class="small"><span class="mute">And your name stays here.</span> After your first batch is served, we carve your name into a low stone wall at the edge of the feeding ground.</p>
-      <div class="ticker" aria-label="Names on the memorial walls"><div class="tk" id="names"></div></div>
-    </div>
     <div class="screen-cards">
       <div class="grid3">
         <div><span class="tag">Wait 14 days before donating</span><h3>Painkillers</h3><p class="mute small">Anti-inflammatory drugs like diclofenac or ibuprofen can stay in tissue. These are the same drugs that wiped out vultures in South Asia.</p></div>
@@ -605,16 +583,16 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
     <div id="faqs">
 <details><summary>Does it hurt?</summary><p>Less than most people expect. The cuff numbs the skin for about three minutes before it does anything else, so what you feel during sampling is mostly pressure. The tattoo module that follows feels like a fine-line tattoo on a numbed arm. The site can be sore for a day or two afterwards, much like after a vaccination.</p></details>
 <details><summary>How much of me do you actually take?</summary><p>About half a gram of skeletal muscle. That's roughly the size of a grain of rice. Your body replaces it within a few weeks and you will not notice any difference in strength or movement.</p></details>
-<details><summary>Will there be a scar?</summary><p>The sample leaves a short line about a centimetre long, and the memorial mark is tattooed right on top of it. For the first few weeks you may still see a little redness under the ink. Once it has healed, the line sits inside the design and most people can't tell it is there.</p></details>
+<details><summary>Will there be a scar?</summary><p>The sample leaves a short line about a centimetre long, and the mark is tattooed right on top of it. For the first few weeks you may still see a little redness under the ink. Once it has healed, the line sits inside the design and most people can't tell it is there.</p></details>
 <details><summary>Is it still me after it's grown?</summary><p>That depends on what you think makes something yours. In strict physical terms, almost none of it is. Your half gram is multiplied into about 160 kilograms, so in any single batch less than one thousandth of a percent was ever inside your body. But every one of those cells grew from yours and carries your DNA. We keep your donor number on every pack because we think that connection matters, even if it's hard to measure.</p></details>
-<details><summary>Will the vulture know my name?</summary><p>No. A vulture recognises food, other vultures and the shape of the place where it is usually fed. It will never know that a person was involved. Your name lives on the wall at the station and in the notices we send you. The relationship is real, but it only runs in one direction, and we think it's important to be honest about that.</p></details>
+<details><summary>Will the vulture know my name?</summary><p>No. A vulture recognises food, other vultures and the shape of the place where it is usually fed. It will never know that a person was involved. Your name lives only in your notices and on your own arm. The relationship is real, but it only runs in one direction, and we think it's important to be honest about that.</p></details>
 <details><summary>Why vultures and not some other animal?</summary><p>Vultures are built to eat what others leave behind. They clean up carcasses that would otherwise rot and spread disease. That role has almost disappeared across much of the world, because people now remove dead animals before vultures can reach them. In many regions the birds that remain depend on food that humans bring. They are also among the species that have suffered most from what we put in that food.</p></details>
 <details><summary>Why not just donate meat or money?</summary><p>You can, and many people already do. Feeding stations always need both. Eternal Flight is for people who want something more direct. Meat from a butcher comes from an animal you never knew. Money turns into meat you never see. Your own tissue is something you can trace from your arm to a particular field on a particular day.</p></details>
 <details><summary>Is it safe for the birds?</summary><p>That's the whole reason for the screening and the testing. Every batch is checked for anti-inflammatory drugs, antibiotics and heavy metals before it leaves the lab, and nothing is released if any residue is found. Cultivated tissue is also free of the bone fragments and lead shot that sometimes end up in donated carcasses. We adjust fat and calcium levels so the food matches what a wild vulture would get from a normal meal.</p></details>
 <details><summary>Can I choose which bird eats it?</summary><p>You choose the station. We can't assign an individual bird. Vultures feed in groups with their own order of who eats first, and older birds often push the young ones aside. We think it's better not to interfere with that.</p></details>
-<details><summary>Why is it called Eternal Flight if the cells run out?</summary><p>It's true that your cell line has a natural limit. After about two hundred meals, there is nothing more to grow. But flight was never only about the cells. The protein from your tissue becomes part of a living bird. That bird raises young, and they raise young of their own. In that sense, a part of every donation keeps flying for as long as vultures do. And while the birds come and go, your mark and your name on the wall stay where they are. We think that is as close to eternal as any of us gets.</p></details>
+<details><summary>Why is it called Eternal Flight if the cells run out?</summary><p>It's true that your cell line has a natural limit. After about two hundred meals, there is nothing more to grow. But flight was never only about the cells. The protein from your tissue becomes part of a living bird. That bird raises young, and they raise young of their own. In that sense, a part of every donation keeps flying for as long as vultures do. And while the birds come and go, the mark on your arm stays exactly where it is. We think that is as close to eternal as any of us gets.</p></details>
   <details><summary>Can I give more than once?</summary><p>No. Each person can donate only once. One sample is enough to grow around 160 kg of food, which is served over a couple of hundred meals, so a second donation isn't needed. It also means every line in our lab belongs to exactly one person, and every mark stands for exactly one gift.</p></details>
-<details><summary>What happens if I die before my line runs out?</summary><p>Your cells keep growing and your batches keep being served until the line reaches its natural limit. Your notices can be sent to someone you name in advance. Your name stays on the wall either way.</p></details>
+<details><summary>What happens if I die before my line runs out?</summary><p>Your cells keep growing and your batches keep being served until the line reaches its natural limit. Your notices can be sent to someone you name in advance.</p></details>
 <details><summary>Can I change my mind?</summary><p>You can cancel at any point before the cartridge is posted. Once your sample reaches the lab and the line has started, we can still stop it, but we can't give anything back. Everything grown up to that point will be destroyed rather than served.</p></details>
     <p class="nores" id="nores">No questions match that search. Try a shorter word, or write to us when you request a kit.</p>
     </div>
@@ -653,7 +631,6 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
       <div class="opts"><label class="opt"><input type="radio" name="mark" checked><img src="img/04a-feather.jpg" alt="">Feather</label><label class="opt"><input type="radio" name="mark"><img src="img/04b-wings.jpg" alt="">Wings</label><label class="opt"><input type="radio" name="mark"><img src="img/04c-number.jpg" alt="">Donor number</label></div>
       <div class="f" style="margin-top:22px">
         <div class="full"><label for="stn">Feeding station</label><select id="stn"></select></div>
-        <div class="full"><label for="wn">Name to carve on the wall</label><input id="wn" autocomplete="name"></div>
       </div>
     </div>
     <div class="pane" hidden>
@@ -765,13 +742,11 @@ $('#back').onclick=()=>show(step-1);
 $$('.risk').forEach(c=>c.onchange=()=>$('#warn').classList.toggle('on',$$('.risk').some(x=>x.checked)));
 $('#next').onclick=()=>{
   for(const r of panes[step].querySelectorAll('input[required]'))if(!r.reportValidity())return;
-  if(step===1&&!$('#wn').value)$('#wn').value=($('#fn').value+' '+$('#ln').value).trim();
   if(step===2){const c=$('#consent');if(!c.checked){c.setCustomValidity('Please tick this box to continue');c.reportValidity();c.onchange=()=>c.setCustomValidity('');return}
-    const held=$$('.risk').some(x=>x.checked),wall=$('#wn').value,st=$('#stn').value.split(' (')[0];
+    const held=$$('.risk').some(x=>x.checked),st=$('#stn').value.split(' (')[0];
     $('#newid').textContent='EF-2026-0'+(4800+Math.floor(Math.random()*900));
     $('#donemsg').textContent=held?`We'll send your kit once it is safe for the birds. Your tissue will go to ${st}. Keep this number, it's printed on your cartridge too.`:`Your tissue will go to ${st}. Keep this number, it's printed on your cartridge too.`;
-    form.reset();
-    if(wall){const s=document.createElement('span');s.className='new';s.textContent=wall;$('#names').prepend(s)}}
+    form.reset();}
   show(step+1)};
 $('#copyid').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText($('#newid').textContent).catch(()=>{});$('#copyid').textContent='Copied';setTimeout(()=>$('#copyid').textContent='Copy',1600)};
 
@@ -807,14 +782,11 @@ $('#trackf').onsubmit=e=>{e.preventDefault();
   $('#res').innerHTML=`<span class="label">${v}</span><div class="big" id="bn">Batch 0 of ${tot}</div><span class="mute small">served to wild ${s.sp} at ${s.n}, ${s.c}</span>
   <div class="prog2"><i id="pb"></i></div><span class="small">${Math.round(done/tot*100)}% of everything grown from your cells has now been eaten</span>
   <div style="margin-top:18px"><div class="row"><span>Most recent feeding</span><span>${d}</span></div><div class="row"><span>Weight of this batch</span><span>750 g</span></div>
-  <div class="row"><span>How much of this batch came from your original sample</span><span>${pct}%</span></div><div class="row"><span>Name on the memorial wall</span><span>Carved</span></div></div>`;
+  <div class="row"><span>How much of this batch came from your original sample</span><span>${pct}%</span></div></div>`;
   setTimeout(()=>$('#pb').style.width=(done/tot*100)+'%',60);
   const t0=performance.now();(function f(t){const k=Math.min((t-t0)/1500,1);const el=$('#bn');if(el)el.textContent=`Batch ${Math.round(done*(1-Math.pow(1-k,3)))} of ${tot}`;if(k<1)requestAnimationFrame(f)})(t0)};
 
-/* ---------- wall ---------- */
-const fnm=['Ji-won','Mina','Sofia','Amara','Haruto','Lukas','Elena','Daniel','Yuna','Omar','Ines','Tomas','Nadia','Chen','Oliver','Seo-yeon','Kofi','Lea','Ravi','Ana'];
-{const list=Array.from({length:60},()=>`<span>${pick(fnm)} ${pick(last)}</span>`).join('');$('#names').innerHTML=list+list}
-function countNames(){}
+
 
 /* ---------- faq search ---------- */
 $('#fq').oninput=()=>{const q=$('#fq').value.trim().toLowerCase();let n=0;$$('#faqs details').forEach(d=>{const hit=!q||d.textContent.toLowerCase().includes(q);d.hidden=!hit;if(hit)n++;if(q&&hit)d.open=true});$('#nores').style.display=n?'none':'block'};
