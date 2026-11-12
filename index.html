@@ -93,12 +93,23 @@ a{color:inherit}
 .hero-full>img{position:absolute;inset:0;filter:grayscale(1) contrast(1.05) brightness(.82);transform:scale(1.04);animation:heroIn 2.4s cubic-bezier(.2,.7,.2,1) forwards}
 @keyframes heroIn{to{transform:none}}
 .hero-full::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,11,11,.55) 0%,rgba(11,11,11,0) 30%,rgba(11,11,11,0) 45%,rgba(11,11,11,.85) 100%)}
-.hero-full .wrap{position:relative;z-index:2;width:100%;padding-bottom:64px;display:flex;justify-content:flex-end}
+.hero-full .wrap{position:relative;z-index:2;width:100%;padding-bottom:110px;display:flex;justify-content:flex-end}
 .hero-full .wrap>div{max-width:600px}
 .hero-full .mono{color:#d8d8d4}
 .hero-full::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(11,11,11,0) 35%,rgba(11,11,11,.6) 100%)}
 .hero-full h1{margin:20px 0 24px;max-width:13ch}
 .hero-full p{font-size:16px;color:#e4e4e0;max-width:56ch}
+body.landing .tabs{visibility:hidden}
+.navlink{display:none;background:none;border:0;color:var(--ink);font:11px "IBM Plex Mono",monospace;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;white-space:nowrap;padding:8px 0;border-bottom:1px solid transparent;transition:border-color .25s}
+.navlink:hover{border-color:var(--ink)}
+body.landing .navlink{display:block}
+.scrollcue{position:absolute;left:50%;bottom:26px;z-index:3;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;font:10px "IBM Plex Mono",monospace;letter-spacing:.14em;text-transform:uppercase;color:#d8d8d4;cursor:pointer;background:none;border:0}
+.scrollcue i{display:block;width:1px;height:46px;background:rgba(242,242,239,.25);position:relative;overflow:hidden}
+.scrollcue i::after{content:"";position:absolute;left:0;top:-46px;width:1px;height:46px;background:#f2f2ef;animation:drip 1.8s cubic-bezier(.6,0,.3,1) infinite}
+@keyframes drip{to{top:46px}}
+.more{margin-top:120px;border-top:1px solid var(--hard);padding-top:40px;display:grid;grid-template-columns:4fr 8fr;gap:48px;align-items:end}
+.more h2{margin:0}
+@media(max-width:860px){.more{grid-template-columns:1fr}}
 /* ---------- how ---------- */
 .step{display:flex;flex-direction:column}.step h3{margin-top:14px}.step .ph{aspect-ratio:4/5;margin-top:auto;padding-top:0}.step p{margin-bottom:24px;min-height:96px}.cols>div.step{padding:20px 14px 0 14px}.cols>div.step:first-child{padding-left:0;padding-right:28px}.cols>div.step:last-child{padding-right:0;padding-left:28px}
 .step p{color:var(--mute);font-size:14px}
@@ -234,7 +245,6 @@ label{display:block;margin-bottom:6px}
 <div class="bar"><div class="wrap">
   <div class="logo" data-go="home"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor"><circle cx="9" cy="9" r="8"/><path d="M2 11c4-1 9-4 14-8"/></svg><span>Eternal Flight</span></div>
   <nav class="tabs" id="tabs">
-    <button class="tab" data-go="home"><b>00</b>Why it matters</button>
     <button class="tab" data-go="how"><b>01</b>How it works</button>
     <button class="tab" data-go="process"><b>02</b>Process</button>
     <button class="tab" data-go="queue"><b>03</b>Donors</button>
@@ -243,6 +253,7 @@ label{display:block;margin-bottom:6px}
     <button class="tab" data-go="faq"><b>06</b>Questions</button>
     <i class="ink" id="ink"></i>
   </nav>
+  <button class="navlink" data-go="how">See the details →</button>
   <button class="btn" data-open><span>Request a kit</span></button>
 </div></div>
 
@@ -255,6 +266,7 @@ label{display:block;margin-bottom:6px}
       <h1>Become part of something that flies.</h1>
       <p>We take a tiny sample of muscle from your arm and grow it in a lab until there is enough to feed wild vultures. We then send it to feeding stations on four continents. Each one is close to a place where vultures breed or spend the winter, and where they can no longer find enough food on their own.</p>
     </div></div>
+  <button class="scrollcue" id="cue" aria-label="Scroll down to read more">Scroll to read<i></i></button>
   </section>
   <div class="wrap">
 
@@ -289,6 +301,13 @@ label{display:block;margin-bottom:6px}
         <li><div><h3>A relationship you can follow</h3><p>We tell you which station received your tissue, the day it was served and which batch it was part of. Your name is also carved into a stone wall next to the feeding ground.</p></div></li>
         <li><div><h3>A part of you that flies</h3><p>When a vulture eats, the protein from its food becomes part of its own body. Some of what grew from your cells will end up in the muscles that move its wings as it flies over mountains and across borders.</p></div></li>
       </ol>
+    </div>
+  </section>
+  <section class="more rv">
+    <span class="mono">Want to know more?</span>
+    <div>
+      <h2>See how the kit works, follow a donation from start to finish, and read what other donors have asked us.</h2>
+      <div class="cta" style="margin-top:32px"><button class="btn" data-go="how"><span>See the details</span><span class="arr">→</span></button></div>
     </div>
   </section>
 </div></main>
@@ -480,10 +499,10 @@ const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const ink=$('#ink');
 function go(id,push=true){
   if(!$('#p-'+id))id='home';
+  document.body.classList.toggle('landing',id==='home');
   $$('.panel').forEach(p=>p.classList.toggle('on',p.id==='p-'+id));
   $$('.tab').forEach(t=>t.classList.toggle('on',t.dataset.go===id));
-  const t=$(`.tab[data-go="${id}"]`);ink.style.left=t.offsetLeft+'px';ink.style.width=t.offsetWidth+'px';
-  t.scrollIntoView({block:'nearest',inline:'center'});
+  const t=$(`.tab[data-go="${id}"]`);if(t){requestAnimationFrame(()=>{ink.style.left=t.offsetLeft+'px';ink.style.width=t.offsetWidth+'px'});t.scrollIntoView({block:'nearest',inline:'center'})}
   if(push)history.replaceState(null,'','#'+id);
   window.scrollTo({top:0});
   $$('#p-'+id+' .rv').forEach(e=>e.classList.remove('in'));
@@ -573,6 +592,7 @@ $('#trackf').onsubmit=e=>{e.preventDefault();
 const fn=['Ji-won','Mina','Sofia','Amara','Haruto','Lukas','Elena','Daniel','Yuna','Omar','Ines','Tomas','Nadia','Chen','Oliver','Seo-yeon','Kofi','Lea','Ravi','Ana'];
 $('#names').innerHTML=Array.from({length:160},()=>`<span>${pick(fn)} ${pick(last)}</span>`).join('');
 
+$('#cue').onclick=()=>window.scrollTo({top:$('.hero-full').offsetHeight+60,behavior:'smooth'});
 go(location.hash.slice(1)||'home',false);
 </script>
 </body>
