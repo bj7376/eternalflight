@@ -973,7 +973,16 @@ function fabricMat(){const f=fabricTex();return new THREE.MeshPhysicalMaterial({
 function strapGeo(R,W,T){const p=[[R,-W/2],[R+T*.6,-W/2],[R+T,-W/2+T*.4],[R+T*1.08,0],[R+T,W/2-T*.4],[R+T*.6,W/2],[R,W/2],[R,-W/2]].map(q=>new THREE.Vector2(q[0],q[1]));return new THREE.LatheGeometry(p,128)}
 function housingGeo(w,d,hh,r){const s=new THREE.Shape(),x=-w/2,y=-d/2;s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);s.lineTo(x+w,y+d-r);s.quadraticCurveTo(x+w,y+d,x+w-r,y+d);s.lineTo(x+r,y+d);s.quadraticCurveTo(x,y+d,x,y+d-r);s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);
   const b=Math.min(hh*.2,.04),g=new THREE.ExtrudeGeometry(s,{depth:hh-2*b,bevelEnabled:true,bevelSize:b,bevelThickness:b,bevelSegments:4,curveSegments:10});g.rotateX(-Math.PI/2);g.translate(0,-hh/2+b,0);return g}
-const housingMat=()=>new THREE.MeshPhysicalMaterial({color:0xe9e7e1,roughness:.32,clearcoat:.5,clearcoatRoughness:.3});
+// a soft, pebble-shaped pod whose underside follows the curve of the arm
+function podGeo(a,b,hh,R,across,n=3.2){const S=56,T=72,pos=[],idx=[];
+  for(let i=0;i<=S;i++){const r=i/S;for(let j=0;j<=T;j++){const th=j/T*Math.PI*2,c=Math.cos(th),s=Math.sin(th);
+    const x=a*r*Math.sign(c)*Math.pow(Math.abs(c),2/n),z=b*r*Math.sign(s)*Math.pow(Math.abs(s),2/n);
+    let y=hh*Math.pow(Math.max(0,1-Math.pow(r,n)),1/n);const q=across==='x'?x:z;y+=Math.sqrt(Math.max(0,R*R-q*q))-R;
+    if(i===S)y-=.03;pos.push(x,y,z)}}
+  for(let i=0;i<S;i++)for(let j=0;j<T;j++){const p=i*(T+1)+j;idx.push(p,p+T+1,p+1,p+1,p+T+1,p+T+2)}
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setIndex(idx);g.computeVertexNormals();return g}
+function rrShape(w,d,r){const s=new THREE.Shape(),x=-w/2,y=-d/2;s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);s.lineTo(x+w,y+d-r);s.quadraticCurveTo(x+w,y+d,x+w-r,y+d);s.lineTo(x+r,y+d);s.quadraticCurveTo(x,y+d,x,y+d-r);s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);return s}
+const housingMat=()=>new THREE.MeshPhysicalMaterial({color:0xe9e7e1,roughness:.38,clearcoat:.5,clearcoatRoughness:.35,side:THREE.DoubleSide});
 function watch(el,fn){let v=false;new IntersectionObserver(e=>v=e[0].isIntersecting).observe(el);return()=>v}
 
 /* =============================== GLOBE =============================== */
@@ -1242,9 +1251,9 @@ function dither(m){m.onBeforeCompile=s=>{s.uniforms.uCut=ditherU;s.fragmentShade
     float b[16]=float[16](0.,8.,2.,10.,12.,4.,14.,6.,3.,11.,1.,9.,15.,7.,13.,5.);
     if((b[k]+.5)/16.<uCut) discard; }`)};return m}
 const cuff=new THREE.Mesh(strapGeo(.455,.6,.05),dither(fabricMat()));cuff.rotation.z=Math.PI/2;A.add(cuff);
-const unit=new THREE.Mesh(housingGeo(.46,.4,.16,.07),dither(housingMat()));unit.position.y=.55;A.add(unit);
-{const bz=new THREE.Mesh(new THREE.PlaneGeometry(.32,.22),dither(new THREE.MeshBasicMaterial({color:0x2a2a2a})));bz.rotation.x=-Math.PI/2;bz.position.y=.081;unit.add(bz);
- const sc=new THREE.Mesh(new THREE.PlaneGeometry(.28,.18),dither(new THREE.MeshBasicMaterial({color:0xcfcfc6})));sc.rotation.x=-Math.PI/2;sc.position.y=.082;unit.add(sc)}
+const unit=new THREE.Mesh(podGeo(.27,.24,.11,.51,'z').translate(0,-.05,0),dither(housingMat()));unit.position.y=.55;A.add(unit);
+{const bz=new THREE.Mesh(new THREE.ShapeGeometry(rrShape(.24,.17,.04)),dither(new THREE.MeshBasicMaterial({color:0x2a2a2a})));bz.rotation.x=-Math.PI/2;bz.position.y=.062;unit.add(bz);
+ const sc=new THREE.Mesh(new THREE.ShapeGeometry(rrShape(.2,.13,.025)),dither(new THREE.MeshBasicMaterial({color:0xcfcfc6})));sc.rotation.x=-Math.PI/2;sc.position.y=.063;unit.add(sc)}
 const needle=new THREE.Mesh(new THREE.CylinderGeometry(.008,.008,.14,8),new THREE.MeshStandardMaterial({color:0xffffff,metalness:1,roughness:.15}));A.add(needle);
 const beadGeo=hBlob(new THREE.IcosahedronGeometry(.06,4),1.1,26,9);beadGeo.scale(1.9,.75,1.05);hBlob(beadGeo,.5,60,3);
 const bead=new THREE.Mesh(beadGeo,new THREE.MeshPhysicalMaterial({color:0xc86868,map:muscleTex,bumpMap:muscleTex,bumpScale:3,roughness:.4,clearcoat:.7,sheen:.6,sheenColor:new THREE.Color(0xff8c80)}));scene.add(bead);
@@ -1625,20 +1634,21 @@ const cuffIn={scale:{set(){}}};
 const mod=new THREE.Group();g.add(mod);
 const rr=(w,d,r)=>{const s=new THREE.Shape(),x=-w/2,y=-d/2;s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);s.lineTo(x+w,y+d-r);s.quadraticCurveTo(x+w,y+d,x+w-r,y+d);s.lineTo(x+r,y+d);s.quadraticCurveTo(x,y+d,x,y+d-r);s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);return s};
 const hG=new THREE.ExtrudeGeometry(rr(.9,1.1,.14),{depth:.34,bevelEnabled:true,bevelSize:.04,bevelThickness:.04,bevelSegments:4,curveSegments:10});hG.rotateX(-Math.PI/2);hG.translate(0,-.19,0);
-const housing=new THREE.Mesh(housingGeo(.98,1.18,.42,.18),dither(housingMat()));mod.add(housing);
+const housing=new THREE.Mesh(podGeo(.56,.66,.4,1.12,'x').translate(0,-.2,0),dither(housingMat()));mod.add(housing);
 // e-ink display
 const scC=document.createElement('canvas');scC.width=512;scC.height=320;const scX=scC.getContext('2d');const scT=new THREE.CanvasTexture(scC);
 function scDraw(l1,l2){scX.fillStyle='#cfcfc6';scX.fillRect(0,0,512,320);scX.fillStyle='#1a1a1a';scX.font='500 64px IBM Plex Mono, monospace';scX.fillText(l1,34,120);scX.font='34px IBM Plex Mono, monospace';scX.fillText(l2,34,190);scX.fillRect(34,240,444,4);scT.needsUpdate=true}
-const screen=new THREE.Mesh(new THREE.PlaneGeometry(.62,.39),new THREE.MeshBasicMaterial({map:scT}));screen.rotation.x=-Math.PI/2;screen.position.set(0,.216,-.25);mod.add(screen);
-const bezel=new THREE.Mesh(new THREE.PlaneGeometry(.68,.45),new THREE.MeshBasicMaterial({color:0x2a2a2a}));bezel.rotation.x=-Math.PI/2;bezel.position.set(0,.214,-.25);mod.add(bezel);
+const scG=new THREE.ShapeGeometry(rrShape(.52,.33,.05));{const p=scG.attributes.position,uv=scG.attributes.uv;for(let i=0;i<p.count;i++)uv.setXY(i,p.getX(i)/.52+.5,p.getY(i)/.33+.5)}
+const screen=new THREE.Mesh(scG,new THREE.MeshBasicMaterial({map:scT}));screen.rotation.x=-Math.PI/2;screen.position.set(0,.198,-.1);mod.add(screen);
+const bezel=new THREE.Mesh(new THREE.ShapeGeometry(rrShape(.58,.39,.07)),new THREE.MeshBasicMaterial({color:0x2a2a2a}));bezel.rotation.x=-Math.PI/2;bezel.position.set(0,.197,-.1);mod.add(bezel);
 // internals (seen through the dither)
 const metal=new THREE.MeshStandardMaterial({color:0xb8b8b2,metalness:.85,roughness:.3});
 const cart=new THREE.Mesh(new THREE.CylinderGeometry(.075,.075,.42,24,1,true),new THREE.MeshPhysicalMaterial({color:0xffffff,transparent:true,opacity:.25,roughness:.05,side:THREE.DoubleSide,depthWrite:false}));cart.rotation.z=Math.PI/2;cart.position.set(.12,0,-.3);mod.add(cart);
 const cartCap=new THREE.Mesh(new THREE.CylinderGeometry(.08,.08,.08,24),new THREE.MeshStandardMaterial({color:0x8c2a2a,roughness:.5}));cartCap.rotation.z=Math.PI/2;cartCap.position.set(.36,0,-.3);mod.add(cartCap);
 const rail=new THREE.Mesh(new THREE.BoxGeometry(.04,.3,.04),metal);rail.position.set(-.12,0,.02);mod.add(rail);
-const motor=new THREE.Mesh(new THREE.CylinderGeometry(.08,.08,.18,20),new THREE.MeshStandardMaterial({color:0x333333,metalness:.5,roughness:.4}));motor.rotation.z=Math.PI/2;motor.position.set(-.26,.05,-.45);mod.add(motor);
-const board=new THREE.Mesh(new THREE.BoxGeometry(.6,.02,.5),new THREE.MeshStandardMaterial({color:0x1f4a2e,roughness:.6}));board.position.set(0,.13,-.5);mod.add(board);
-const batt=new THREE.Mesh(new THREE.BoxGeometry(.36,.1,.22),new THREE.MeshStandardMaterial({color:0x555555,roughness:.6}));batt.position.set(0,-.05,-.75);mod.add(batt);
+const motor=new THREE.Mesh(new THREE.CylinderGeometry(.08,.08,.18,20),new THREE.MeshStandardMaterial({color:0x333333,metalness:.5,roughness:.4}));motor.rotation.z=Math.PI/2;motor.position.set(-.22,-.02,-.35);mod.add(motor);
+const board=new THREE.Mesh(new THREE.BoxGeometry(.4,.02,.3),new THREE.MeshStandardMaterial({color:0x1f4a2e,roughness:.6}));board.position.set(0,.07,-.35);mod.add(board);
+const batt=new THREE.Mesh(new THREE.BoxGeometry(.36,.1,.22),new THREE.MeshStandardMaterial({color:0x555555,roughness:.6}));batt.position.set(0,-.08,-.5);mod.add(batt);
 const sbG=new THREE.IcosahedronGeometry(.024,3);{const p=sbG.attributes.position,v=new THREE.Vector3();for(let i=0;i<p.count;i++){v.fromBufferAttribute(p,i);const n=Math.sin(v.x*90)*Math.cos(v.y*70)*.5+Math.sin(v.z*110+v.x*40)*.5;v.multiplyScalar(1+n*.35);p.setXYZ(i,v.x*1.7,v.y*.7,v.z)}sbG.computeVertexNormals()}
 const sampleBead=new THREE.Mesh(sbG,new THREE.MeshPhysicalMaterial({color:0xc98078,roughness:.5,clearcoat:.4,clearcoatRoughness:.4,sheen:.5,sheenColor:new THREE.Color(0xffc2b8)}));sampleBead.visible=false;g.add(sampleBead);
 // needle (front, in the cut plane)
