@@ -1270,7 +1270,7 @@ function makeVulture(){
 const vult=makeVulture();G.add(vult);
 
 /* ---- timeline ---- */
-const T=17.6,P=[['0:00','Sample','A rice-sized piece of muscle is taken from your arm.'],['Day 2','Grow','Your cells multiply in their own vessel.'],['Day 70','Serve','They become a meal, delivered cold to a feeding station.'],['That winter','Fly','A vulture eats. Part of you is in its wings.']];
+const T=18.4,P=[['0:00','Sample','A rice-sized piece of muscle is taken from your arm.'],['Day 2','Grow','Your cells multiply in their own vessel.'],['Day 70','Serve','They become a meal, delivered cold to a feeding station.'],['That winter','Fly','A vulture eats. Part of you is in its wings.']];
 let phase=-1;
 function setCap(i){if(i===phase||!cap)return;phase=i;cap.innerHTML=`<span>${P[i][0]}</span><b>${P[i][1]}</b>${P[i][2]}`;cap.classList.remove('in');void cap.offsetWidth;cap.classList.add('in')}
 const m4=new THREE.Matrix4(),q=new THREE.Quaternion(),sv=new THREE.Vector3(),pv=new THREE.Vector3();
@@ -1278,7 +1278,7 @@ const camPath=t=>{ // x position of camera target
   if(t<3.6)return -4;if(t<5)return -4+ease(seg(t,3.6,5))*4;if(t<9.3)return 0;if(t<10.5)return ease(seg(t,9.3,10.5))*4.5;return 4.5};
 const tgt=new THREE.Vector3();
 function frame(now){
-  const tr=(now/1000)%T,tt=now/1000,t=tr<2.7?tr:(tr<4.3?2.7:tr-1.6);
+  const tr=(now/1000)%T,tt=now/1000,t=tr<2.7?tr:(tr<5.1?2.7:tr-2.4);
   // camera
   const cx=camPath(t);tgt.set(cx,t>10?-.3:0,0);
   {const d=t<5?2.6+3.6*ease(seg(t,3.6,5)):6.2,yy=t<5?2.9-1.4*ease(seg(t,3.6,5)):1.5;cam.position.set(cx+Math.sin(tt*.15)*.5,yy,d);if(t<5)tgt.y=.35*(1-ease(seg(t,3.6,5)));cam.lookAt(tgt)}
@@ -1287,7 +1287,11 @@ function frame(now){
   setCap(t<4.4?0:t<9.4?1:t<11.6?2:3);
   const down=ease(seg(t,.6,1.4)),up=ease(seg(t,1.9,2.7));
   const tipY=.47-.14*down+.14*up;needle.position.set(0,tipY+.07,0);needle.visible=tr<2.75;
-  ditherU.value=.72*seg(tr,.2,.8)*(1-seg(tr,4.3,4.9));
+  // open the housing while working, close it, then loosen and lift the cuff off the arm
+  {const rel=ease(seg(tr,4.5,4.8)),off=ease(seg(tr,4.8,5.4));
+   ditherU.value=Math.max(.72*seg(tr,.2,.8)*(1-seg(tr,4.3,4.5)),off);
+   const cr=1+.22*rel;cuff.scale.set(cr,1,cr);
+   cuff.position.y=off*.9;unit.position.y=.55+(cr-1)*.5+off*.9;cuff.visible=unit.visible=off<.99}
   {const cut=seg(tr,2.2,2.7)*(1-seg(tr,4.3,8)),tp=seg(tr,2.8,4.2);drawTattoo(tp,Math.round(cut*10)/10);
   mark.material.opacity=tr>T-.6?1-seg(tr,T-.6,T):1;
   const lon=tr>2.8&&tr<4.2;laser.visible=lSpot.visible=lHead.visible=lon;lGlow.intensity=lon?1.2+Math.random()*.8:0;
