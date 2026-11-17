@@ -1238,7 +1238,7 @@ const scanBeam=new THREE.Mesh(new THREE.PlaneGeometry(.02,1.6),new THREE.MeshBas
 const scanLine=new THREE.Mesh(new THREE.BoxGeometry(.02,1.2,1.2),new THREE.MeshBasicMaterial({color:0x7dffa8,transparent:true,opacity:.18,depthWrite:false}));scanLine.position.y=-.2;formG.add(scanLine);
 
 formG.visible=false;
-// stage 6: packs on the snow and a vulture feeding
+// stage 6: packs on the ground and a vulture feeding
 const feedG=new THREE.Group();scene.add(feedG);
 const snow=new THREE.Mesh(new THREE.CircleGeometry(3.4,64),new THREE.MeshStandardMaterial({color:0x4a4a47,roughness:1}));snow.rotation.x=-Math.PI/2;snow.position.y=-1;feedG.add(snow);
 const packs6=[[.4,.5],[-.8,-.2],[1.3,-.6]].map(([x,z],k)=>{const p=new THREE.Mesh(blob(new THREE.BoxGeometry(.9,.22,.6,12,4,8),.06,3,k+5),tissueM);p.scale.setScalar(.5);p.position.set(x,-.94,z);p.rotation.y=k;feedG.add(p);return p});
@@ -1608,7 +1608,7 @@ const wLegs=[];[-.09,.09].forEach(z=>{const hip=new THREE.Group();hip.position.s
   const arm=new THREE.Mesh(new THREE.CylinderGeometry(.045,.04,len,8),coat);arm.position.y=-len/2;sh.add(arm);
   sh.quaternion.setFromUnitVectors(new THREE.Vector3(0,-1,0),to.normalize())});
 cast(worker);
-// packs: four ride on the cart, then end up on the snow
+// packs: four ride on the cart, then end up on the ground
 const NP=4,packs=[],spots=[[2.0,1.5],[3.1,.6],[2.4,-.5],[3.5,1.9]];
 for(let i=0;i<NP;i++){const p=new THREE.Mesh(packGeo,packMat);p.scale.setScalar(.38);p.castShadow=true;scene.add(p);packs.push(p)}
 
