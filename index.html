@@ -1153,9 +1153,31 @@ const arm=new THREE.Mesh(new THREE.LatheGeometry(new THREE.SplineCurve(armProf).
 const cuff=new THREE.Mesh(new THREE.CylinderGeometry(.5,.5,.6,48,1,true),new THREE.MeshStandardMaterial({color:0x3a3a38,roughness:.9,side:THREE.DoubleSide}));cuff.rotation.z=Math.PI/2;A.add(cuff);
 const unit=new THREE.Mesh(new THREE.BoxGeometry(.5,.16,.42),grey(0xd8d8d2));unit.position.y=.55;A.add(unit);
 const needle=new THREE.Mesh(new THREE.CylinderGeometry(.012,.012,.6,8),new THREE.MeshStandardMaterial({color:0xffffff,metalness:1,roughness:.15}));A.add(needle);
-const bead=new THREE.Mesh(new THREE.IcosahedronGeometry(.07,3),redMat);scene.add(bead);
+const beadGeo=hBlob(new THREE.IcosahedronGeometry(.06,4),1.1,26,9);beadGeo.scale(1.9,.75,1.05);hBlob(beadGeo,.5,60,3);
+const bead=new THREE.Mesh(beadGeo,new THREE.MeshPhysicalMaterial({color:0xc86868,map:muscleTex,bumpMap:muscleTex,bumpScale:3,roughness:.4,clearcoat:.7,sheen:.6,sheenColor:new THREE.Color(0xff8c80)}));scene.add(bead);
 // tiny mark that appears on the arm
-const mark=new THREE.Mesh(new THREE.PlaneGeometry(.18,.05),new THREE.MeshBasicMaterial({color:0x111111,transparent:true,opacity:0}));mark.position.set(.35,.47,.0);mark.rotation.x=-Math.PI/2;mark.rotation.z=.5;A.add(mark);
+// tattoo decal on top of the arm, over the cut
+const tC=document.createElement('canvas');tC.width=512;tC.height=256;const tg=tC.getContext('2d');
+const tTex=new THREE.CanvasTexture(tC);tTex.colorSpace=THREE.SRGBColorSpace;tTex.anisotropy=4;
+const mark=new THREE.Mesh(new THREE.PlaneGeometry(.72,.36),new THREE.MeshBasicMaterial({map:tTex,transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2}));
+mark.position.set(.66,.458,0);mark.rotation.x=-Math.PI/2;A.add(mark);
+// feather strokes in drawing order (canvas coords)
+const fStrokes=[];{const N=26;fStrokes.push({a:[60,150],c:[256,120],b:[456,104],w:7});
+  for(let i=0;i<N;i++){const t=.08+i/N*.86,x=60+396*t,y=150-46*t+Math.sin(t*3)*3,len=(Math.sin(t*Math.PI)*.8+.2)*70*(t<.15?t/.15:1);
+    [-1,1].forEach(s=>{if(i%7===3&&s>0)return;fStrokes.push({a:[x,y],c:[x+len*.3,y+s*len*.55],b:[x+len*.62,y+s*len],w:3.4})})}}
+let tDrawn=-1;
+function drawTattoo(p,cut){ // p: 0..1 drawing progress, cut: 0..1 visibility of the fresh cut
+  const n=Math.floor(p*fStrokes.length);if(n===tDrawn&&cut===tDrawn.cut)return;tDrawn=n;
+  tg.clearRect(0,0,512,256);
+  if(cut>0){tg.save();tg.globalAlpha=cut;tg.strokeStyle='rgba(170,40,45,.9)';tg.lineWidth=10;tg.lineCap='round';tg.filter='blur(3px)';tg.beginPath();tg.moveTo(170,138);tg.lineTo(330,118);tg.stroke();tg.filter='none';tg.lineWidth=4;tg.strokeStyle='#7a1a20';tg.stroke();tg.restore()}
+  tg.strokeStyle='#121212';tg.lineCap='round';
+  for(let i=0;i<n;i++){const s=fStrokes[i];tg.lineWidth=s.w;tg.beginPath();tg.moveTo(...s.a);tg.quadraticCurveTo(...s.c,...s.b);tg.stroke()}
+  tTex.needsUpdate=true;return n?fStrokes[Math.min(n,fStrokes.length)-1].b:null}
+const strokeEnd=i=>fStrokes[Math.max(0,Math.min(i,fStrokes.length-1))].b;
+const laser=new THREE.Mesh(new THREE.CylinderGeometry(.006,.006,1,8),new THREE.MeshBasicMaterial({color:0xff4136,transparent:true,opacity:.9}));A.add(laser);
+const lSpot=new THREE.Mesh(new THREE.SphereGeometry(.018,10,8),new THREE.MeshBasicMaterial({color:0xffd2c4}));A.add(lSpot);
+const lGlow=new THREE.PointLight(0xff4136,0,.8);A.add(lGlow);
+const lHead=new THREE.Mesh(new THREE.CylinderGeometry(.03,.045,.08,16),new THREE.MeshStandardMaterial({color:0x2a2a2a,metalness:.6,roughness:.3}));A.add(lHead);
 
 /* ---- stage 2: vessel with dividing cells (x = 0) ---- */
 const V=new THREE.Group();scene.add(V);
@@ -1173,15 +1195,15 @@ const NB=26,bub=new THREE.InstancedMesh(new THREE.SphereGeometry(.018,10,8),new 
 const bubs=Array.from({length:NB},()=>({x:(Math.random()-.5)*1.1,z:(Math.random()-.5)*1.1,o:Math.random()*1.5,s:.6+Math.random()*.8}));
 // cells: organic, translucent, with nucleus; each one buds off a parent
 const N=72;
-const cellGeo=hBlob(new THREE.IcosahedronGeometry(.13,4),.35,6.5);
+const cellGeo=hBlob(new THREE.IcosahedronGeometry(.13,4),.6,5.5);
 const cellMat=new THREE.MeshPhysicalMaterial({color:0xffffff,map:speckTex,roughness:.3,transmission:.45,thickness:.4,ior:1.38,attenuationColor:new THREE.Color(0xa01c26),attenuationDistance:.22,sheen:1,sheenColor:new THREE.Color(0xff9a8e),sheenRoughness:.4,clearcoat:.6,clearcoatRoughness:.25});
 const cells=new THREE.InstancedMesh(cellGeo,cellMat,N);cells.instanceMatrix.setUsage(THREE.DynamicDrawUsage);cells.frustumCulled=false;V.add(cells);
 const nuc=new THREE.InstancedMesh(hBlob(new THREE.IcosahedronGeometry(.05,3),.25,14,3),new THREE.MeshStandardMaterial({color:0x4a0a14,roughness:.5,emissive:0x2a0308}),N);nuc.frustumCulled=false;V.add(nuc);
 {const c=new THREE.Color();for(let i=0;i<N;i++){c.setHSL(.99+Math.random()*.03,.55+Math.random()*.2,.45+Math.random()*.12);cells.setColorAt(i,c)}}
-const cp=[],par=[],born=[],rot=[];
+const cp=[],par=[],born=[],rot=[],asp=[];
 for(let i=0;i<N;i++){let v;do{v=new THREE.Vector3(Math.random()*2-1,Math.random()*2-1,Math.random()*2-1)}while(v.length()>1);
   cp.push(v.multiply(new THREE.Vector3(.5,.62,.5)).add(new THREE.Vector3(0,-.2,0)));par.push(i?Math.floor((i-1)/2):-1);
-  born.push(i?4.9+Math.log2(i+1)*.55+Math.random()*.25:4.6);rot.push(new THREE.Euler(Math.random()*6,Math.random()*6,Math.random()*6))}
+  born.push(i?4.9+Math.log2(i+1)*.55+Math.random()*.25:4.6);rot.push(new THREE.Euler(Math.random()*6,Math.random()*6,Math.random()*6));asp.push(new THREE.Vector3(1+Math.random()*.6,.7+Math.random()*.3,.8+Math.random()*.4))}
 cp[0].set(0,-.2,0);
 // muscle tissue block
 const packGeo=hBlob(new THREE.BoxGeometry(.9,.24,.6,24,6,16),.12,3.2,5);
@@ -1243,28 +1265,32 @@ function makeVulture(){
 const vult=makeVulture();G.add(vult);
 
 /* ---- timeline ---- */
-const T=16,P=[['0:00','Sample','A rice-sized piece of muscle is taken from your arm.'],['Day 2','Grow','Your cells multiply in their own vessel.'],['Day 70','Serve','They become a meal, delivered cold to a feeding station.'],['That winter','Fly','A vulture eats. Part of you is in its wings.']];
+const T=17.6,P=[['0:00','Sample','A rice-sized piece of muscle is taken from your arm.'],['Day 2','Grow','Your cells multiply in their own vessel.'],['Day 70','Serve','They become a meal, delivered cold to a feeding station.'],['That winter','Fly','A vulture eats. Part of you is in its wings.']];
 let phase=-1;
 function setCap(i){if(i===phase||!cap)return;phase=i;cap.innerHTML=`<span>${P[i][0]}</span><b>${P[i][1]}</b>${P[i][2]}`;cap.classList.remove('in');void cap.offsetWidth;cap.classList.add('in')}
 const m4=new THREE.Matrix4(),q=new THREE.Quaternion(),sv=new THREE.Vector3(),pv=new THREE.Vector3();
 const camPath=t=>{ // x position of camera target
-  if(t<3.6)return -4;if(t<5)return -4+ease(seg(t,3.6,5))*4;if(t<9.3)return 0;if(t<10.5)return ease(seg(t,9.3,10.5))*4.5;return 4.5};
+  if(t<3.6)return -3.4;if(t<5)return -3.4+ease(seg(t,3.6,5))*3.4;if(t<9.3)return 0;if(t<10.5)return ease(seg(t,9.3,10.5))*4.5;return 4.5};
 const tgt=new THREE.Vector3();
 function frame(now){
-  const t=(now/1000)%T,tt=now/1000;
+  const tr=(now/1000)%T,tt=now/1000,t=tr<2.7?tr:(tr<4.3?2.7:tr-1.6);
   // camera
   const cx=camPath(t);tgt.set(cx,t>10?-.3:0,0);
-  cam.position.set(cx+Math.sin(tt*.15)*.6,1.5,6.2);cam.lookAt(tgt);
+  {const d=t<5?2.6+3.6*ease(seg(t,3.6,5)):6.2,yy=t<5?2.9-1.4*ease(seg(t,3.6,5)):1.5;cam.position.set(cx+Math.sin(tt*.15)*.5,yy,d);if(t<5)tgt.y=.35*(1-ease(seg(t,3.6,5)));cam.lookAt(tgt)}
 
   /* stage 1 */
   setCap(t<4.4?0:t<9.4?1:t<11.6?2:3);
   const down=ease(seg(t,.6,1.4)),up=ease(seg(t,1.9,2.7));
-  const tipY=.9-.55*down+.55*up;needle.position.set(.35,tipY+.3,0);needle.visible=t<3;
-  mark.material.opacity=ease(seg(t,2.6,3.2))*(t<15.5?1:1-seg(t,15.5,16));
+  const tipY=.9-.55*down+.55*up;needle.position.set(.66,tipY+.3,0);needle.visible=tr<2.75;
+  {const cut=seg(tr,2.2,2.7)*(1-seg(tr,4.3,8)),tp=seg(tr,2.8,4.2);drawTattoo(tp,Math.round(cut*10)/10);
+  mark.material.opacity=tr>T-.6?1-seg(tr,T-.6,T):1;
+  const lon=tr>2.8&&tr<4.2;laser.visible=lSpot.visible=lHead.visible=lon;lGlow.intensity=lon?1.2+Math.random()*.8:0;
+  if(lon){const b=strokeEnd(Math.floor(tp*fStrokes.length));const lx=.66+(b[0]/512-.5)*.72,lz=(b[1]/256-.5)*.36,top=.82;
+    laser.position.set(lx,(top+.458)/2,lz);laser.scale.y=top-.458;lSpot.position.set(lx,.462,lz);lGlow.position.set(lx,.52,lz);lHead.position.set(lx,top+.04,lz);laser.material.opacity=.6+Math.random()*.4}}
   // bead follows needle, then flies to vessel
   if(t<1.9){bead.visible=false}
-  else if(t<3.2){bead.visible=true;bead.position.set(-4+.35,tipY-.02,0);bead.scale.setScalar(1)}
-  else if(t<4.6){bead.visible=true;const k=ease(seg(t,3.2,4.6));bead.position.set(-3.65+3.65*k,.6+Math.sin(k*Math.PI)*.9-.65*k,0)}
+  else if(t<3.2){bead.visible=true;bead.position.set(-4+.66,tipY-.02,0);bead.scale.setScalar(1)}
+  else if(t<4.6){bead.visible=true;const k=ease(seg(t,3.2,4.6));bead.position.set(-3.34+3.34*k,.6+Math.sin(k*Math.PI)*.9-.65*k,0)}
   else bead.visible=false;
 
   /* stage 2: cells bud off parents, then fuse into tissue */
@@ -1282,7 +1308,7 @@ function frame(now){
     tmp.y+=Math.sin(tt*1.3+i)*.015;
     pv.copy(tmp).lerp(new THREE.Vector3(cp[i].x*.85,-.78+(i%3)*.04,cp[i].z*.6),fuse);
     rot[i].y+=.003;q.setFromEuler(rot[i]);
-    const w=1+Math.sin(tt*1.7+i)*.05;sv.set(s*w*(1+fuse*.9),s/w,s);m4.compose(pv,q,sv);cells.setMatrixAt(i,m4);
+    const w=1+Math.sin(tt*1.7+i)*.05;sv.set(s*w*asp[i].x*(1+fuse*.9),s/w*asp[i].y,s*asp[i].z);m4.compose(pv,q,sv);cells.setMatrixAt(i,m4);
     tmp.set(.02,.01,.03).applyQuaternion(q).multiplyScalar(s);pv.add(tmp);sv.setScalar(s);m4.compose(pv,q,sv);nuc.setMatrixAt(i,m4)}
   cells.instanceMatrix.needsUpdate=true;nuc.instanceMatrix.needsUpdate=true;
   bubs.forEach((b,i)=>{const y=-.85+((tt*.25*b.s+b.o)%1.4);m4.compose(pv.set(b.x+Math.sin(tt*2+i)*.02,y,b.z),q.identity(),sv.setScalar(fill*b.s));bub.setMatrixAt(i,m4)});bub.instanceMatrix.needsUpdate=true;
