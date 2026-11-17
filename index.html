@@ -1419,7 +1419,21 @@ const handle=new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,.7,8),darkM);hand
 [[.35],[-.35]].forEach(([z])=>{const a=new THREE.Mesh(new THREE.CylinderGeometry(.018,.018,.55,8),darkM);a.position.set(-.7,.6,z);a.rotation.z=.7;cart.add(a)});
 const cw=[];[[.3,.3],[.3,-.3],[-.3,.3],[-.3,-.3]].forEach(([x,z])=>{const w=new THREE.Mesh(new THREE.CylinderGeometry(.13,.13,.06,16),darkM);w.rotation.x=Math.PI/2;w.position.set(x,.13,z);cart.add(w);cw.push(w)});
 const legs=new THREE.Mesh(new THREE.BoxGeometry(.9,.25,.05),darkM);legs.position.set(0,.27,0);cart.add(legs);
-cast(cart);
+// a simple worker who pushes the cart
+const worker=new THREE.Group();worker.position.set(-1.28,0,0);cart.add(worker);
+const coat=mat(0x3f4a44,{roughness:.9}),pants=mat(0x2a2a2a,{roughness:.9}),skin=mat(0xb59a86),hat=mat(0x8c2a2a,{roughness:.9});
+const torso=new THREE.Mesh(new THREE.CapsuleGeometry(.17,.36,6,12),coat);torso.position.y=1.0;torso.rotation.z=-.18;worker.add(torso);
+const headW=new THREE.Mesh(new THREE.SphereGeometry(.11,16,12),skin);headW.position.set(.06,1.37,0);worker.add(headW);
+const beanie=new THREE.Mesh(new THREE.SphereGeometry(.115,16,10,0,Math.PI*2,0,Math.PI/2),hat);beanie.position.set(.06,1.39,0);worker.add(beanie);
+const wLegs=[];[-.09,.09].forEach(z=>{const hip=new THREE.Group();hip.position.set(0,.72,z);worker.add(hip);
+  const leg=new THREE.Mesh(new THREE.CylinderGeometry(.06,.05,.68,8),pants);leg.position.y=-.34;hip.add(leg);
+  const boot=new THREE.Mesh(new THREE.BoxGeometry(.16,.07,.09),mat(0x1a1a1a));boot.position.set(.03,-.69,0);hip.add(boot);wLegs.push(hip)});
+// arms reach from the shoulders to the cart handle
+[-.2,.2].forEach(z=>{const sh=new THREE.Group();sh.position.set(.05,1.17,z);worker.add(sh);
+  const to=new THREE.Vector3(1.28-.85,.75,z*1.6).sub(sh.position),len=to.length();
+  const arm=new THREE.Mesh(new THREE.CylinderGeometry(.045,.04,len,8),coat);arm.position.y=-len/2;sh.add(arm);
+  sh.quaternion.setFromUnitVectors(new THREE.Vector3(0,-1,0),to.normalize())});
+cast(worker);
 // packs: four ride on the cart, then end up on the snow
 const NP=4,packs=[],spots=[[2.0,1.5],[3.1,.6],[2.4,-.5],[3.5,1.9]];
 for(let i=0;i<NP;i++){const p=new THREE.Mesh(packGeo,packMat);p.scale.setScalar(.38);p.castShadow=true;scene.add(p);packs.push(p)}
@@ -1449,11 +1463,12 @@ function frame(now){
   for(let i=0;i<NM;i++){const m=mists[i],k=((tt*.35+m.o)%1),on=op>.3?op:0;P.set(truck.position.x+1.7+k*1.4,.7+m.y+k*.5,1+m.z+k*.2);S.setScalar(on*m.s*(1-k)*(.6+k));M.compose(P,Q.identity(),S);mist.setMatrixAt(i,M)}mist.instanceMatrix.needsUpdate=true;
   // cart: out of the truck, to the field, tip, back
   const out=ease(seg(t,5.6,8.2)),back=ease(seg(t,9.4,11.2)),tip=ease(seg(t,8.4,8.9))*(1-ease(seg(t,9.1,9.4)));
-  const start=new THREE.Vector3(truckStop+2.1,0,1),field=new THREE.Vector3(2.7,0,.6);
+  const start=new THREE.Vector3(truckStop+3.3,0,1),field=new THREE.Vector3(2.7,0,.6);
   cart.visible=t>5.4&&t<11.4;
   P.copy(start).lerp(field,out);P.lerp(start,back);cart.position.copy(P);
   cart.rotation.y=back>0?Math.PI:0;tray.rotation.z=(back>0?-1:1)*tip*.5;
   cw.forEach(w=>w.rotation.y=-cart.position.x*7);
+  {const moving=(t>5.6&&t<8.2)||(t>9.4&&t<11.2),ph=tt*7;wLegs.forEach((l,k)=>l.rotation.z=moving?Math.sin(ph+k*Math.PI)*.45:0);worker.position.y=moving?Math.abs(Math.sin(ph))*.03:0}
   // packs ride the cart, then slide off and get eaten
   const eat=seg(t,13.5,18.3);
   packs.forEach((p,i)=>{
