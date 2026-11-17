@@ -415,8 +415,8 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
   </article>
   <article class="story">
     <div><span class="label">Part 2 of 3</span><h3 style="margin-top:8px">Nothing left to find</h3></div>
-    <div><p>Vultures do not hunt. They eat what has already died. In much of the modern world dead livestock are collected and destroyed, roadkill is cleared within hours, and fields are kept clean. Europe tightened its rules on carcass disposal after the BSE crisis, and countries from Spain to Korea followed similar paths.</p><p>So in many places vultures are now fed by people. Conservation groups, farmers and volunteers run feeding sites, sometimes called vulture restaurants, in the mountains of Spain, the plains of Nepal and the snowy fields of Korea. When the meat runs out, the birds go hungry.</p><p class="src">Several vulture species are now listed as threatened or critically endangered on the IUCN Red List.</p></div>
-    <div class="ph"><img src="img/11-cart.jpg" alt="A volunteer pushing a wheelbarrow of meat across a snowy field toward waiting vultures"></div>
+    <div><p>Vultures do not hunt. They eat what has already died. In much of the modern world dead livestock are collected and destroyed, roadkill is cleared within hours, and fields are kept clean. Europe tightened its rules on carcass disposal after the BSE crisis, and countries from Spain to Korea followed similar paths.</p><p>So in many places vultures are now fed by people. Conservation groups, farmers and volunteers run feeding sites, sometimes called vulture restaurants, in the mountains of Spain, the plains of Nepal and the farmland of Korea. When the meat runs out, the birds go hungry.</p><p class="src">Several vulture species are now listed as threatened or critically endangered on the IUCN Red List.</p></div>
+    <div class="ph"><img src="img/11-cart.jpg" alt="A volunteer pushing a wheelbarrow of meat across a field toward waiting vultures"></div>
   </article>
   <article class="story">
     <div><span class="label">Part 3 of 3</span><h3 style="margin-top:8px">What we put in the food</h3></div>
@@ -549,10 +549,10 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
     <div class="autoplay"><span class="label" id="playstate">Playing through the stages</span><button class="textlink" id="playbtn">Pause</button></div>
     <div class="donors-omni" style="margin-top:90px">
       <h2>Every pack arrives cold, on feeding day.</h2>
-      <p class="mute">The vacuum-sealed packs grown from your cells leave the lab in a refrigerated truck that holds them between 0 and 4 °C all the way to the feeding station. On a feeding day, a station worker wheels the packs onto the field on a cart and lays them on the snow several metres apart, so that young birds can eat even when older ones guard a spot. The truck then drives off. Vultures are wary of people, so they only come down once the field is empty and quiet.</p>
-      <div class="feed3d" id="feed3d" role="img" aria-label="Animation: a refrigerated truck backs up to a snowy field, a worker wheels the packs out and lays them on the snow, the truck leaves, and cinereous vultures land to eat."><p class="h3-cap" aria-hidden="true"></p></div>
+      <p class="mute">The vacuum-sealed packs grown from your cells leave the lab in a refrigerated truck that holds them between 0 and 4 °C all the way to the feeding station. On a feeding day, a station worker wheels the packs onto the field on a cart and lays them on the ground several metres apart, so that young birds can eat even when older ones guard a spot. The truck then drives off. Vultures are wary of people, so they only come down once the field is empty and quiet.</p>
+      <div class="feed3d" id="feed3d" role="img" aria-label="Animation: a refrigerated truck backs up to a field, a worker wheels the packs out and lays them on the ground, the truck leaves, and cinereous vultures land to eat."><p class="h3-cap" aria-hidden="true"></p></div>
       <div class="feedbar" id="feedbar" aria-hidden="true"><div class="fbtrack"><i id="fbfill"></i></div><ol>
-        <li data-a="0" data-b="4.2">Truck arrives</li><li data-a="4.2" data-b="5.6">Doors open</li><li data-a="5.6" data-b="8.4">Packs wheeled out</li><li data-a="8.4" data-b="11.5">Laid on the snow</li><li data-a="11.5" data-b="15.5">Truck leaves</li><li data-a="11.2" data-b="14.5">Vultures land</li><li data-a="14.5" data-b="19">Feeding</li><li data-a="19" data-b="21">Lift off</li></ol></div>
+        <li data-a="0" data-b="4.2">Truck arrives</li><li data-a="4.2" data-b="5.6">Doors open</li><li data-a="5.6" data-b="8.4">Packs wheeled out</li><li data-a="8.4" data-b="11.5">Laid on the ground</li><li data-a="11.5" data-b="15.5">Truck leaves</li><li data-a="11.2" data-b="14.5">Vultures land</li><li data-a="14.5" data-b="19">Feeding</li><li data-a="19" data-b="21">Lift off</li></ol></div>
     </div>
   </section>
 
@@ -1251,7 +1251,7 @@ const TXT=['Your sample, sealed in its cartridge, travels inside the padded retu
  'Scale-up. Your cell line moves into a stirred bioreactor used only for your cells. The impeller keeps them suspended and evenly fed.',
  'Differentiation. The cells line up and fuse into long muscle fibres on an edible, plant-based scaffold.',
  'Formulation. Fat and calcium are added, the tissue is vacuum-packed in 750 g batches labelled with your donor number, and every pack is scanned for anti-inflammatory drug residues.',
- 'Feeding. The packs are laid on the snow with the station\'s other food. Each batch that is eaten is logged and sent to you.'];
+ 'Feeding. The packs are laid on the ground with the station\'s other food. Each batch that is eaten is logged and sent to you.'];
 function setStage(s){stage=s;t0=performance.now();cap.textContent=TXT[s]||'';
   tank.visible=s===3;lump.visible=s===1;fibres.visible=s===4;fibreMat.opacity=0;capG.visible=s===0;formG.visible=s===5;feedG.visible=s===6;
   if(s===6&&!v6&&window.efShared){v6=window.efShared.makeVulture();v6.scale.multiplyScalar(.9);feedG.add(v6)}
@@ -1457,7 +1457,7 @@ const vult=makeVulture();G.add(vult);
 window.efShared={makeVulture,packGeo,packMat};
 
 /* ---- timeline ---- */
-const T=18.4,P=[['0:00','Sample','A rice-sized piece of muscle is taken from your arm.'],['Day 2','Grow','Your cells multiply in their own vessel.'],['Day 70','Serve','They become a meal, delivered cold to a feeding station.'],['That winter','Fly','A vulture eats. Part of you is in its wings.']];
+const T=18.4,P=[['0:00','Sample','A rice-sized piece of muscle is taken from your arm.'],['Day 2','Grow','Your cells multiply in their own vessel.'],['Day 70','Serve','They become a meal, delivered cold to a feeding station.'],['Feeding day','Fly','A vulture eats. Part of you is in its wings.']];
 let phase=-1;
 function setCap(i){if(i===phase||!cap)return;phase=i;cap.innerHTML=`<span>${P[i][0]}</span><b>${P[i][1]}</b>${P[i][2]}`;cap.classList.remove('in');void cap.offsetWidth;cap.classList.add('in')}
 const m4=new THREE.Matrix4(),q=new THREE.Quaternion(),sv=new THREE.Vector3(),pv=new THREE.Vector3();
@@ -1619,7 +1619,7 @@ function wings(v,flap,spread){v.userData.wings.forEach(w=>{const f=1-spread;w.sh
 const vPlan=[{t0:11.2,from:[-6,7,-8],land:[1.5,1.7],face:-.4},{t0:12.0,from:[10,8,-6],land:[3.9,.5],face:2.6},{t0:12.9,from:[3,9,-11],land:[2.4,-1.1],face:1.4}];
 
 /* ---- timeline ---- */
-const T=21,CAP=[[0,'Delivery','A refrigerated truck backs up to the edge of the field, holding the packs at 0–4 °C.'],[5.6,'Feeding day','A station worker wheels four 750 g packs out on a cart and lays them on the snow, several metres apart.'],[11.5,'The field empties','The worker loads the cart back in and the truck drives off.'],[13,'Feeding','Once the field is quiet, cinereous vultures land and feed with their wings spread over the food.']];
+const T=21,CAP=[[0,'Delivery','A refrigerated truck backs up to the edge of the field, holding the packs at 0–4 °C.'],[5.6,'Feeding day','A station worker wheels four 750 g packs out on a cart and lays them on the ground, several metres apart.'],[11.5,'The field empties','The worker loads the cart back in and the truck drives off.'],[13,'Feeding','Once the field is quiet, cinereous vultures land and feed with their wings spread over the food.']];
 let lastCap=-1;function setCap(t){let i=0;CAP.forEach((c,k)=>{if(t>=c[0])i=k});if(i===lastCap||!cap)return;lastCap=i;cap.innerHTML=`<b>${CAP[i][1]}</b>${CAP[i][2]}`;cap.classList.remove('in');void cap.offsetWidth;cap.classList.add('in')}
 const fbFill=document.getElementById('fbfill'),fbItems=[...document.querySelectorAll('#feedbar li')];
 const M=new THREE.Matrix4(),Q=new THREE.Quaternion(),S=new THREE.Vector3(),P=new THREE.Vector3();
