@@ -1455,7 +1455,7 @@ function frame(now){
   cam.position.set(-.6+Math.sin(tt*.07)*.6,4.6,12.5);cam.lookAt(-.6,.5,.3);
   // truck drives in and parks
   const drive=ease(seg(t,0,4));
-  truck.position.set(-12+(truckStop+12)*drive,0,1);
+  const leave=ease(seg(t,11.9,15.5));truck.position.set(-12+(truckStop+12)*drive-leave*11,0,1);
   wheels.forEach(w=>w.rotation.y=-truck.position.x*3.7);
   // doors swing open, then close
   const op=ease(seg(t,4.2,5.2))*(1-ease(seg(t,10.5,11.5)));doors.forEach(d=>d.hinge.rotation.y=d.s*-op*1.9);
