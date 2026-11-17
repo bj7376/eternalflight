@@ -67,7 +67,8 @@ section.s:first-child{border-top:0;padding-top:72px}
 @media(max-width:860px){.grid3{grid-template-columns:1fr}}
 /* ---------- landing ---------- */
 .hero{display:grid;grid-template-columns:5fr 6fr;gap:56px;align-items:center;padding:80px 0 40px}
-.hero h1{margin-bottom:26px;max-width:12ch}
+.hero h1{margin-bottom:14px;max-width:12ch}
+.hero .sub{font-size:17px;color:var(--ink);margin-bottom:22px;letter-spacing:-.02em}
 .hero p{color:#c8c8c3;max-width:46ch}
 .feed3d{position:relative;aspect-ratio:16/8;margin-top:30px;background:radial-gradient(ellipse at 50% 40%,#1a1a1a 0%,#000 75%);border:1px solid var(--line);overflow:hidden}
 .feed3d canvas{transition:opacity .2s}
@@ -399,7 +400,8 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
   <section class="hero">
     <div>
       <h1>Become the bird above your head.</h1>
-      <p>We take a tiny sample of muscle from your arm and grow it in a lab until there is enough to feed wild vultures. Then we send it to feeding stations in Korea, Mongolia, Nepal and Spain, each one close to a place where vultures breed or spend the winter and can no longer find enough food on their own.</p>
+      <p class="sub">A new kinship with an endangered species.</p>
+      <p>We take a tiny sample of muscle from your arm and grow it in a lab until there is enough to feed wild vultures. Then we send it to feeding stations in Korea, Mongolia, Nepal and Spain, each one close to a place where vultures breed or spend the winter and can no longer find enough food on their own. You don't just watch them from a distance. You become part of them.</p>
       <div class="hero-actions"><button class="btn" data-open><span>Request a kit</span></button><button class="textlink" data-details>See how it works</button></div>
     </div>
     <div class="hero3d" id="hero3d" role="img" aria-label="Animation: a small sample is taken from an arm, its cells are grown in a vessel, packed as food, and eaten by a vulture."><p class="h3-cap" aria-hidden="true"></p></div>
@@ -428,6 +430,7 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
     <div class="pitch-side"><span class="label">Why you</span><div class="ph"><img src="img/14-whyyou.jpg" alt="A donor standing in a snowy field, showing a feather tattoo on her arm"></div><span class="label">Ji-woo, 29, donated to the Ikh Nart station in Mongolia last spring. Her tissue is still being served there.</span></div>
     <div>
       <h2>You already have exactly what they need.</h2>
+      <p style="margin-bottom:14px">Most of us can only admire these birds from afar. Eternal Flight lets you join them.</p>
       <p class="mute">The food we grow from your muscle is clean, and we can trace every piece of it back to you. It comes from a living person who chose to give it. No animal has to die to make it, and you don't have to wait until the end of your own life to help.</p>
       <ol class="reasons">
         <li><span>1</span><div><h3>Clean food they can trust</h3><p>Every batch is screened for painkillers, antibiotics and lead before it leaves the lab. Nobody can promise that about a dead animal left out in a field.</p></div></li>
@@ -471,6 +474,7 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
       <div>
         <h2>Give once.<br>Wear it for life.</h2>
         <p class="mute">Every donor leaves with a small mark on the arm. It is tattooed directly over the place where your sample came out, so instead of a scar you keep a design, and it tells anyone who asks that part of you is up there somewhere. Most people get asked about it within a week.</p>
+        <p class="mute" style="margin-top:12px">The mark is a sign of kinship. It says you share something with a bird that is close to disappearing.</p>
         <p class="mute" style="margin-top:12px">You can only donate once, so there is only ever one mark. It is the one thing you keep from the whole process.</p>
         <p class="small" id="markname" style="margin-top:18px">Feather. The most popular choice, picked by about half of our donors.</p>
       </div>
@@ -606,7 +610,8 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
 <details><summary>Why not just donate meat or money?</summary><p>You can, and many people already do. Feeding stations always need both. Eternal Flight is for people who want something more direct. Meat from a butcher comes from an animal you never knew. Money turns into meat you never see. Your own tissue is something you can trace from your arm to a particular field on a particular day.</p></details>
 <details><summary>Is it safe for the birds?</summary><p>That's the whole reason for the screening and the testing. Every batch is checked for anti-inflammatory drugs, antibiotics and heavy metals before it leaves the lab, and nothing is released if any residue is found. Cultivated tissue is also free of the bone fragments and lead shot that sometimes end up in donated carcasses. We adjust fat and calcium levels so the food matches what a wild vulture would get from a normal meal.</p></details>
 <details><summary>Can I choose which bird eats it?</summary><p>You choose the station. We can't assign an individual bird. Vultures feed in groups with their own order of who eats first, and older birds often push the young ones aside. We think it's better not to interfere with that.</p></details>
-<details><summary>Why is it called Eternal Flight if the cells run out?</summary><p>It's true that your cell line has a natural limit. After about two hundred meals, there is nothing more to grow. But flight was never only about the cells. The protein from your tissue becomes part of a living bird. That bird raises young, and they raise young of their own. In that sense, a part of every donation keeps flying for as long as vultures do. And while the birds come and go, the mark on your arm stays exactly where it is. We think that is as close to eternal as any of us gets.</p></details>
+<details><summary>Why do you call it kinship?</summary><p>Because it is the oldest kind there is. Families are bound by what passes between bodies: blood, milk, food shared at one table. We have spent a long time protecting endangered species from the outside, with fences, laws and binoculars. Kinship works from the inside. When a vulture eats what grew from your cells, the two of you are no longer strangers. You are not its owner, its keeper or its rescuer. You are, in a small and very literal way, related.</p></details>
+  <details><summary>Why is it called Eternal Flight if the cells run out?</summary><p>It's true that your cell line has a natural limit. After about two hundred meals, there is nothing more to grow. But flight was never only about the cells. The protein from your tissue becomes part of a living bird. That bird raises young, and they raise young of their own. In that sense, a part of every donation keeps flying for as long as vultures do. And while the birds come and go, the mark on your arm stays exactly where it is. We think that is as close to eternal as any of us gets.</p></details>
   <details><summary>Can I give more than once?</summary><p>No. Each person can donate only once. One sample is enough to grow around 160 kg of food, which is served over a couple of hundred meals, so a second donation isn't needed. It also means every line in our lab belongs to exactly one person, and every mark stands for exactly one gift.</p></details>
 <details><summary>What happens if I die before my line runs out?</summary><p>Your cells keep growing and your batches keep being served until the line reaches its natural limit. Your notices can be sent to someone you name in advance.</p></details>
 <details><summary>Can I change my mind?</summary><p>You can cancel at any point before the cartridge is posted. Once your sample reaches the lab and the line has started, we can still stop it, but we can't give anything back. Everything grown up to that point will be destroyed rather than served.</p></details>
