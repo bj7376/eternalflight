@@ -870,6 +870,15 @@ const cRgh=document.createElement('canvas');cRgh.width=1024;cRgh.height=Math.rou
 const rough=new THREE.CanvasTexture(cRgh);rough.wrapS=THREE.RepeatWrapping;
 const mat=new THREE.MeshPhysicalMaterial({map:tex,bumpMap:bump,bumpScale:1.4,roughnessMap:rough,roughness:1,sheen:.55,sheenRoughness:.55,sheenColor:new THREE.Color(0xffc9b5),
   clearcoat:.12,clearcoatRoughness:.55,specularIntensity:.6,emissive:new THREE.Color(0x3a0c06),emissiveIntensity:.12});
+// instead of modelling a shoulder, dissolve the top of the arm into the dark with an ordered dither
+mat.onBeforeCompile=s=>{
+  s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nvarying float vArmY;').replace('#include <begin_vertex>','#include <begin_vertex>\nvArmY=position.y;');
+  s.fragmentShader=s.fragmentShader.replace('#include <common>','#include <common>\nvarying float vArmY;').replace('#include <dithering_fragment>',`#include <dithering_fragment>
+    { float f=smoothstep(2.3,3.3,vArmY);
+      ivec2 q=ivec2(mod(gl_FragCoord.xy,4.)); int k=q.x+q.y*4;
+      float b[16]=float[16](0.,8.,2.,10.,12.,4.,14.,6.,3.,11.,1.,9.,15.,7.,13.,5.);
+      gl_FragColor.rgb*=1.-f*.92;
+      if((b[k]+.5)/16.<f*f) discard; }`)};
 const arm=new THREE.Mesh(geo,mat);arm.scale.set(1,1,.86);arm.rotation.y=Math.PI;scene.add(arm);
 
 /* a soft shadow disc under the arm */
