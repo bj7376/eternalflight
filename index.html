@@ -455,7 +455,7 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
         <li><b>Sampling cuff</b><span>Takes the sample and then applies your mark. You use it only once.</span></li>
         <li><b>Specimen cartridge</b><span>Fits inside the cuff and seals itself once the sample is inside.</span></li>
         <li><b>Antiseptic wipe</b><span>For cleaning your arm before you begin.</span></li>
-        <li><b>Return capsule</b><span>Keeps the sample cold on its way back to us. The postage is already paid.</span></li>
+        <li><b>Return capsule</b><span>Protects the cartridge on its way back to us. The postage is already paid.</span></li>
       </ul>
     </div>
 
@@ -463,7 +463,7 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
       <div class="grid3">
         <div><span class="label">Step 1</span><h3>Sample</h3><p>Wrap the cuff around your upper arm and press start. It numbs the skin and takes a piece of muscle about the size of a grain of rice.</p><div class="ph"><img src="img/03-cuff.jpg" alt="The cuff worn on an upper arm"></div></div>
         <div><span class="label">Step 2</span><h3>Mark</h3><p>The cuff tattoos a small design right over the spot where the sample was taken, so the mark covers the cut. You choose a feather, a pair of wings or your donor number.</p><div class="ph"><img src="img/04a-feather.jpg" alt="A small feather tattoo on an upper arm"></div></div>
-        <div><span class="label">Step 3</span><h3>Return</h3><p>Put the sealed cartridge into the return capsule and post it. It reaches our lab, still cold, within two days.</p><div class="ph"><img src="img/05-capsule.jpg" alt="The return capsule in a padded envelope"></div></div>
+        <div><span class="label">Step 3</span><h3>Return</h3><p>Put the sealed cartridge into the return capsule and post it. It reaches our lab within two days.</p><div class="ph"><img src="img/05-capsule.jpg" alt="The return capsule in a padded envelope"></div></div>
       </div>
     </div>
 
@@ -713,7 +713,7 @@ let cuffSeen=false;new IntersectionObserver(e=>cuffSeen=e[0].isIntersecting).obs
 
 /* ---------- process (auto-advance) ---------- */
 const S=[
- {d:'Day 0 to 2',t:'Biopsy',p:'Your sealed cartridge travels to our lab, kept cold at 4 °C the whole way.',l:[['Size of the sample','about half a gram of muscle'],['Time in the post','less than two days'],['Temperature check','recorded every five minutes']],gfx:1},
+ {d:'Day 0 to 2',t:'Biopsy',p:'Your sealed cartridge travels to our lab by ordinary post inside the return capsule. The cartridge holds a preservation fluid that keeps the cells alive for a few days at room temperature.',l:[['Size of the sample','about half a gram of muscle'],['Time in the post','less than two days'],['Temperature check','recorded every five minutes']],gfx:1},
  {d:'Day 2 to 5',t:'Isolation',p:'We separate out the muscle stem cells, called satellite cells, and check them for contamination.',l:[['What we test for','bacteria, mycoplasma and viruses'],['Your own cell line','started and labelled with your donor number']],gfx:1},
  {d:'Day 5 to 40',t:'Expansion',p:'The cells multiply in a nutrient liquid. Human cells can only divide a limited number of times, so each donor can only ever produce so much.',l:[['How many times the cells divide','about thirty'],['What they grow in','a nutrient liquid with no animal serum']],n:'One donor\'s cells usually grow into about 160 kg of tissue. This is served over roughly two hundred separate meals.',gfx:1},
  {d:'Day 40 to 55',t:'Scale-up',p:'Your cells move into their own large tank. A label follows the tank through every transfer, so your cells are never mixed with anyone else\'s.',l:[['Where the cells grow','a tank used only for your cells'],['How we keep track','a label that moves with them every time']],gfx:1},
@@ -1111,7 +1111,7 @@ const capG=new THREE.Group();scene.add(capG);
  const vCap=new THREE.Mesh(new THREE.CylinderGeometry(.2,.2,.22,24),white);vCap.rotation.z=Math.PI/2;vCap.position.x=.5;capG.add(vCap);
  const smp=new THREE.Mesh(blob(new THREE.IcosahedronGeometry(.07,3),.9,30,2),tissueM);smp.scale.set(1.6,.8,1);smp.position.x=-.15;capG.add(smp);
  for(let k=0;k<3;k++){const ring=new THREE.Mesh(new THREE.TorusGeometry(.92,.01,6,64),new THREE.MeshBasicMaterial({color:0xbfe0ff,transparent:true,opacity:.35}));ring.rotation.y=Math.PI/2;ring.position.x=-.9+k*.9;capG.add(ring)}}
-const thermo=textPlane(1.8,.62,['4.0 °C','logged 08:35'],'#bfe0ff');thermo.position.set(0,1.45,.2);scene.add(thermo);thermo.visible=false;
+
 capG.visible=false;
 // stage 5: muscle cut into packs, sealed, tested on a conveyor
 const formG=new THREE.Group();scene.add(formG);
@@ -1130,7 +1130,7 @@ const packs5=[];for(let k=0;k<4;k++){const g=new THREE.Group();
 const scanFrame=new THREE.Mesh(new THREE.TorusGeometry(.95,.04,10,40,Math.PI),new THREE.MeshStandardMaterial({color:0xc4c4bf,metalness:.9,roughness:.3}));scanFrame.rotation.y=Math.PI/2;scanFrame.position.y=-.7;scanFrame.scale.set(1,1.1,1);formG.add(scanFrame);
 const scanBeam=new THREE.Mesh(new THREE.PlaneGeometry(.02,1.6),new THREE.MeshBasicMaterial({color:0x7dffa8,transparent:true,opacity:.7,side:THREE.DoubleSide}));scanBeam.rotation.y=Math.PI/2;scanBeam.rotation.x=Math.PI/2;scanBeam.position.y=-.2;formG.add(scanBeam);
 const scanLine=new THREE.Mesh(new THREE.BoxGeometry(.02,1.2,1.2),new THREE.MeshBasicMaterial({color:0x7dffa8,transparent:true,opacity:.18,depthWrite:false}));scanLine.position.y=-.2;formG.add(scanLine);
-const readout=textPlane(2.6,.7,['NSAID residue: not detected','Pack weight: 750 g']);readout.position.set(0,.75,0);formG.add(readout);
+
 formG.visible=false;
 // stage 6: packs on the snow and a vulture feeding
 const feedG=new THREE.Group();scene.add(feedG);
@@ -1139,7 +1139,7 @@ const packs6=[[.4,.5],[-.8,-.2],[1.3,-.6]].map(([x,z],k)=>{const p=new THREE.Mes
 let v6=null;feedG.visible=false;
 const easeC=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2,clC=t=>Math.max(0,Math.min(1,t)),segC=(t,a,b)=>clC((t-a)/(b-a));
 let stage=-1,t0=0,born=0;
-const TXT=['Your sealed sample cartridge inside its return capsule, held at 4 °C. A logger records the temperature every five minutes.',
+const TXT=['Your sample, sealed in its cartridge, travels inside the padded return capsule by ordinary post.',
  'Isolation. The tissue is gently broken up and the satellite cells, the muscle stem cells, are separated out and screened for bacteria, mycoplasma and viruses.',
  'Expansion. The satellite cells divide about thirty times in a serum-free medium. A cell line can only divide so often, so one donor yields roughly 160 kg.',
  'Scale-up. Your cell line moves into a stirred bioreactor used only for your cells. The impeller keeps them suspended and evenly fed.',
@@ -1147,7 +1147,7 @@ const TXT=['Your sealed sample cartridge inside its return capsule, held at 4 °
  'Formulation. Fat and calcium are added, the tissue is vacuum-packed in 750 g batches labelled with your donor number, and every pack is scanned for anti-inflammatory drug residues.',
  'Feeding. The packs are laid on the snow with the station\'s other food. Each batch that is eaten is logged and sent to you.'];
 function setStage(s){stage=s;t0=performance.now();cap.textContent=TXT[s]||'';
-  tank.visible=s===3;lump.visible=s===1;fibres.visible=s===4;fibreMat.opacity=0;capG.visible=thermo.visible=s===0;formG.visible=s===5;feedG.visible=s===6;
+  tank.visible=s===3;lump.visible=s===1;fibres.visible=s===4;fibreMat.opacity=0;capG.visible=s===0;formG.visible=s===5;feedG.visible=s===6;
   if(s===6&&!v6&&window.efShared){v6=window.efShared.makeVulture();v6.scale.multiplyScalar(.9);feedG.add(v6)}
   for(let i=0;i<N;i++){tscl[i]=0;stretch[i]=1}
   if(s===1){for(let i=0;i<16;i++){cur[i].copy(lump.position).add(inBall(.5));tgt[i].set(rnd(.4,2.6),rnd(-1.3,1.3),rnd(-.8,.8));tscl[i]=1.15;scl[i]=.1}born=16}
