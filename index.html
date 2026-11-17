@@ -1192,27 +1192,27 @@ const lid=new THREE.Mesh(new THREE.CylinderGeometry(.78,.78,.08,64),steel);lid.p
 const base=new THREE.Mesh(new THREE.CylinderGeometry(.8,.82,.12,64),steel);base.position.y=-.96;V.add(base);
 [[-.35,.2],[.3,-.25],[0,.42]].forEach(([x,z])=>{const p=new THREE.Mesh(new THREE.CylinderGeometry(.035,.035,.22,12),steel);p.position.set(x,1.08,z);V.add(p)});
 // culture medium
-const medMat=new THREE.MeshPhysicalMaterial({color:0xe07c7c,transparent:true,opacity:.0,roughness:.1,transmission:.4,thickness:1,depthWrite:false});
+const medMat=new THREE.MeshPhysicalMaterial({color:0xf0b0a8,transparent:true,opacity:.0,roughness:.1,transmission:.4,thickness:1,depthWrite:false});
 const medium=new THREE.Mesh(new THREE.CylinderGeometry(.73,.73,1.5,64),medMat);medium.position.y=-.15;V.add(medium);
-const glow=new THREE.PointLight(0xff6a5a,0,3);glow.position.set(0,-.1,.4);V.add(glow);
+const glow=new THREE.PointLight(0xffb0a0,0,3);glow.position.set(0,-.1,.4);V.add(glow);
 // bubbles
 const NB=26,bub=new THREE.InstancedMesh(new THREE.SphereGeometry(.018,10,8),new THREE.MeshPhysicalMaterial({color:0xffffff,transmission:.9,roughness:0,thickness:.05,transparent:true,opacity:.7}),NB);bub.frustumCulled=false;V.add(bub);
 const bubs=Array.from({length:NB},()=>({x:(Math.random()-.5)*1.1,z:(Math.random()-.5)*1.1,o:Math.random()*1.5,s:.6+Math.random()*.8}));
 // cells: organic, translucent, with nucleus; each one buds off a parent
 const N=72;
-const cellGeo=hBlob(new THREE.IcosahedronGeometry(.13,4),.6,5.5);
-const cellMat=new THREE.MeshPhysicalMaterial({color:0xffffff,map:speckTex,roughness:.3,transmission:.45,thickness:.4,ior:1.38,attenuationColor:new THREE.Color(0xa01c26),attenuationDistance:.22,sheen:1,sheenColor:new THREE.Color(0xff9a8e),sheenRoughness:.4,clearcoat:.6,clearcoatRoughness:.25});
+const cellGeo=hBlob(new THREE.IcosahedronGeometry(.13,4),.28,4.5);
+const cellMat=new THREE.MeshPhysicalMaterial({color:0xf4c3bb,roughness:.45,transmission:.55,thickness:.5,ior:1.33,attenuationColor:new THREE.Color(0xe08a84),attenuationDistance:.6,clearcoat:.25,clearcoatRoughness:.4,transparent:true,opacity:.92});
 const cells=new THREE.InstancedMesh(cellGeo,cellMat,N);cells.instanceMatrix.setUsage(THREE.DynamicDrawUsage);cells.frustumCulled=false;V.add(cells);
-const nuc=new THREE.InstancedMesh(hBlob(new THREE.IcosahedronGeometry(.05,3),.25,14,3),new THREE.MeshStandardMaterial({color:0x4a0a14,roughness:.5,emissive:0x2a0308}),N);nuc.frustumCulled=false;V.add(nuc);
-{const c=new THREE.Color();for(let i=0;i<N;i++){c.setHSL(.99+Math.random()*.03,.55+Math.random()*.2,.45+Math.random()*.12);cells.setColorAt(i,c)}}
+const nuc=new THREE.InstancedMesh(hBlob(new THREE.IcosahedronGeometry(.05,3),.25,14,3),new THREE.MeshStandardMaterial({color:0xd98f88,roughness:.6}),N);nuc.frustumCulled=false;V.add(nuc);
+{const c=new THREE.Color();for(let i=0;i<N;i++){c.setHSL(.01+Math.random()*.02,.45+Math.random()*.15,.82+Math.random()*.08);cells.setColorAt(i,c)}}
 const cp=[],par=[],born=[],rot=[],asp=[];
 for(let i=0;i<N;i++){let v;do{v=new THREE.Vector3(Math.random()*2-1,Math.random()*2-1,Math.random()*2-1)}while(v.length()>1);
   cp.push(v.multiply(new THREE.Vector3(.5,.62,.5)).add(new THREE.Vector3(0,-.2,0)));par.push(i?Math.floor((i-1)/2):-1);
   born.push(i?4.9+Math.log2(i+1)*.55+Math.random()*.25:4.6);rot.push(new THREE.Euler(Math.random()*6,Math.random()*6,Math.random()*6));asp.push(new THREE.Vector3(1+Math.random()*.6,.7+Math.random()*.3,.8+Math.random()*.4))}
 cp[0].set(0,-.2,0);
 // muscle tissue block
-const packGeo=hBlob(new THREE.BoxGeometry(.9,.24,.6,24,6,16),.12,3.2,5);
-const packMat=new THREE.MeshPhysicalMaterial({color:0xc86868,map:muscleTex,bumpMap:muscleTex,bumpScale:2.5,roughness:.42,clearcoat:.7,clearcoatRoughness:.25,sheen:.7,sheenColor:new THREE.Color(0xff8c80)});
+const packGeo=hBlob(new THREE.BoxGeometry(.9,.24,.6,24,6,16),.05,3.2,5);
+const packMat=new THREE.MeshPhysicalMaterial({color:0xd98a84,map:muscleTex,bumpMap:muscleTex,bumpScale:.8,roughness:.55,clearcoat:.25,clearcoatRoughness:.5});
 const pack=new THREE.Mesh(packGeo,packMat);V.add(pack);
 
 /* ---- stage 3: ground + vulture (x = 4.5) ---- */
@@ -1295,12 +1295,12 @@ function frame(now){
     laser.position.set(lx,(top+.418)/2,lz);laser.scale.y=top-.418;lSpot.position.set(lx,.421,lz);lGlow.position.set(lx,.46,lz);lHead.position.set(lx,top+.02,lz);laser.material.opacity=.6+Math.random()*.4}}
   // bead follows needle, then flies to vessel
   if(t<1.9){bead.visible=false}
-  else if(t<3.2){bead.visible=true;bead.position.set(-4,tipY+.02,.08);bead.scale.setScalar(.55)}
-  else if(t<4.6){bead.visible=true;const k=ease(seg(t,3.2,4.6));bead.scale.setScalar(.55+.45*k);bead.position.set(-4+4*k,.6+Math.sin(k*Math.PI)*.9-.65*k,0)}
+  else if(t<3.2){bead.visible=true;bead.position.set(-4,tipY+.02,.06);bead.scale.setScalar(.22)}
+  else if(t<4.6){bead.visible=true;const k=ease(seg(t,3.2,4.6));bead.scale.setScalar(.22+.18*k);bead.position.set(-4+4*k,.6+Math.sin(k*Math.PI)*.9-.65*k,0)}
   else bead.visible=false;
 
   /* stage 2: cells bud off parents, then fuse into tissue */
-  const fill=seg(t,4.5,5.2)*(1-seg(t,9.3,10));medMat.opacity=.28*fill;glow.intensity=2.2*fill;
+  const fill=seg(t,4.5,5.2)*(1-seg(t,9.3,10));medMat.opacity=.16*fill;glow.intensity=.9*fill;
   const fuse=ease(seg(t,8.1,9.2));
   const tmp=new THREE.Vector3();
   for(let i=0;i<N;i++){
