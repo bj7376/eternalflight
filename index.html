@@ -704,13 +704,13 @@ let cuffSeen=false;new IntersectionObserver(e=>cuffSeen=e[0].isIntersecting).obs
 
 /* ---------- process (auto-advance) ---------- */
 const S=[
- {d:'Day 0 to 2',t:'Biopsy',p:'Your sealed cartridge travels to our lab, kept cold at 4 °C the whole way.',l:[['Size of the sample','about half a gram of muscle'],['Time in the post','less than two days'],['Temperature check','recorded every five minutes']],img:'05-capsule'},
+ {d:'Day 0 to 2',t:'Biopsy',p:'Your sealed cartridge travels to our lab, kept cold at 4 °C the whole way.',l:[['Size of the sample','about half a gram of muscle'],['Time in the post','less than two days'],['Temperature check','recorded every five minutes']],gfx:1},
  {d:'Day 2 to 5',t:'Isolation',p:'We separate out the muscle stem cells, called satellite cells, and check them for contamination.',l:[['What we test for','bacteria, mycoplasma and viruses'],['Your own cell line','started and labelled with your donor number']],gfx:1},
  {d:'Day 5 to 40',t:'Expansion',p:'The cells multiply in a nutrient liquid. Human cells can only divide a limited number of times, so each donor can only ever produce so much.',l:[['How many times the cells divide','about thirty'],['What they grow in','a nutrient liquid with no animal serum']],n:'One donor\'s cells usually grow into about 160 kg of tissue. This is served over roughly two hundred separate meals.',gfx:1},
  {d:'Day 40 to 55',t:'Scale-up',p:'Your cells move into their own large tank. A label follows the tank through every transfer, so your cells are never mixed with anyone else\'s.',l:[['Where the cells grow','a tank used only for your cells'],['How we keep track','a label that moves with them every time']],gfx:1},
  {d:'Day 55 to 65',t:'Differentiation',p:'The cells join together into muscle fibres on an edible frame and slowly thicken into solid tissue.',l:[['What the cells grow on','an edible frame made from plants'],['What comes out','solid muscle tissue']],gfx:1},
- {d:'Day 65 to 70',t:'Formulation',p:'We adjust the tissue to suit a vulture\'s diet and test it for drug residues before it can leave the lab.',l:[['What we add','fat and calcium, which wild vultures normally get from bones'],['Painkiller test','no trace may be found'],['Packaging','sealed airtight and labelled with your donor number and batch']],img:'08-feed'},
- {d:'Day 70 onwards',t:'Feeding',p:'The packs are sent cold to your feeding station. On feeding days they are laid out in the field together with the other food.',l:[['Feeding stations','seven, on four continents'],['What we tell you','the date, the station and the batch']],img:'09-feeding',n:'We send you a message every time one of your batches is served.'}];
+ {d:'Day 65 to 70',t:'Formulation',p:'We adjust the tissue to suit a vulture\'s diet and test it for drug residues before it can leave the lab.',l:[['What we add','fat and calcium, which wild vultures normally get from bones'],['Painkiller test','no trace may be found'],['Packaging','sealed airtight and labelled with your donor number and batch']],gfx:1},
+ {d:'Day 70 onwards',t:'Feeding',p:'The packs are sent cold to your feeding station. On feeding days they are laid out in the field together with the other food.',l:[['Feeding stations','seven, on four continents'],['What we tell you','the date, the station and the batch']],gfx:1,n:'We send you a message every time one of your batches is served.'}];
 const rail=$('#rail'),stage=$('#stage');let si=0,playing=true,ptimer,t0=0;const DUR=6500;
 rail.innerHTML=S.map((s,i)=>`<button data-i="${i}">${s.d}<b>${s.t}</b><i></i></button>`).join('');
 const rb=$$('#rail button');
@@ -1090,10 +1090,44 @@ const cur=[],tgt=[],scl=[],tscl=[],stretch=[],rot=[],ph=[];
 for(let i=0;i<N;i++){cur.push(new THREE.Vector3(0,0,-30));tgt.push(new THREE.Vector3(0,0,-30));scl.push(0);tscl.push(0);stretch.push(1);rot.push(new THREE.Euler(Math.random()*6,Math.random()*6,Math.random()*6));ph.push(Math.random()*6.28)}
 const rnd=(a,b)=>a+Math.random()*(b-a);
 const inBall=rad=>{let v;do{v=new THREE.Vector3(rnd(-1,1),rnd(-1,1),rnd(-1,1))}while(v.length()>1);return v.multiplyScalar(rad)};
+
+/* ---- extra stages: 0 biopsy transit, 5 formulation, 6 feeding ---- */
+const white=new THREE.MeshPhysicalMaterial({color:0xf2f0ea,roughness:.35,clearcoat:.4});
+const frost=new THREE.MeshPhysicalMaterial({color:0xffffff,roughness:.25,transmission:.75,thickness:.6,transparent:true,opacity:.55,depthWrite:false});
+const tissueM=new THREE.MeshPhysicalMaterial({map:stri,color:0xd98a84,bumpMap:stri,bumpScale:1,roughness:.5,clearcoat:.3});
+// stage 0: sealed vial inside the cold return capsule
+const capG=new THREE.Group();scene.add(capG);
+{const shellA=new THREE.Mesh(new THREE.CapsuleGeometry(.9,1.6,12,48),frost);shellA.rotation.z=Math.PI/2;capG.add(shellA);
+ const band=new THREE.Mesh(new THREE.CylinderGeometry(.93,.93,.18,48,1,true),white);band.rotation.z=Math.PI/2;capG.add(band);
+ const vialT=new THREE.Mesh(new THREE.CylinderGeometry(.18,.18,.8,24,1,true),new THREE.MeshPhysicalMaterial({color:0xffffff,transparent:true,opacity:.3,roughness:.05,side:THREE.DoubleSide,depthWrite:false}));vialT.rotation.z=Math.PI/2;capG.add(vialT);
+ const vCap=new THREE.Mesh(new THREE.CylinderGeometry(.2,.2,.22,24),white);vCap.rotation.z=Math.PI/2;vCap.position.x=.5;capG.add(vCap);
+ const smp=new THREE.Mesh(blob(new THREE.IcosahedronGeometry(.07,3),.9,30,2),tissueM);smp.scale.set(1.6,.8,1);smp.position.x=-.15;capG.add(smp);
+ for(let k=0;k<3;k++){const ring=new THREE.Mesh(new THREE.TorusGeometry(.92,.01,6,64),new THREE.MeshBasicMaterial({color:0xbfe0ff,transparent:true,opacity:.35}));ring.rotation.y=Math.PI/2;ring.position.x=-.9+k*.9;capG.add(ring)}}
+capG.visible=false;
+// stage 5: muscle cut into packs, sealed, tested on a conveyor
+const formG=new THREE.Group();scene.add(formG);
+const belt=new THREE.Mesh(new THREE.BoxGeometry(7,.12,1.2),new THREE.MeshStandardMaterial({color:0x2a2a2a,roughness:.8}));belt.position.y=-.75;formG.add(belt);
+const rollers=[];for(let k=0;k<14;k++){const rr=new THREE.Mesh(new THREE.CylinderGeometry(.07,.07,1.25,12),new THREE.MeshStandardMaterial({color:0x8a8a86,metalness:.8,roughness:.3}));rr.rotation.x=Math.PI/2;rr.position.set(-3.25+k*.5,-.86,0);formG.add(rr);rollers.push(rr)}
+const packs5=[];for(let k=0;k<4;k++){const g=new THREE.Group();
+  const meat=new THREE.Mesh(blob(new THREE.BoxGeometry(.9,.22,.6,12,4,8),.06,3,k),tissueM);g.add(meat);
+  const film=new THREE.Mesh(new THREE.BoxGeometry(1.02,.3,.72),new THREE.MeshPhysicalMaterial({color:0xffffff,transparent:true,opacity:.18,roughness:.1,depthWrite:false}));g.add(film);
+  const label=new THREE.Mesh(new THREE.PlaneGeometry(.34,.18),new THREE.MeshBasicMaterial({color:0xf2f0ea}));label.rotation.x=-Math.PI/2;label.position.set(.18,.152,.1);g.add(label);
+  g.position.y=-.55;formG.add(g);packs5.push(g)}
+const scanFrame=new THREE.Mesh(new THREE.TorusGeometry(.95,.04,10,40,Math.PI),new THREE.MeshStandardMaterial({color:0xc4c4bf,metalness:.9,roughness:.3}));scanFrame.rotation.y=Math.PI/2;scanFrame.position.y=-.7;scanFrame.scale.set(1,1.1,1);formG.add(scanFrame);
+const scanBeam=new THREE.Mesh(new THREE.PlaneGeometry(.02,1.6),new THREE.MeshBasicMaterial({color:0x7dffa8,transparent:true,opacity:.7,side:THREE.DoubleSide}));scanBeam.rotation.y=Math.PI/2;scanBeam.rotation.x=Math.PI/2;scanBeam.position.y=-.2;formG.add(scanBeam);
+const scanLine=new THREE.Mesh(new THREE.BoxGeometry(.02,1.2,1.2),new THREE.MeshBasicMaterial({color:0x7dffa8,transparent:true,opacity:.18,depthWrite:false}));scanLine.position.y=-.2;formG.add(scanLine);
+formG.visible=false;
+// stage 6: packs on the snow and a vulture feeding
+const feedG=new THREE.Group();scene.add(feedG);
+const snow=new THREE.Mesh(new THREE.CircleGeometry(3.4,64),new THREE.MeshStandardMaterial({color:0x4a4a47,roughness:1}));snow.rotation.x=-Math.PI/2;snow.position.y=-1;feedG.add(snow);
+const packs6=[[.4,.5],[-.8,-.2],[1.3,-.6]].map(([x,z],k)=>{const p=new THREE.Mesh(blob(new THREE.BoxGeometry(.9,.22,.6,12,4,8),.06,3,k+5),tissueM);p.scale.setScalar(.5);p.position.set(x,-.94,z);p.rotation.y=k;feedG.add(p);return p});
+let v6=null;feedG.visible=false;
+const easeC=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2,clC=t=>Math.max(0,Math.min(1,t)),segC=(t,a,b)=>clC((t-a)/(b-a));
 let stage=-1,t0=0,born=0;
-const TXT=['Satellite cells being separated from your sample','Each cell divides again and again','Your cells growing in their own tank','Cells joining into muscle fibres'];
-function setStage(s){stage=s;t0=performance.now();cap.textContent=TXT[s-1]||'';
-  tank.visible=s===3;lump.visible=s===1;fibres.visible=s===4;fibreMat.opacity=0;
+const TXT=['Your sample, sealed and kept at 4 °C on its way to the lab','Satellite cells being separated from your sample','Each cell divides again and again','Your cells growing in their own tank','Cells joining into muscle fibres','Packed, sealed and tested for drug residues','Laid out on the snow on feeding day'];
+function setStage(s){stage=s;t0=performance.now();cap.textContent=TXT[s]||'';
+  tank.visible=s===3;lump.visible=s===1;fibres.visible=s===4;fibreMat.opacity=0;capG.visible=s===0;formG.visible=s===5;feedG.visible=s===6;
+  if(s===6&&!v6&&window.efShared){v6=window.efShared.makeVulture();v6.scale.multiplyScalar(.9);feedG.add(v6)}
   for(let i=0;i<N;i++){tscl[i]=0;stretch[i]=1}
   if(s===1){for(let i=0;i<16;i++){cur[i].copy(lump.position).add(inBall(.5));tgt[i].set(rnd(.4,2.6),rnd(-1.3,1.3),rnd(-.8,.8));tscl[i]=1.15;scl[i]=.1}born=16}
   if(s===2){born=6;for(let i=0;i<N;i++){cur[i].copy(inBall(.5));tgt[i].copy(cur[i]);tscl[i]=i<6?1.15:0;scl[i]=tscl[i]}}
@@ -1114,12 +1148,21 @@ function frame(){const now=performance.now(),t=(now-t0)/1000,tt=now/1000;
     off.set(.02,.01,.03).applyQuaternion(q).multiplyScalar(scl[i]);pv.copy(cur[i]).add(off);sv.setScalar(scl[i]*(stretch[i]>1?1.1:1));m4.compose(pv,q,sv);nuc.setMatrixAt(i,m4)}
   cells.instanceMatrix.needsUpdate=true;nuc.instanceMatrix.needsUpdate=true;
   const dpos=debrisGeo.attributes.position;for(let i=0;i<dpos.count;i++){let y=dpos.getY(i)+.0015;if(y>3.5)y=-3.5;dpos.setY(i,y)}dpos.needsUpdate=true;
-  scene.rotation.y=stage===4?Math.sin(tt*.2)*.15:stage===3?.15:Math.sin(tt*.25)*.25;
+  if(stage===0){capG.rotation.set(.3,.55+Math.sin(tt*.3)*.35,Math.sin(tt*.6)*.06);capG.position.y=Math.sin(tt*.9)*.08}
+  if(stage===5){const sp=.55;packs5.forEach((g,k)=>{const x=((t*sp+k*1.8)%7.2)-3.6;g.position.x=x;g.visible=Math.abs(x)<3.4});rollers.forEach(rr=>rr.rotation.y=-t*sp/.07);
+    const near=packs5.some(g=>Math.abs(g.position.x)<.5);scanBeam.material.opacity=near?.9:.35;scanLine.material.opacity=near?.28:.08}
+  if(stage===6&&v6){const c=(t%9);const H=v6.userData.head;let flap=0,spread=1;
+    if(c<2.4){const k=easeC(segC(c,0,2.4));v6.position.set(-2.8+3*k,2.6-3.08*k,-.4+.4*k);v6.rotation.set(0,Math.PI*.5,0);flap=Math.sin(tt*4)*.12*(1-k)+(k>.82?Math.sin(tt*13)*.45:0);v6.userData.legs.visible=k>.85;H.rotation.x=0}
+    else if(c<7.5){v6.position.set(.2,-.48,0);v6.rotation.set(0,Math.PI*.5+.3,0);spread=.15;v6.userData.legs.visible=true;const pk=Math.max(0,Math.sin(tt*4.5));H.rotation.x=.45+pk*.6;H.position.y=.32-pk*.13}
+    else{const k=easeC(segC(c,7.5,9));v6.position.set(.2+2.5*k,-.48+3*k,0);v6.rotation.set(-.3*k,Math.PI*.5,0);flap=Math.sin(tt*7)*.32;v6.userData.legs.visible=false;H.rotation.x=0;H.position.y=.32}
+    v6.userData.wings.forEach(w=>{const f=1-spread;w.sh.rotation.set(0,w.s*1.45*f,flap*w.s-.15*f*w.s);w.el.rotation.set(0,w.s*1.5*f,-flap*.6*w.s)});
+    packs6.forEach((p,k)=>{const e=c>2.6&&c<7.5?segC(c,2.6,7.5):(c>=7.5?1:0);const s=.5*(1-e*(.4+k*.12));p.scale.set(s,.5*(1-e*.3),s)})}
+  scene.rotation.y=stage===0||stage>=5?0:stage===4?Math.sin(tt*.2)*.15:stage===3?.15:Math.sin(tt*.25)*.25;
   if(stage===1)lump.rotation.y+=.003;
   r.render(scene,cam)}
 function size(){const w=holder.clientWidth,h=holder.clientHeight;if(!w)return;r.setSize(w,h,false);cam.aspect=w/h;cam.position.z=w/h<1.2?9.5:7.5;cam.updateProjectionMatrix()}
 new ResizeObserver(size).observe(holder);
-const vis=watch(holder);(function loop(){requestAnimationFrame(loop);if(stage>0&&vis())frame()})();
+const vis=watch(holder);(function loop(){requestAnimationFrame(loop);if(stage>=0&&vis())frame()})();
 window.cultureMount=(slot,s)=>{slot.appendChild(holder);size();setStage(s)};
 if(window.__pendingCulture){window.cultureMount(...window.__pendingCulture)}
 })();
