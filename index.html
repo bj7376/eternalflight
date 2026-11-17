@@ -1270,7 +1270,6 @@ function dither(m){m.onBeforeCompile=s=>{s.uniforms.uCut=ditherU;s.fragmentShade
     float b[16]=float[16](0.,8.,2.,10.,12.,4.,14.,6.,3.,11.,1.,9.,15.,7.,13.,5.);
     if((b[k]+.5)/16.<uCut) discard; }`)};return m}
 const cuff=new THREE.Mesh(strapGeo(.455,.6,.05),dither(fabricMat()));cuff.rotation.z=Math.PI/2;A.add(cuff);
-addInflation(cuff,.455,.6,.05,Math.PI/2,dither,-1);
 const unit=new THREE.Mesh(curvedBox(.5,.44,.16,.07,.52,'z').translate(0,-.05,0),dither(housingMat()));unit.position.y=.55;A.add(unit);
 {const bz=new THREE.Mesh(new THREE.ShapeGeometry(rrShape(.24,.17,.04)),dither(new THREE.MeshBasicMaterial({color:0x2a2a2a})));bz.rotation.x=-Math.PI/2;bz.position.y=.112;unit.add(bz);
  const sc=new THREE.Mesh(new THREE.ShapeGeometry(rrShape(.2,.13,.025)),dither(new THREE.MeshBasicMaterial({color:0xcfcfc6})));sc.rotation.x=-Math.PI/2;sc.position.y=.113;unit.add(sc)}
@@ -1646,8 +1645,7 @@ function dither(m){m.onBeforeCompile=s=>{s.uniforms.uCut=cutU;s.fragmentShader='
 // cuff band: a solid strap with thickness and soft edges
 const strapProf=[[1.0,-.66],[1.06,-.66],[1.09,-.62],[1.1,0],[1.09,.62],[1.06,.66],[1.0,.66],[1.0,-.66]].map(p=>new THREE.Vector2(p[0],p[1]));
 const strapMat=dither(fabricMat());
-const cuff=new THREE.Mesh(strapGeo(1.0,1.32,.1),strapMat);
-addInflation(cuff,1.0,1.32,.1,Math.PI,dither,-1);cuff.rotation.x=Math.PI/2;cuff.position.z=-.72;g.add(cuff);
+const cuff=new THREE.Mesh(strapGeo(1.0,1.32,.1),strapMat);cuff.rotation.x=Math.PI/2;cuff.position.z=-.72;g.add(cuff);
 const seamMat=dither(new THREE.MeshStandardMaterial({color:0x5a5a57,roughness:.7}));
 const seams=[-.58,.58].map(z=>{const s=new THREE.Mesh(new THREE.TorusGeometry(1.1,.008,6,128),seamMat);s.userData.o=z;g.add(s);return s});
 function seamsMove(cz){seams.forEach(s=>{s.position.z=cz+s.userData.o;s.visible=cz>-1})}
@@ -1665,16 +1663,16 @@ const screen=new THREE.Mesh(scG,new THREE.MeshBasicMaterial({map:scT}));screen.r
 const bezel=new THREE.Mesh(new THREE.ShapeGeometry(rrShape(.58,.39,.07)),new THREE.MeshBasicMaterial({color:0x2a2a2a}));bezel.rotation.x=-Math.PI/2;bezel.position.set(0,.141,-.12);mod.add(bezel);
 // internals (seen through the dither)
 const metal=new THREE.MeshStandardMaterial({color:0xb8b8b2,metalness:.85,roughness:.3});
-const cart=new THREE.Mesh(new THREE.CylinderGeometry(.075,.075,.42,24,1,true),new THREE.MeshPhysicalMaterial({color:0xffffff,transparent:true,opacity:.25,roughness:.05,side:THREE.DoubleSide,depthWrite:false}));cart.rotation.z=Math.PI/2;cart.position.set(.12,0,-.3);mod.add(cart);
-const cartCap=new THREE.Mesh(new THREE.CylinderGeometry(.08,.08,.08,24),new THREE.MeshStandardMaterial({color:0x8c2a2a,roughness:.5}));cartCap.rotation.z=Math.PI/2;cartCap.position.set(.36,0,-.3);mod.add(cartCap);
-const rail=new THREE.Mesh(new THREE.BoxGeometry(.04,.3,.04),metal);rail.position.set(-.12,0,.02);mod.add(rail);
+const cart=new THREE.Mesh(new THREE.CylinderGeometry(.055,.055,.34,24,1,true),new THREE.MeshPhysicalMaterial({color:0xffffff,transparent:true,opacity:.25,roughness:.05,side:THREE.DoubleSide,depthWrite:false}));cart.rotation.z=Math.PI/2;cart.position.set(.08,-.06,-.3);mod.add(cart);
+const cartCap=new THREE.Mesh(new THREE.CylinderGeometry(.06,.06,.06,24),new THREE.MeshStandardMaterial({color:0x8c2a2a,roughness:.5}));cartCap.rotation.z=Math.PI/2;cartCap.position.set(.27,-.06,-.3);mod.add(cartCap);
+const rail=new THREE.Mesh(new THREE.BoxGeometry(.035,.2,.035),metal);rail.position.set(-.1,-.07,.02);mod.add(rail);
 const motor=new THREE.Mesh(new THREE.CylinderGeometry(.08,.08,.18,20),new THREE.MeshStandardMaterial({color:0x333333,metalness:.5,roughness:.4}));motor.rotation.z=Math.PI/2;motor.position.set(-.22,-.02,-.35);mod.add(motor);
 const board=new THREE.Mesh(new THREE.BoxGeometry(.4,.02,.3),new THREE.MeshStandardMaterial({color:0x1f4a2e,roughness:.6}));board.position.set(0,.07,-.35);mod.add(board);
 const batt=new THREE.Mesh(new THREE.BoxGeometry(.36,.1,.22),new THREE.MeshStandardMaterial({color:0x555555,roughness:.6}));batt.position.set(0,-.08,-.5);mod.add(batt);
 const sbG=new THREE.IcosahedronGeometry(.024,3);{const p=sbG.attributes.position,v=new THREE.Vector3();for(let i=0;i<p.count;i++){v.fromBufferAttribute(p,i);const n=Math.sin(v.x*90)*Math.cos(v.y*70)*.5+Math.sin(v.z*110+v.x*40)*.5;v.multiplyScalar(1+n*.35);p.setXYZ(i,v.x*1.7,v.y*.7,v.z)}sbG.computeVertexNormals()}
 const sampleBead=new THREE.Mesh(sbG,new THREE.MeshPhysicalMaterial({color:0xc98078,roughness:.5,clearcoat:.4,clearcoatRoughness:.4,sheen:.5,sheenColor:new THREE.Color(0xffc2b8)}));sampleBead.visible=false;g.add(sampleBead);
 // needle (front, in the cut plane)
-const needle=new THREE.Mesh(new THREE.CylinderGeometry(.012,.012,.3,12),new THREE.MeshStandardMaterial({color:0xdadada,metalness:1,roughness:.15}));g.add(needle);
+const needle=new THREE.Mesh(new THREE.CylinderGeometry(.012,.012,.22,12),new THREE.MeshStandardMaterial({color:0xdadada,metalness:1,roughness:.15}));g.add(needle);
 // laser head + beam
 const head=new THREE.Mesh(new THREE.CylinderGeometry(.05,.07,.12,20),new THREE.MeshStandardMaterial({color:0x333333,metalness:.6,roughness:.3}));g.add(head);
 const beam=new THREE.Mesh(new THREE.CylinderGeometry(.012,.012,1,8),new THREE.MeshBasicMaterial({color:0xff4136,transparent:true,opacity:.9}));g.add(beam);
@@ -1683,7 +1681,7 @@ const glow=new THREE.PointLight(0xff3b30,0,1.2);g.add(glow);
 // tattoo dots left on the skin
 const MAXD=260,dots=new THREE.InstancedMesh(new THREE.CircleGeometry(.016,8),new THREE.MeshBasicMaterial({color:0x1d1b1e}),MAXD);dots.count=0;dots.frustumCulled=false;g.add(dots);
 // wipe pad, numbing glow, bandage
-const pad=new THREE.Mesh(new THREE.BoxGeometry(.3,.025,.22),new THREE.MeshStandardMaterial({color:0xf6f6f2,roughness:1}));g.add(pad);
+const padG=new THREE.CylinderGeometry(R+.01,R+.01,.22,24,1,false,-.15,.3);padG.rotateX(Math.PI/2);const pad=new THREE.Mesh(padG,new THREE.MeshStandardMaterial({color:0xf6f6f2,roughness:1,side:THREE.DoubleSide}));g.add(pad);
 const cool=new THREE.Mesh(new THREE.CylinderGeometry(1.004,1.004,.9,64,1,true,Math.PI*.65,Math.PI*.7),new THREE.MeshBasicMaterial({color:0x8fc8ff,transparent:true,opacity:0,side:THREE.DoubleSide,depthWrite:false}));cool.rotation.x=Math.PI/2;cool.position.z=-.5;g.add(cool);
 const band=new THREE.Mesh(new THREE.CylinderGeometry(1.006,1.006,.6,64,1,true,Math.PI*.8,Math.PI*.4),new THREE.MeshPhysicalMaterial({color:0xffffff,transmission:.7,roughness:.2,transparent:true,opacity:0,side:THREE.DoubleSide}));band.rotation.x=Math.PI/2;band.position.z=-.3;g.add(band);
 
@@ -1723,15 +1721,15 @@ function frame(){const t=(performance.now()-t0)/1000;
   cuff.scale.set(cr,1,cr);
   mod.position.set(0,cr+.16,cuff.position.z+.22);
   {const want=step===3||step===4?.78:step===2?.3:0;cutU.value+=(want-cutU.value)*.08}
-  pad.visible=step===0;if(step===0){const a=t*3.2,px=Math.cos(a)*.18,pz=-.45+Math.sin(a)*.14;pad.position.copy(onSkin(px,pz,.015));pad.rotation.set(0,a*.2,-Math.asin(Math.max(-1,Math.min(1,px))))}
+  pad.visible=step===0;if(step===0){const a=t*3.2;pad.position.set(0,0,-.45+Math.sin(a)*.14);pad.rotation.set(0,0,Math.PI+Math.cos(a)*.18)}
   cool.material.opacity=step===2?.18+.12*Math.sin(t*3):step>2&&step<5?.08:0;
   skinRing.material.color.setHex(step===2?0xb7c8e0:0xd9927a);
   // needle
   const top=Math.sqrt(1)*1.0+.0;let tip=top,showN=step===3;
   if(step===3){const a=cl(t/1.4),b=cl((t-2.2)/1.2);tip=top-ease(a)*(top-.55)+ease(b)*(top-.55)}
-  needle.visible=showN;needle.position.set(0,tip+.15,-.03);
+  needle.visible=showN;needle.position.set(0,tip+.11,-.03);
   // the fragment rides up with the needle, then is carried into the cartridge and stays there
-  {const inCart=new THREE.Vector3(.08,cr+.2,-.8),up=cr+.12;
+  {const inCart=new THREE.Vector3(.04,cr+.1,-.8),up=cr+.12;
    if(step<3||(step===3&&t<1.4)){sampleBead.visible=false}
    else if(step===3&&t<3.4){sampleBead.visible=true;const b=ease(cl((t-2.2)/1.2));sampleBead.position.set(0,.6+b*(up-.6),.012);sampleBead.rotation.set(0,t*.5,0)}
    else if(step===3&&t<4.6){sampleBead.visible=true;const k=ease(cl((t-3.4)/1.2));sampleBead.position.lerpVectors(new THREE.Vector3(0,up,.012),inCart,k);sampleBead.position.y+=Math.sin(k*Math.PI)*.1}
@@ -1739,9 +1737,9 @@ function frame(){const t=(performance.now()-t0)/1000;
   // laser
   const showL=step===4;head.visible=beam.visible=spot.visible=showL;glow.intensity=0;
   if(step>=4){const n=step===4?Math.floor(cl((t-.4)/5)*path.length):path.length;placeDots(n);
-    if(showL&&n<path.length){const p=path[Math.max(0,n)]||path[0];const sp=onSkin(p[0],p[1],.003);const hy=cr+.1;head.position.set(sp.x,hy,sp.z);
+    if(showL&&n<path.length){const p=path[Math.max(0,n)]||path[0];const sp=onSkin(p[0],p[1],.003);const hy=cr+.06;head.position.set(sp.x,hy,sp.z);
       beam.position.set(sp.x,(hy+sp.y)/2,sp.z);beam.scale.y=hy-sp.y;spot.position.copy(sp);glow.position.copy(sp).add(new THREE.Vector3(0,.05,0));glow.intensity=1.5+Math.random();beam.material.opacity=.6+Math.random()*.4}
-    else if(showL){head.position.set(0,cr+.1,SITE_Z);beam.visible=spot.visible=false}}
+    else if(showL){head.position.set(0,cr+.06,SITE_Z);beam.visible=spot.visible=false}}
   else dots.count=0;
   band.material.opacity=step===5?ease(cl((t-1)/1))*.5:0;
   g.rotation.y=Math.sin(performance.now()/4000)*.12;
