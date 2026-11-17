@@ -557,7 +557,7 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
   </section>
 
   <section class="s" id="stations">
-    <div class="shead"><div><h2>Seven stations on four continents.</h2><p class="mute">When you request a kit you choose where your tissue will go. Each station works with a local conservation team that runs the feeding site.</p></div></div>
+    <div class="shead"><div><h2>Nine stations on four continents.</h2><p class="mute">When you request a kit you choose where your tissue will go. Each station works with a local conservation team that runs the feeding site.</p></div></div>
     <div class="stations"><ul class="slist" id="slist"></ul><div><div id="globe" class="globe"><span class="globe-hint">Drag to turn the globe. Dashed lines show where each station's birds travel between seasons. Circles mark birds that stay in one area all year.</span></div><div class="sdetail" id="sdetail"></div></div></div>
   </section>
 
@@ -678,7 +678,9 @@ const STATIONS=[
  {k:'Rhodopes, BG',n:'Eastern Rhodopes',c:'Bulgaria',sp:'Egyptian vultures',season:'Summer breeding, April to September',birds:'a few dozen pairs',since:2025,donors:347,note:'Low mountains on the border with Greece. One of the last strongholds of Egyptian vultures in the Balkans.',route:'Egyptian vultures leave in September and winter in the Sahel and Ethiopia, more than 4,000 km away.'},
  {k:'Chitwan, NP',n:'Chitwan',c:'Nepal',sp:'white-rumped vultures',season:'All year',birds:'a recovering local population',since:2025,donors:529,note:'Lowland grasslands where community-run feeding sites helped vultures recover after the diclofenac collapse.',route:'White-rumped vultures stay in the same area all year and do not migrate.'},
  {k:'Magaliesberg, ZA',n:'Magaliesberg',c:'South Africa',sp:'Cape vultures',season:'All year',birds:'large cliff colonies',since:2026,donors:288,note:'Quartzite ridges west of Johannesburg where Cape vultures nest on steep cliff faces.',route:'Cape vultures stay in southern Africa all year, though they can range hundreds of kilometres to find food.'},
- {k:'Cheorwon, KR',n:'Cheorwon',c:'South Korea',sp:'cinereous vultures',season:'Wintering, November to March',birds:'several hundred wintering birds',since:2024,donors:1410,note:'Farmland near the border where young vultures from Mongolia spend the winter and depend on donated food.',route:'These birds return to breed in Mongolia each spring, about 1,800 km to the northwest.'}];
+ {k:'Cheorwon, KR',n:'Cheorwon',c:'South Korea',sp:'cinereous vultures',season:'Wintering, November to March',birds:'several hundred wintering birds',since:2024,donors:1410,note:'Farmland near the border where young vultures from Mongolia spend the winter and depend on donated food.',route:'These birds return to breed in Mongolia each spring, about 1,800 km to the northwest.'},
+ {k:'Goseong, KR',n:'Goseong',c:'South Korea (Gyeongnam)',sp:'cinereous vultures',season:'Wintering, November to March',birds:'several hundred wintering birds',since:2024,donors:1236,note:'Fields on the southern coast, the far end of the flyway, where a long-running winter feeding programme draws vultures each year.',route:'These birds fly about 2,300 km back to Mongolia to breed in spring.'},
+ {k:'Seosan, KR',n:'Seosan',c:'South Korea',sp:'cinereous vultures',season:'Wintering, November to March',birds:'a smaller wintering group',since:2025,donors:584,note:'Reclaimed farmland by Cheonsu Bay on the west coast, a major stopover for migratory birds, where vultures are fed through the winter.',route:'These birds return north to Mongolia in spring, about 2,000 km away.'}];
 const stn=STATIONS.map(s=>s.k);
 
 /* ---------- view switching ---------- */
@@ -792,7 +794,7 @@ $('#trackf').onsubmit=e=>{e.preventDefault();
   const v=($('#tid').value||'').trim().toUpperCase();
   if(!/^EF-\d{4}-\d{5}$/.test(v)){$('#res').innerHTML='<p class="small">That doesn\'t look like a donor number. It should look like EF-2026-00413, with two dashes. You\'ll find it on the label of your cartridge.</p>';return}
   let h=0;for(const ch of v)h=(h*31+ch.charCodeAt(0))>>>0;
-  const tot=180+h%60,done=20+h%(tot-20),s=STATIONS[h%7],d=new Date(2026,10,1+h%11).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  const tot=180+h%60,done=20+h%(tot-20),s=STATIONS[h%STATIONS.length],d=new Date(2026,10,1+h%11).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
   const pct=(0.5/(tot*0.75*1000)*100).toFixed(4);
   $('#res').innerHTML=`<span class="label">${v}</span><div class="big" id="bn">Batch 0 of ${tot}</div><span class="mute small">served to wild ${s.sp} at ${s.n}, ${s.c}</span>
   <div class="prog2"><i id="pb"></i></div><span class="small">${Math.round(done/tot*100)}% of everything grown from your cells has now been eaten</span>
@@ -1098,7 +1100,7 @@ fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json').then(x=>x.jso
 }).catch(()=>{});
 
 // stations
-const ST=[[45.7,108.7],[39.85,-6.0],[44.2,3.2],[41.5,25.9],[27.5,84.4],[-25.8,27.6],[38.2,127.3]];
+const ST=[[45.7,108.7],[39.85,-6.0],[44.2,3.2],[41.5,25.9],[27.5,84.4],[-25.8,27.6],[38.2,127.3],[34.97,128.32],[36.78,126.45]];
 const dotGeo=new THREE.SphereGeometry(.018,16,16),ringGeo=new THREE.RingGeometry(.03,.036,48);
 const markers=ST.map(([la,lo],i)=>{const p=ll(la,lo,1.004);const m=new THREE.Mesh(dotGeo,new THREE.MeshBasicMaterial({color:0xf0f0ec}));m.position.copy(p);m.userData.i=i;world.add(m);
   const rg=new THREE.Mesh(ringGeo,new THREE.MeshBasicMaterial({color:0xf0f0ec,transparent:true,side:THREE.DoubleSide}));rg.position.copy(p);rg.lookAt(p.clone().multiplyScalar(2));world.add(rg);m.userData.ring=rg;return m});
@@ -1107,7 +1109,7 @@ const markers=ST.map(([la,lo],i)=>{const p=ll(la,lo,1.004);const m=new THREE.Mes
 function arcLine(a,b){const A=ll(...a),B=ll(...b),pts=[];for(let i=0;i<=80;i++){const t=i/80,p=A.clone().lerp(B,t).normalize().multiplyScalar(R*(1+.18*Math.sin(Math.PI*t)));pts.push(p)}
   const geo=new THREE.BufferGeometry().setFromPoints(pts);const l=new THREE.Line(geo,new THREE.LineDashedMaterial({color:0xf0f0ec,dashSize:.03,gapSize:.025,transparent:true,opacity:.8}));l.computeLineDistances();world.add(l);return l}
 // seasonal routes for each station (station index, destination, what it is)
-const ROUTES=[[0,[38.2,127.3]],[6,[45.7,108.7]],[1,[14.5,-14.5]],[2,[39.5,-5.5]],[3,[9.5,39.5]]];
+const ROUTES=[[0,[38.2,127.3]],[6,[45.7,108.7]],[7,[45.7,108.7]],[8,[45.7,108.7]],[1,[14.5,-14.5]],[2,[39.5,-5.5]],[3,[9.5,39.5]]];
 const migs=ROUTES.map(([i,to])=>{const l=arcLine(ST[i],to);l.userData.st=i;return l});
 const homeRange=[4,5].map(i=>{const g=new THREE.Mesh(new THREE.RingGeometry(.06,.068,64),new THREE.MeshBasicMaterial({color:0xf0f0ec,transparent:true,opacity:.3,side:THREE.DoubleSide,depthWrite:false}));const p=ll(...ST[i],1.006);g.position.copy(p);g.lookAt(p.clone().multiplyScalar(2));g.userData.st=i;world.add(g);return g});
 let mig=migs[0];
