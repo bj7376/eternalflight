@@ -558,7 +558,7 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
 
   <section class="s" id="stations">
     <div class="shead"><div><h2>Seven stations on four continents.</h2><p class="mute">When you request a kit you choose where your tissue will go. Each station works with a local conservation team that runs the feeding site.</p></div></div>
-    <div class="stations"><ul class="slist" id="slist"></ul><div><div id="globe" class="globe"><span class="globe-hint">Drag to turn the globe. The dashed line shows how young cinereous vultures fly from Mongolia to Korea each winter.</span></div><div class="sdetail" id="sdetail"></div></div></div>
+    <div class="stations"><ul class="slist" id="slist"></ul><div><div id="globe" class="globe"><span class="globe-hint">Drag to turn the globe. Dashed lines show where each station's birds travel between seasons. Circles mark birds that stay in one area all year.</span></div><div class="sdetail" id="sdetail"></div></div></div>
   </section>
 
   <section class="s" id="donors">
@@ -672,13 +672,13 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const pick=a=>a[Math.floor(Math.random()*a.length)];
 const STATIONS=[
- {k:'Ikh Nart, MN',n:'Ikh Nart',c:'Mongolia',sp:'cinereous vultures',season:'Breeding colony, March to September',birds:'about 120 nesting pairs',since:2024,donors:1184,note:'Steppe and rocky outcrops where young cinereous vultures fledge before many of them fly south to Korea for the winter.'},
- {k:'Monfragüe, ES',n:'Monfragüe',c:'Spain',sp:'cinereous and griffon vultures',season:'All year',birds:'several hundred birds',since:2024,donors:902,note:'River gorges and cork-oak hills in Extremadura with large breeding colonies of both species.'},
- {k:'Grands Causses, FR',n:'Grands Causses',c:'France',sp:'griffon vultures',season:'All year',birds:'several hundred birds',since:2025,donors:611,note:'Limestone plateaus where vultures were reintroduced after disappearing from the region in the last century.'},
- {k:'Rhodopes, BG',n:'Eastern Rhodopes',c:'Bulgaria',sp:'Egyptian vultures',season:'Summer breeding, April to September',birds:'a few dozen pairs',since:2025,donors:347,note:'Low mountains on the border with Greece. One of the last strongholds of Egyptian vultures in the Balkans.'},
- {k:'Chitwan, NP',n:'Chitwan',c:'Nepal',sp:'white-rumped vultures',season:'All year',birds:'a recovering local population',since:2025,donors:529,note:'Lowland grasslands where community-run feeding sites helped vultures recover after the diclofenac collapse.'},
- {k:'Magaliesberg, ZA',n:'Magaliesberg',c:'South Africa',sp:'Cape vultures',season:'All year',birds:'large cliff colonies',since:2026,donors:288,note:'Quartzite ridges west of Johannesburg where Cape vultures nest on steep cliff faces.'},
- {k:'Cheorwon, KR',n:'Cheorwon',c:'South Korea',sp:'cinereous vultures',season:'Wintering, November to March',birds:'several hundred wintering birds',since:2024,donors:1410,note:'Farmland near the border where young vultures from Mongolia spend the winter and depend on donated food.'}];
+ {k:'Ikh Nart, MN',n:'Ikh Nart',c:'Mongolia',sp:'cinereous vultures',season:'Breeding colony, March to September',birds:'about 120 nesting pairs',since:2024,donors:1184,note:'Steppe and rocky outcrops where young cinereous vultures fledge before many of them fly south to Korea for the winter.',route:'Many young birds winter in Korea, about 1,800 km to the southeast.'},
+ {k:'Monfragüe, ES',n:'Monfragüe',c:'Spain',sp:'cinereous and griffon vultures',season:'All year',birds:'several hundred birds',since:2024,donors:902,note:'River gorges and cork-oak hills in Extremadura with large breeding colonies of both species.',route:'Many young griffons cross the Strait of Gibraltar and spend their first winters in the Sahel of West Africa.'},
+ {k:'Grands Causses, FR',n:'Grands Causses',c:'France',sp:'griffon vultures',season:'All year',birds:'several hundred birds',since:2025,donors:611,note:'Limestone plateaus where vultures were reintroduced after disappearing from the region in the last century.',route:'Young griffons often drift south to Spain, and some continue into West Africa.'},
+ {k:'Rhodopes, BG',n:'Eastern Rhodopes',c:'Bulgaria',sp:'Egyptian vultures',season:'Summer breeding, April to September',birds:'a few dozen pairs',since:2025,donors:347,note:'Low mountains on the border with Greece. One of the last strongholds of Egyptian vultures in the Balkans.',route:'Egyptian vultures leave in September and winter in the Sahel and Ethiopia, more than 4,000 km away.'},
+ {k:'Chitwan, NP',n:'Chitwan',c:'Nepal',sp:'white-rumped vultures',season:'All year',birds:'a recovering local population',since:2025,donors:529,note:'Lowland grasslands where community-run feeding sites helped vultures recover after the diclofenac collapse.',route:'White-rumped vultures stay in the same area all year and do not migrate.'},
+ {k:'Magaliesberg, ZA',n:'Magaliesberg',c:'South Africa',sp:'Cape vultures',season:'All year',birds:'large cliff colonies',since:2026,donors:288,note:'Quartzite ridges west of Johannesburg where Cape vultures nest on steep cliff faces.',route:'Cape vultures stay in southern Africa all year, though they can range hundreds of kilometres to find food.'},
+ {k:'Cheorwon, KR',n:'Cheorwon',c:'South Korea',sp:'cinereous vultures',season:'Wintering, November to March',birds:'several hundred wintering birds',since:2024,donors:1410,note:'Farmland near the border where young vultures from Mongolia spend the winter and depend on donated food.',route:'These birds return to breed in Mongolia each spring, about 1,800 km to the northwest.'}];
 const stn=STATIONS.map(s=>s.k);
 
 /* ---------- view switching ---------- */
@@ -736,7 +736,7 @@ $('#slist').innerHTML=STATIONS.map((s,i)=>`<li><button data-i="${i}"><span>${s.n
 $('#stn').innerHTML=STATIONS.map(s=>`<option>${s.n}, ${s.c} (${s.sp})</option>`).join('');
 const sb=$$('#slist button');
 window.showStationInfo=showStationInfo;function showStationInfo(i){if(window.globeFocus)window.globeFocus(i);sb.forEach((b,k)=>b.classList.toggle('on',k===i));const s=STATIONS[i],max=1410;
-  $('#sdetail').innerHTML=`<div class="fade"><span class="label">${s.c}</span><h2 style="margin-top:10px">${s.n}</h2><p class="mute">${s.note}</p>
+  $('#sdetail').innerHTML=`<div class="fade"><span class="label">${s.c}</span><h2 style="margin-top:10px">${s.n}</h2><p class="mute">${s.note}</p><p class="small" style="margin-top:10px">${s.route||''}</p>
   <dl><div><dt>Birds fed here</dt><dd>${s.sp[0].toUpperCase()+s.sp.slice(1)}</dd></div><div><dt>When birds are present</dt><dd>${s.season}</dd></div><div><dt>Local population</dt><dd>${s.birds}</dd></div><div><dt>Part of Eternal Flight since</dt><dd>${s.since}</dd></div></dl>
   <div style="margin-top:24px;display:flex;justify-content:space-between" class="small"><span class="mute">Donors giving to this station</span><span>${s.donors.toLocaleString('en-US')}</span></div><div class="meter"><i id="sm"></i></div>
   <p style="margin-top:24px"><button class="textlink" data-pick="${i}">Choose this station when I request a kit</button></p></div>`;
@@ -1005,13 +1005,17 @@ const markers=ST.map(([la,lo],i)=>{const p=ll(la,lo,1.004);const m=new THREE.Mes
 // migration arc: Ikh Nart (breeding) -> Cheorwon (wintering)
 function arcLine(a,b){const A=ll(...a),B=ll(...b),pts=[];for(let i=0;i<=80;i++){const t=i/80,p=A.clone().lerp(B,t).normalize().multiplyScalar(R*(1+.18*Math.sin(Math.PI*t)));pts.push(p)}
   const geo=new THREE.BufferGeometry().setFromPoints(pts);const l=new THREE.Line(geo,new THREE.LineDashedMaterial({color:0xf0f0ec,dashSize:.03,gapSize:.025,transparent:true,opacity:.8}));l.computeLineDistances();world.add(l);return l}
-const mig=arcLine(ST[0],ST[6]);
+// seasonal routes for each station (station index, destination, what it is)
+const ROUTES=[[0,[38.2,127.3]],[6,[45.7,108.7]],[1,[14.5,-14.5]],[2,[39.5,-5.5]],[3,[9.5,39.5]]];
+const migs=ROUTES.map(([i,to])=>{const l=arcLine(ST[i],to);l.userData.st=i;return l});
+const homeRange=[4,5].map(i=>{const g=new THREE.Mesh(new THREE.RingGeometry(.06,.068,64),new THREE.MeshBasicMaterial({color:0xf0f0ec,transparent:true,opacity:.3,side:THREE.DoubleSide,depthWrite:false}));const p=ll(...ST[i],1.006);g.position.copy(p);g.lookAt(p.clone().multiplyScalar(2));g.userData.st=i;world.add(g);return g});
+let mig=migs[0];
 // a small travelling dot along the arc
 const traveler=new THREE.Mesh(new THREE.SphereGeometry(.012,12,12),new THREE.MeshBasicMaterial({color:0xffffff}));world.add(traveler);
-const migPts=mig.geometry.attributes.position;
+
 
 let sel=6,goalQ=null;
-window.globeFocus=i=>{sel=i;const [la,lo]=ST[i];const v=ll(la,lo);
+window.globeFocus=i=>{sel=i;mig=migs.find(m=>m.userData.st===i)||null;const [la,lo]=ST[i];const v=ll(la,lo);
   const yaw=-Math.atan2(v.x,v.z),pitch=la*Math.PI/180*.85;
   goalQ=new THREE.Quaternion().setFromEuler(new THREE.Euler(pitch,yaw,0,'XYZ'));ctl.reset()};
 const ray=new THREE.Raycaster(),mouse=new THREE.Vector2();let down=null;
@@ -1025,7 +1029,9 @@ const vis=watch(box);let t=0;
 (function loop(){requestAnimationFrame(loop);if(!vis())return;t+=.016;
   if(goalQ){world.quaternion.slerp(goalQ,.06);if(world.quaternion.angleTo(goalQ)<.002)goalQ=null}
   markers.forEach((m,i)=>{const on=i===sel,k=(t*.8+i*.3)%1;m.scale.setScalar(on?1.8:1);const rg=m.userData.ring;rg.scale.setScalar(on?1+k*2.2:1+k*1.2);rg.material.opacity=(on?.9:.35)*(1-k)});
-  mig.material.dashOffset=-t*.15;const n=migPts.count,k=Math.floor((t*18)%n);traveler.position.fromBufferAttribute(migPts,k);
+  migs.forEach(m=>{m.material.dashOffset=-t*.15;m.material.opacity=m===mig?.95:.22});
+  homeRange.forEach(g=>{const on=g.userData.st===sel;g.material.opacity=on?.6+.3*Math.sin(t*2):.18;g.scale.setScalar(on?1+.15*Math.sin(t*2):1)});
+  traveler.visible=!!mig;if(mig){const mp=mig.geometry.attributes.position,n=mp.count,k=Math.floor((t*18)%n);traveler.position.fromBufferAttribute(mp,k)}
   ctl.update();r.render(scene,cam)})();
 setTimeout(()=>window.globeFocus(sel),50);
 })();
