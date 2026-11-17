@@ -66,6 +66,11 @@ section.s:first-child{border-top:0;padding-top:72px}
 .hero{display:grid;grid-template-columns:5fr 6fr;gap:56px;align-items:center;padding:80px 0 40px}
 .hero h1{margin-bottom:26px;max-width:12ch}
 .hero p{color:#c8c8c3;max-width:46ch}
+.hero3d{position:relative;aspect-ratio:3/2;background:radial-gradient(ellipse at 50% 45%,#181818 0%,#000 70%);border:1px solid var(--line);overflow:hidden}
+.h3-cap{position:absolute;left:18px;bottom:16px;right:18px;font-size:12px;color:var(--mute);z-index:2;pointer-events:none;max-width:none}
+.h3-cap span{display:block;font-size:11px;color:var(--dim)}
+.h3-cap b{display:block;font-weight:300;font-size:22px;letter-spacing:-.04em;color:var(--ink);margin:2px 0}
+.h3-cap.in{animation:fade .6s}
 .hero .ph{aspect-ratio:3/2}
 .hero .ph img{animation:settle 2.2s cubic-bezier(.2,.7,.2,1) both}
 @keyframes settle{from{transform:scale(1.06);filter:grayscale(1) brightness(.5)}}
@@ -312,7 +317,7 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
   h2{font-size:24px;margin-bottom:14px}
   .hero{padding:36px 0 10px;gap:28px}
   .hero h1{font-size:34px;margin-bottom:18px}
-  .hero .ph{order:-1}
+  .hero .ph,.hero3d{order:-1}
   .hero-actions{margin-top:24px}
   .cue{margin:18px 0 40px}
   .story{gap:14px;padding:24px 0}
@@ -383,7 +388,7 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
       <p>We take a tiny sample of muscle from your arm and grow it in a lab until there is enough to feed wild vultures. Then we send it to feeding stations on four continents, each one close to a place where vultures breed or spend the winter and can no longer find enough food on their own.</p>
       <div class="hero-actions"><button class="btn" data-open><span>Request a kit</span></button><button class="textlink" data-details>See how it works</button></div>
     </div>
-    <div class="ph"><img src="img/15-hero.jpg" alt="The sampling cuff and cartridge on a rock above a snowy valley, with a vulture flying overhead"></div>
+    <div class="hero3d" id="hero3d" role="img" aria-label="Animation: a small sample is taken from an arm, its cells are grown in a vessel, packed as food, and eaten by a vulture."><p class="h3-cap" aria-hidden="true"></p></div>
   </section>
   <button class="cue" id="cue"><i></i>Scroll to read why vultures need help</button>
 
@@ -1116,6 +1121,133 @@ const vis=watch(holder);(function loop(){requestAnimationFrame(loop);if(stage>0&
 window.cultureMount=(slot,s)=>{slot.appendChild(holder);size();setStage(s)};
 if(window.__pendingCulture){window.cultureMount(...window.__pendingCulture)}
 })();
+/* =============================== HERO STORY =============================== */
+(function(){
+const box=document.getElementById('hero3d');if(!box)return;
+const r=mkRenderer();r.toneMapping=THREE.ACESFilmicToneMapping;r.toneMappingExposure=1.05;box.appendChild(r.domElement);
+const cap=box.querySelector('.h3-cap');
+const scene=new THREE.Scene();scene.fog=new THREE.Fog(0x000000,9,22);
+const cam=new THREE.PerspectiveCamera(30,3/2,.1,60);
+scene.add(new THREE.HemisphereLight(0xffffff,0x111111,.9));
+const key=new THREE.DirectionalLight(0xffffff,2.2);key.position.set(4,6,5);scene.add(key);
+const rim=new THREE.DirectionalLight(0xffffff,1.1);rim.position.set(-5,3,-4);scene.add(rim);
+
+const grey=c=>new THREE.MeshStandardMaterial({color:c,roughness:.75});
+const RED=0xb3242c;
+const redMat=new THREE.MeshPhysicalMaterial({color:RED,roughness:.35,clearcoat:.6,sheen:.6,sheenColor:new THREE.Color(0xff8a80)});
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2,cl=t=>Math.max(0,Math.min(1,t)),seg=(t,a,b)=>cl((t-a)/(b-a));
+
+/* ---- stage 1: arm + cuff + needle (x = -4) ---- */
+const A=new THREE.Group();A.position.set(-4,0,0);scene.add(A);
+const armProf=[[.0,-1.9],[.28,-1.88],[.33,-1.6],[.31,-1.1],[.34,-.6],[.4,-.1],[.45,.4],[.47,.9],[.46,1.3],[.4,1.6],[.25,1.78],[.0,1.82]].map(p=>new THREE.Vector2(p[0],p[1]));
+const arm=new THREE.Mesh(new THREE.LatheGeometry(new THREE.SplineCurve(armProf).getPoints(60),64),new THREE.MeshPhysicalMaterial({color:0x9a9692,roughness:.55,sheen:.5,sheenColor:new THREE.Color(0xffe2d6)}));arm.scale.set(1,1,.88);arm.rotation.z=-Math.PI/2;A.add(arm);
+const cuff=new THREE.Mesh(new THREE.CylinderGeometry(.5,.5,.6,48,1,true),new THREE.MeshStandardMaterial({color:0x3a3a38,roughness:.9,side:THREE.DoubleSide}));cuff.rotation.z=Math.PI/2;A.add(cuff);
+const unit=new THREE.Mesh(new THREE.BoxGeometry(.5,.16,.42),grey(0xd8d8d2));unit.position.y=.55;A.add(unit);
+const needle=new THREE.Mesh(new THREE.CylinderGeometry(.012,.012,.6,8),new THREE.MeshStandardMaterial({color:0xffffff,metalness:1,roughness:.15}));A.add(needle);
+const bead=new THREE.Mesh(new THREE.IcosahedronGeometry(.07,3),redMat);scene.add(bead);
+// tiny mark that appears on the arm
+const mark=new THREE.Mesh(new THREE.PlaneGeometry(.18,.05),new THREE.MeshBasicMaterial({color:0x111111,transparent:true,opacity:0}));mark.position.set(.35,.47,.0);mark.rotation.x=-Math.PI/2;mark.rotation.z=.5;A.add(mark);
+
+/* ---- stage 2: vessel with dividing cells (x = 0) ---- */
+const V=new THREE.Group();scene.add(V);
+const glass=new THREE.Mesh(new THREE.CylinderGeometry(.75,.75,1.8,64,1,true),new THREE.MeshPhysicalMaterial({color:0xffffff,transparent:true,opacity:.1,roughness:.05,side:THREE.DoubleSide,depthWrite:false}));V.add(glass);
+[.9,-.9].forEach(y=>{const e=new THREE.Mesh(new THREE.TorusGeometry(.75,.015,8,64),grey(0xbdbdb8));e.rotation.x=Math.PI/2;e.position.y=y;V.add(e)});
+const N=180,cells=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(.07,2),redMat,N);cells.instanceMatrix.setUsage(THREE.DynamicDrawUsage);cells.frustumCulled=false;V.add(cells);
+const cp=[];for(let i=0;i<N;i++){let v;do{v=new THREE.Vector3(Math.random()*2-1,Math.random()*2-1,Math.random()*2-1)}while(v.length()>1);cp.push(v.multiply(new THREE.Vector3(.55,.7,.55)).add(new THREE.Vector3(0,-.05,0)))}
+const pack=new THREE.Mesh(new THREE.BoxGeometry(.9,.22,.6,6,2,4),redMat);V.add(pack);
+{const p=pack.geometry.attributes.position;for(let i=0;i<p.count;i++)p.setY(i,p.getY(i)+(Math.random()-.5)*.03);pack.geometry.computeVertexNormals()}
+
+/* ---- stage 3: ground + vulture (x = 4.5) ---- */
+const G=new THREE.Group();G.position.set(4.5,-.9,0);scene.add(G);
+const ground=new THREE.Mesh(new THREE.CircleGeometry(2.4,64),new THREE.MeshStandardMaterial({color:0x1c1c1b,roughness:1}));ground.rotation.x=-Math.PI/2;G.add(ground);
+const meal=new THREE.Mesh(pack.geometry,redMat);meal.position.y=.11;G.add(meal);
+
+function makeVulture(){
+  const v=new THREE.Group(),dark=grey(0x2b2a28),ruff=grey(0x4a4844),pale=grey(0x9b9890);
+  const body=new THREE.Mesh(new THREE.SphereGeometry(.32,24,16),dark);body.scale.set(.95,.8,1.7);v.add(body);
+  const neck=new THREE.Mesh(new THREE.CylinderGeometry(.07,.11,.3,12),ruff);neck.position.set(0,.18,.42);neck.rotation.x=.9;v.add(neck);
+  const head=new THREE.Group();head.position.set(0,.3,.58);v.add(head);
+  head.add(new THREE.Mesh(new THREE.SphereGeometry(.1,16,12),pale));
+  const beak=new THREE.Mesh(new THREE.ConeGeometry(.04,.16,10),grey(0x2e2e2e));beak.rotation.x=Math.PI/2;beak.position.z=.12;head.add(beak);
+  const tail=new THREE.Mesh(new THREE.BoxGeometry(.32,.03,.36),dark);tail.position.set(0,-.02,-.62);v.add(tail);
+  const wings=[];
+  const innerS=new THREE.Shape();innerS.moveTo(0,.2);innerS.lineTo(.8,.24);innerS.lineTo(.8,-.26);innerS.quadraticCurveTo(.4,-.32,0,-.22);innerS.lineTo(0,.2);
+  const outerS=new THREE.Shape();outerS.moveTo(0,.24);outerS.lineTo(.42,.2);
+  for(let k=0;k<7;k++){const y=.2-k*.068;const L=.36+Math.sin(k/6*Math.PI)*.12;outerS.lineTo(.42+L,y-.012);outerS.lineTo(.42+L-.04,y-.05);outerS.lineTo(.42,y-.058)}
+  outerS.lineTo(.3,-.26);outerS.lineTo(0,-.26);outerS.lineTo(0,.24);
+  const ex={depth:.025,bevelEnabled:false};
+  const iG=new THREE.ExtrudeGeometry(innerS,ex);iG.rotateX(Math.PI/2);const oG=new THREE.ExtrudeGeometry(outerS,ex);oG.rotateX(Math.PI/2);
+  [-1,1].forEach(s=>{
+    const sh=new THREE.Group();sh.position.set(s*.2,.1,.05);sh.scale.x=s;v.add(sh);
+    sh.add(new THREE.Mesh(iG,dark));
+    const el=new THREE.Group();el.position.x=.78;sh.add(el);
+    el.add(new THREE.Mesh(oG,dark));
+    wings.push({sh,el,s});
+  });
+  // legs (shown when landed)
+  const legs=new THREE.Group();[-.1,.1].forEach(x=>{const l=new THREE.Mesh(new THREE.CylinderGeometry(.025,.025,.32,6),pale);l.position.set(x,-.38,.05);legs.add(l)});v.add(legs);
+  v.userData={wings,head,legs};return v;
+}
+const vult=makeVulture();G.add(vult);
+
+/* ---- timeline ---- */
+const T=16,P=[['0:00','Sample','A rice-sized piece of muscle is taken from your arm.'],['Day 2','Grow','Your cells multiply in their own vessel.'],['Day 70','Serve','They become a meal, delivered cold to a feeding station.'],['That winter','Fly','A vulture eats. Part of you is in its wings.']];
+let phase=-1;
+function setCap(i){if(i===phase||!cap)return;phase=i;cap.innerHTML=`<span>${P[i][0]}</span><b>${P[i][1]}</b>${P[i][2]}`;cap.classList.remove('in');void cap.offsetWidth;cap.classList.add('in')}
+const m4=new THREE.Matrix4(),q=new THREE.Quaternion(),sv=new THREE.Vector3(),pv=new THREE.Vector3();
+const camPath=t=>{ // x position of camera target
+  if(t<3.6)return -4;if(t<5)return -4+ease(seg(t,3.6,5))*4;if(t<9.3)return 0;if(t<10.5)return ease(seg(t,9.3,10.5))*4.5;return 4.5};
+const tgt=new THREE.Vector3();
+function frame(now){
+  const t=(now/1000)%T,tt=now/1000;
+  // camera
+  const cx=camPath(t);tgt.set(cx,t>10?-.3:0,0);
+  cam.position.set(cx+Math.sin(tt*.15)*.6,1.5,6.2);cam.lookAt(tgt);
+
+  /* stage 1 */
+  setCap(t<4.4?0:t<9.4?1:t<11.6?2:3);
+  const down=ease(seg(t,.6,1.4)),up=ease(seg(t,1.9,2.7));
+  const tipY=.9-.55*down+.55*up;needle.position.set(.35,tipY+.3,0);needle.visible=t<3;
+  mark.material.opacity=ease(seg(t,2.6,3.2))*(t<15.5?1:1-seg(t,15.5,16));
+  // bead follows needle, then flies to vessel
+  if(t<1.9){bead.visible=false}
+  else if(t<3.2){bead.visible=true;bead.position.set(-4+.35,tipY-.02,0);bead.scale.setScalar(1)}
+  else if(t<4.6){bead.visible=true;const k=ease(seg(t,3.2,4.6));bead.position.set(-3.65+3.65*k,.6+Math.sin(k*Math.PI)*.9-.65*k,0)}
+  else bead.visible=false;
+
+  /* stage 2: cells divide from 1 to N, then fuse into a pack */
+  const grow=seg(t,4.6,8.2),n=t<4.6?0:Math.min(N,Math.max(1,Math.floor(Math.pow(2,grow*7.5))));
+  const fuse=ease(seg(t,8.0,9.2));
+  for(let i=0;i<N;i++){
+    const on=i<n&&t<9.4;let s=on?(1-fuse*.6):0;
+    pv.copy(cp[i]);pv.y+=Math.sin(tt*1.5+i)*.02;
+    pv.lerp(new THREE.Vector3((cp[i].x)*.8,-.75,cp[i].z*.55),fuse);
+    if(i===0&&n===1){pv.set(0,-.05,0)}
+    sv.setScalar(s*(1+.08*Math.sin(tt*2+i)));m4.compose(pv,q.identity(),sv);cells.setMatrixAt(i,m4)}
+  cells.instanceMatrix.needsUpdate=true;
+  pack.visible=t>9&&t<10.5;{const k=ease(seg(t,9.4,10.5));pack.position.set(4.5*k,-.78+Math.sin(k*Math.PI)*1.2-.01*k,0);pack.rotation.y=k*1.5}pack.scale.setScalar(t>9?ease(seg(t,9,9.4)):0);
+  glass.material.opacity=.1*(1-seg(t,9.3,10));
+  // pack travels to the ground
+  meal.visible=t>=10.5;meal.rotation.y=1.5;
+  const eaten=seg(t,12.6,14.6);meal.scale.set(1-eaten*.85,1-eaten*.5,1-eaten*.85);
+
+  /* stage 3: vulture glides in, lands, eats, leaves */
+  const W=vult.userData.wings,H=vult.userData.head;let flap=0,spread=1,land=0;
+  if(t<10.5){vult.visible=false}
+  else{vult.visible=true;
+    if(t<12.2){const k=ease(seg(t,10.5,12.2));vult.position.set(-2.8+2.2*k,3.2-2.82*k,-.6+.6*k);vult.rotation.set(-.15*(1-k),Math.PI*.5,0);spread=1;flap=Math.sin(tt*5)*.12*(1-k)+(k>.8?Math.sin(tt*14)*.5*(k-.8)*5:0);land=k>.85?1:0}
+    else if(t<14.6){vult.position.set(-.6,.38,0);vult.rotation.set(0,Math.PI*.5+.2,0);spread=.15;land=1;H.rotation.x=.5+Math.max(0,Math.sin(tt*5))*.6;H.position.y=.3-Math.max(0,Math.sin(tt*5))*.12}
+    else{const k=ease(seg(t,14.6,16));vult.position.set(-.6+2.6*k,.38+3*k,0);vult.rotation.set(-.3*k,Math.PI*.5,0);spread=1;flap=Math.sin(tt*9)*.55;land=k<.1?1:0;H.rotation.x=0;H.position.y=.3}
+  }
+  W.forEach(w=>{const f=1-spread;w.sh.rotation.set(0,w.s*1.45*f,flap*w.s-.15*f*w.s);w.el.rotation.set(0,w.s*1.5*f,-flap*.6*w.s)});
+  vult.userData.legs.visible=!!land;
+  r.render(scene,cam);
+}
+function size(){const w=box.clientWidth,h=box.clientHeight;if(!w)return;r.setSize(w,h,false);cam.aspect=w/h;cam.fov=w/h<1.1?42:30;cam.updateProjectionMatrix()}
+new ResizeObserver(size).observe(box);size();
+const vis=watch(box);(function loop(now){requestAnimationFrame(loop);if(vis())frame(now||0)})();
+})();
+
 /* =============================== CUFF CUTAWAY =============================== */
 (function(){
 const box=document.getElementById('cuff3d');if(!box)return;
