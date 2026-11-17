@@ -71,6 +71,13 @@ section.s:first-child{border-top:0;padding-top:72px}
 .hero p{color:#c8c8c3;max-width:46ch}
 .feed3d{position:relative;aspect-ratio:16/8;margin-top:30px;background:radial-gradient(ellipse at 50% 40%,#1a1a1a 0%,#000 75%);border:1px solid var(--line);overflow:hidden}
 .feed3d canvas{transition:opacity .2s}
+.feedbar{margin-top:14px}
+.fbtrack{height:2px;background:var(--line);position:relative}
+.fbtrack i{position:absolute;left:0;top:0;bottom:0;background:var(--ink);width:0}
+.feedbar ol{list-style:none;display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin-top:10px;font-size:11px;color:var(--dim)}
+.feedbar li{transition:color .3s;border-left:1px solid var(--line);padding-left:6px}
+.feedbar li.on{color:var(--ink);border-color:var(--ink)}
+@media(max-width:700px){.feedbar ol{grid-template-columns:repeat(4,1fr)}}
 @media(max-width:700px){.feed3d{aspect-ratio:4/3}}
 .feed3d::after{content:"";position:absolute;left:0;right:0;bottom:0;height:45%;background:linear-gradient(transparent,rgba(0,0,0,.75));pointer-events:none;z-index:1}
 .hero3d{position:relative;aspect-ratio:3/2;background:radial-gradient(ellipse at 50% 45%,#181818 0%,#000 70%);border:1px solid var(--line);overflow:hidden}
@@ -211,7 +218,7 @@ input[type=range]:focus{background:transparent}
 .globe-hint{position:absolute;left:14px;bottom:12px;right:14px;font-size:11px;color:var(--dim);pointer-events:none;z-index:2}
 .gfxslot{aspect-ratio:4/3}
 .gfx{position:relative;width:100%;height:100%;border:1px solid var(--line);background:radial-gradient(ellipse at 50% 45%,#2a0c0c 0%,#070202 72%)}
-.gfx-cap{position:absolute;left:14px;bottom:12px;font-size:11px;color:var(--mute);pointer-events:none}
+.gfx-cap{position:absolute;left:14px;bottom:12px;right:14px;font-size:11.5px;line-height:1.5;color:#c8c8c3;pointer-events:none;max-width:60ch;text-shadow:0 1px 6px #000}
 .sdetail dl{display:grid;grid-template-columns:1fr 1fr;gap:18px 28px;margin-top:22px;border-top:1px solid var(--line);padding-top:20px}
 .sdetail dt{font-size:11px;color:var(--mute)}
 .sdetail dd{font-size:15px}
@@ -542,8 +549,10 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
     <div class="autoplay"><span class="label" id="playstate">Playing through the stages</span><button class="textlink" id="playbtn">Pause</button></div>
     <div class="donors-omni" style="margin-top:90px">
       <h2>Every pack arrives cold, on feeding day.</h2>
-      <p class="mute">From the lab, your tissue travels to the feeding station in a refrigerated truck. On feeding days the packs are wheeled out and laid on the snow, a little apart from each other, so that more birds can eat at once.</p>
-      <div class="feed3d" id="feed3d" role="img" aria-label="Animation: a refrigerated truck backs up to a snowy field, a cart carries the packs out and lays them on the snow, and cinereous vultures land to eat."><p class="h3-cap" aria-hidden="true"></p></div>
+      <p class="mute">The vacuum-sealed packs grown from your cells leave the lab in a refrigerated truck that holds them between 0 and 4 °C all the way to the feeding station. On a feeding day, a station worker wheels the packs onto the field on a cart and lays them on the snow several metres apart, so that young birds can eat even when older ones guard a spot. The truck then drives off. Vultures are wary of people, so they only come down once the field is empty and quiet.</p>
+      <div class="feed3d" id="feed3d" role="img" aria-label="Animation: a refrigerated truck backs up to a snowy field, a worker wheels the packs out and lays them on the snow, the truck leaves, and cinereous vultures land to eat."><p class="h3-cap" aria-hidden="true"></p></div>
+      <div class="feedbar" id="feedbar" aria-hidden="true"><div class="fbtrack"><i id="fbfill"></i></div><ol>
+        <li data-a="0" data-b="4.2">Truck arrives</li><li data-a="4.2" data-b="5.6">Doors open</li><li data-a="5.6" data-b="8.4">Packs wheeled out</li><li data-a="8.4" data-b="11.5">Laid on the snow</li><li data-a="11.5" data-b="15.5">Truck leaves</li><li data-a="11.2" data-b="14.5">Vultures land</li><li data-a="14.5" data-b="19">Feeding</li><li data-a="19" data-b="21">Lift off</li></ol></div>
     </div>
   </section>
 
@@ -1103,19 +1112,26 @@ const capG=new THREE.Group();scene.add(capG);
  const vCap=new THREE.Mesh(new THREE.CylinderGeometry(.2,.2,.22,24),white);vCap.rotation.z=Math.PI/2;vCap.position.x=.5;capG.add(vCap);
  const smp=new THREE.Mesh(blob(new THREE.IcosahedronGeometry(.07,3),.9,30,2),tissueM);smp.scale.set(1.6,.8,1);smp.position.x=-.15;capG.add(smp);
  for(let k=0;k<3;k++){const ring=new THREE.Mesh(new THREE.TorusGeometry(.92,.01,6,64),new THREE.MeshBasicMaterial({color:0xbfe0ff,transparent:true,opacity:.35}));ring.rotation.y=Math.PI/2;ring.position.x=-.9+k*.9;capG.add(ring)}}
+const thermo=textPlane(1.8,.62,['4.0 °C','logged 08:35'],'#bfe0ff');thermo.position.set(0,1.45,.2);scene.add(thermo);thermo.visible=false;
 capG.visible=false;
 // stage 5: muscle cut into packs, sealed, tested on a conveyor
 const formG=new THREE.Group();scene.add(formG);
 const belt=new THREE.Mesh(new THREE.BoxGeometry(7,.12,1.2),new THREE.MeshStandardMaterial({color:0x2a2a2a,roughness:.8}));belt.position.y=-.75;formG.add(belt);
 const rollers=[];for(let k=0;k<14;k++){const rr=new THREE.Mesh(new THREE.CylinderGeometry(.07,.07,1.25,12),new THREE.MeshStandardMaterial({color:0x8a8a86,metalness:.8,roughness:.3}));rr.rotation.x=Math.PI/2;rr.position.set(-3.25+k*.5,-.86,0);formG.add(rr);rollers.push(rr)}
+function labelTex(k){const c=document.createElement('canvas');c.width=256;c.height=136;const g=c.getContext('2d');g.fillStyle='#f2f0ea';g.fillRect(0,0,256,136);g.fillStyle='#111';
+  g.font='600 22px IBM Plex Mono, monospace';g.fillText('EF-2026-00413',14,34);g.font='18px IBM Plex Mono, monospace';g.fillText('Batch '+(86+k)+' of 214',14,64);g.fillText('750 g  0-4 C',14,92);
+  for(let i=0;i<40;i++){g.fillRect(14+i*5.6,104,i%3?2:3.5,22)}const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return t}
+function textPlane(w,hh,lines,col='#7dffa8'){const c=document.createElement('canvas');c.width=512;c.height=Math.round(512*hh/w);const g=c.getContext('2d');g.fillStyle='rgba(0,0,0,.6)';g.fillRect(0,0,c.width,c.height);g.fillStyle=col;g.font='34px IBM Plex Mono, monospace';
+  lines.forEach((l,i)=>g.fillText(l,22,50+i*46));const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return new THREE.Mesh(new THREE.PlaneGeometry(w,hh),new THREE.MeshBasicMaterial({map:t,transparent:true,depthWrite:false}))}
 const packs5=[];for(let k=0;k<4;k++){const g=new THREE.Group();
   const meat=new THREE.Mesh(blob(new THREE.BoxGeometry(.9,.22,.6,12,4,8),.06,3,k),tissueM);g.add(meat);
   const film=new THREE.Mesh(new THREE.BoxGeometry(1.02,.3,.72),new THREE.MeshPhysicalMaterial({color:0xffffff,transparent:true,opacity:.18,roughness:.1,depthWrite:false}));g.add(film);
-  const label=new THREE.Mesh(new THREE.PlaneGeometry(.34,.18),new THREE.MeshBasicMaterial({color:0xf2f0ea}));label.rotation.x=-Math.PI/2;label.position.set(.18,.152,.1);g.add(label);
+  const label=new THREE.Mesh(new THREE.PlaneGeometry(.34,.18),new THREE.MeshBasicMaterial({map:labelTex(k)}));label.rotation.x=-Math.PI/2;label.position.set(.18,.152,.1);g.add(label);
   g.position.y=-.55;formG.add(g);packs5.push(g)}
 const scanFrame=new THREE.Mesh(new THREE.TorusGeometry(.95,.04,10,40,Math.PI),new THREE.MeshStandardMaterial({color:0xc4c4bf,metalness:.9,roughness:.3}));scanFrame.rotation.y=Math.PI/2;scanFrame.position.y=-.7;scanFrame.scale.set(1,1.1,1);formG.add(scanFrame);
 const scanBeam=new THREE.Mesh(new THREE.PlaneGeometry(.02,1.6),new THREE.MeshBasicMaterial({color:0x7dffa8,transparent:true,opacity:.7,side:THREE.DoubleSide}));scanBeam.rotation.y=Math.PI/2;scanBeam.rotation.x=Math.PI/2;scanBeam.position.y=-.2;formG.add(scanBeam);
 const scanLine=new THREE.Mesh(new THREE.BoxGeometry(.02,1.2,1.2),new THREE.MeshBasicMaterial({color:0x7dffa8,transparent:true,opacity:.18,depthWrite:false}));scanLine.position.y=-.2;formG.add(scanLine);
+const readout=textPlane(2.6,.7,['NSAID residue: not detected','Pack weight: 750 g']);readout.position.set(0,.75,0);formG.add(readout);
 formG.visible=false;
 // stage 6: packs on the snow and a vulture feeding
 const feedG=new THREE.Group();scene.add(feedG);
@@ -1124,9 +1140,15 @@ const packs6=[[.4,.5],[-.8,-.2],[1.3,-.6]].map(([x,z],k)=>{const p=new THREE.Mes
 let v6=null;feedG.visible=false;
 const easeC=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2,clC=t=>Math.max(0,Math.min(1,t)),segC=(t,a,b)=>clC((t-a)/(b-a));
 let stage=-1,t0=0,born=0;
-const TXT=['Your sample, sealed and kept at 4 °C on its way to the lab','Satellite cells being separated from your sample','Each cell divides again and again','Your cells growing in their own tank','Cells joining into muscle fibres','Packed, sealed and tested for drug residues','Laid out on the snow on feeding day'];
+const TXT=['Your sealed sample cartridge inside its return capsule, held at 4 °C. A logger records the temperature every five minutes.',
+ 'Isolation. The tissue is gently broken up and the satellite cells, the muscle stem cells, are separated out and screened for bacteria, mycoplasma and viruses.',
+ 'Expansion. The satellite cells divide about thirty times in a serum-free medium. A cell line can only divide so often, so one donor yields roughly 160 kg.',
+ 'Scale-up. Your cell line moves into a stirred bioreactor used only for your cells. The impeller keeps them suspended and evenly fed.',
+ 'Differentiation. The cells line up and fuse into long muscle fibres on an edible, plant-based scaffold.',
+ 'Formulation. Fat and calcium are added, the tissue is vacuum-packed in 750 g batches labelled with your donor number, and every pack is scanned for anti-inflammatory drug residues.',
+ 'Feeding. The packs are laid on the snow with the station\'s other food. Each batch that is eaten is logged and sent to you.'];
 function setStage(s){stage=s;t0=performance.now();cap.textContent=TXT[s]||'';
-  tank.visible=s===3;lump.visible=s===1;fibres.visible=s===4;fibreMat.opacity=0;capG.visible=s===0;formG.visible=s===5;feedG.visible=s===6;
+  tank.visible=s===3;lump.visible=s===1;fibres.visible=s===4;fibreMat.opacity=0;capG.visible=thermo.visible=s===0;formG.visible=s===5;feedG.visible=s===6;
   if(s===6&&!v6&&window.efShared){v6=window.efShared.makeVulture();v6.scale.multiplyScalar(.9);feedG.add(v6)}
   for(let i=0;i<N;i++){tscl[i]=0;stretch[i]=1}
   if(s===1){for(let i=0;i<16;i++){cur[i].copy(lump.position).add(inBall(.5));tgt[i].set(rnd(.4,2.6),rnd(-1.3,1.3),rnd(-.8,.8));tscl[i]=1.15;scl[i]=.1}born=16}
@@ -1490,12 +1512,14 @@ function wings(v,flap,spread){v.userData.wings.forEach(w=>{const f=1-spread;w.sh
 const vPlan=[{t0:11.2,from:[-6,7,-8],land:[1.5,1.7],face:-.4},{t0:12.0,from:[10,8,-6],land:[3.9,.5],face:2.6},{t0:12.9,from:[3,9,-11],land:[2.4,-1.1],face:1.4}];
 
 /* ---- timeline ---- */
-const T=21,CAP=[[0,'Delivery','Packs travel to the station in a refrigerated truck.'],[5,'Feeding day','They are wheeled out and laid on the snow, a little apart.'],[11,'Arrival','The vultures come down to eat.']];
+const T=21,CAP=[[0,'Delivery','A refrigerated truck backs up to the edge of the field, holding the packs at 0–4 °C.'],[5.6,'Feeding day','A station worker wheels four 750 g packs out on a cart and lays them on the snow, several metres apart.'],[11.5,'The field empties','The worker loads the cart back in and the truck drives off.'],[13,'Feeding','Once the field is quiet, cinereous vultures land and feed with their wings spread over the food.']];
 let lastCap=-1;function setCap(t){let i=0;CAP.forEach((c,k)=>{if(t>=c[0])i=k});if(i===lastCap||!cap)return;lastCap=i;cap.innerHTML=`<b>${CAP[i][1]}</b>${CAP[i][2]}`;cap.classList.remove('in');void cap.offsetWidth;cap.classList.add('in')}
+const fbFill=document.getElementById('fbfill'),fbItems=[...document.querySelectorAll('#feedbar li')];
 const M=new THREE.Matrix4(),Q=new THREE.Quaternion(),S=new THREE.Vector3(),P=new THREE.Vector3();
 const truckStop=-3.2;
 function frame(now){
   const t=(now/1000)%T,tt=now/1000;setCap(t);
+  if(fbFill){fbFill.style.width=(t/T*100)+'%';fbItems.forEach(li=>li.classList.toggle('on',t>=+li.dataset.a&&t<+li.dataset.b))}
   // camera
   cam.position.set(-.6+Math.sin(tt*.07)*.6,4.6,12.5);cam.lookAt(-.6,.5,.3);
   // truck drives in and parks
