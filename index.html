@@ -1184,11 +1184,23 @@ const lSpot=new THREE.Mesh(new THREE.SphereGeometry(.018,10,8),new THREE.MeshBas
 const lGlow=new THREE.PointLight(0xff4136,0,.8);A.add(lGlow);
 const lHead=new THREE.Mesh(new THREE.CylinderGeometry(.02,.03,.05,16),new THREE.MeshStandardMaterial({color:0x2a2a2a,metalness:.6,roughness:.3}));A.add(lHead);
 
+/* ---- specimen vial that carries the sample ---- */
+const vial=new THREE.Group();scene.add(vial);
+{const tube=new THREE.Mesh(new THREE.CylinderGeometry(.06,.06,.22,24,1,true),new THREE.MeshPhysicalMaterial({color:0xffffff,transparent:true,opacity:.28,roughness:.05,side:THREE.DoubleSide,depthWrite:false}));vial.add(tube);
+ const bottom=new THREE.Mesh(new THREE.SphereGeometry(.06,20,10,0,Math.PI*2,Math.PI/2,Math.PI/2),tube.material);bottom.position.y=-.11;vial.add(bottom);
+ const cap=new THREE.Mesh(new THREE.CylinderGeometry(.068,.068,.07,24),new THREE.MeshStandardMaterial({color:0xeeeeea,roughness:.5}));cap.position.y=.145;vial.add(cap);
+ const label=new THREE.Mesh(new THREE.CylinderGeometry(.0605,.0605,.08,24,1,true),new THREE.MeshStandardMaterial({color:0xdedcd6,roughness:.8,side:THREE.DoubleSide}));label.position.y=.02;vial.add(label);
+ vial.userData.cap=cap}
+vial.visible=false;
+
 /* ---- stage 2: vessel with dividing cells (x = 0) ---- */
 const V=new THREE.Group();scene.add(V);
 const glass=new THREE.Mesh(new THREE.CylinderGeometry(.75,.75,1.8,64,1,true),new THREE.MeshPhysicalMaterial({color:0xffffff,transparent:true,opacity:.1,roughness:.05,side:THREE.DoubleSide,depthWrite:false}));V.add(glass);
 const steel=new THREE.MeshStandardMaterial({color:0xc4c4bf,metalness:.9,roughness:.3});
-const lid=new THREE.Mesh(new THREE.CylinderGeometry(.78,.78,.08,64),steel);lid.position.y=.94;V.add(lid);
+const lid=new THREE.Group();lid.position.y=.94;V.add(lid);
+{const top=new THREE.Mesh(new THREE.RingGeometry(.16,.78,64),new THREE.MeshStandardMaterial({color:0xc4c4bf,metalness:.9,roughness:.3,side:THREE.DoubleSide}));top.rotation.x=-Math.PI/2;top.position.y=.04;lid.add(top);
+ const band=new THREE.Mesh(new THREE.CylinderGeometry(.78,.78,.08,64,1,true),steel);lid.add(band);
+ const neck=new THREE.Mesh(new THREE.CylinderGeometry(.16,.16,.1,32,1,true),steel);neck.position.y=.09;lid.add(neck)}
 const base=new THREE.Mesh(new THREE.CylinderGeometry(.8,.82,.12,64),steel);base.position.y=-.96;V.add(base);
 [[-.35,.2],[.3,-.25],[0,.42]].forEach(([x,z])=>{const p=new THREE.Mesh(new THREE.CylinderGeometry(.035,.035,.22,12),steel);p.position.set(x,1.08,z);V.add(p)});
 // culture medium
@@ -1208,7 +1220,7 @@ const nuc=new THREE.InstancedMesh(hBlob(new THREE.IcosahedronGeometry(.05,3),.25
 const cp=[],par=[],born=[],rot=[],asp=[];
 for(let i=0;i<N;i++){let v;do{v=new THREE.Vector3(Math.random()*2-1,Math.random()*2-1,Math.random()*2-1)}while(v.length()>1);
   cp.push(v.multiply(new THREE.Vector3(.5,.62,.5)).add(new THREE.Vector3(0,-.2,0)));par.push(i?Math.floor((i-1)/2):-1);
-  born.push(i?4.9+Math.log2(i+1)*.55+Math.random()*.25:4.6);rot.push(new THREE.Euler(Math.random()*6,Math.random()*6,Math.random()*6));asp.push(new THREE.Vector3(1+Math.random()*.6,.7+Math.random()*.3,.8+Math.random()*.4))}
+  born.push(i?5.4+Math.log2(i+1)*.48+Math.random()*.2:5.1);rot.push(new THREE.Euler(Math.random()*6,Math.random()*6,Math.random()*6));asp.push(new THREE.Vector3(1+Math.random()*.6,.7+Math.random()*.3,.8+Math.random()*.4))}
 cp[0].set(0,-.2,0);
 // muscle tissue block
 const packGeo=hBlob(new THREE.BoxGeometry(.9,.24,.6,24,6,16),.05,3.2,5);
@@ -1298,9 +1310,16 @@ function frame(now){
   if(lon){const b=strokeEnd(Math.floor(tp*fStrokes.length));const lx=(b[0]/512-.5)*.46,lz=(b[1]/256-.5)*.23,top=.5;
     laser.position.set(lx,(top+.418)/2,lz);laser.scale.y=top-.418;lSpot.position.set(lx,.421,lz);lGlow.position.set(lx,.46,lz);lHead.position.set(lx,top+.02,lz);laser.material.opacity=.6+Math.random()*.4}}
   // bead follows needle, then flies to vessel
+  // the sample is sealed in a vial as the cuff comes off, carried to the vessel, and tipped in
+  const vIn=ease(seg(tr,5.0,5.35)),vp=new THREE.Vector3();
+  if(t<3.2)vp.set(-4,.85,0);else if(t<4.6){const k=ease(seg(t,3.2,4.6));vp.set(-4+4*k,.85+Math.sin(k*Math.PI)*.3+.6*k,0)}else vp.set(0,1.45,0);
+  vial.visible=tr>5.0&&t<5.3;vial.position.copy(vp);
+  vial.scale.setScalar(t<4.9?vIn:1-ease(seg(t,5.0,5.3)));
+  vial.rotation.z=t>4.6?ease(seg(t,4.6,4.85))*2.7:0;vial.userData.cap.visible=t<4.6;
   if(t<1.9){bead.visible=false}
-  else if(t<3.2){bead.visible=true;bead.position.set(-4,tipY+.02,.06);bead.scale.setScalar(.22)}
-  else if(t<4.6){bead.visible=true;const k=ease(seg(t,3.2,4.6));bead.scale.setScalar(.22+.18*k);bead.position.set(-4+4*k,.6+Math.sin(k*Math.PI)*.9-.65*k,0)}
+  else if(tr<5.0){bead.visible=true;bead.position.set(-4,tipY+.02,.06);bead.scale.setScalar(.22)}
+  else if(t<4.75){bead.visible=true;bead.scale.setScalar(.3);bead.position.copy(vp).add(new THREE.Vector3(0,-.06,0))}
+  else if(t<5.1){bead.visible=true;const k=seg(t,4.75,5.1);bead.scale.setScalar(.22+.15*k);bead.position.set(0,1.38-1.58*k*k,0)}
   else bead.visible=false;
 
   /* stage 2: cells bud off parents, then fuse into tissue */
