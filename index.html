@@ -532,7 +532,7 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
           <li data-s="Numb&#10;03:00 remaining&#10;You may feel a cool sensation."><i>3</i><div><b>Numb</b><span>A pad on the inside of the cuff numbs your skin. This takes about three minutes.</span></div></li>
           <li data-s="Sample&#10;Collecting...&#10;Sample collected. Thank you for your flight."><i>4</i><div><b>Sample</b><span>A small needle you never see takes about half a gram of muscle and seals it inside the cartridge.</span></div></li>
           <li data-s="Mark&#10;Laser tracing your feather...&#10;Done."><i>5</i><div><b>Mark</b><span>A fine laser inside the cuff traces your design into the skin, directly over the spot where the sample was taken, so the mark covers the cut.</span></div></li>
-          <li data-s="Aftercare&#10;Keep the bandage on for 24 hours.&#10;You can now remove the cartridge."><i>6</i><div><b>Aftercare</b><span>Keep the waterproof bandage on for a day. After that, look after the mark the way you would look after any new tattoo.</span></div></li>
+          <li data-s="Aftercare&#10;Cuff released.&#10;Plaster on. Keep it on for a day."><i>6</i><div><b>Aftercare</b><span>The cuff loosens and comes off, and a small round plaster goes over the spot, just like after an injection. Keep it on for a day, then look after the mark the way you would look after any new tattoo.</span></div></li>
         </ol>
       </div>
       <div>
@@ -1683,7 +1683,12 @@ const MAXD=260,dots=new THREE.InstancedMesh(new THREE.CircleGeometry(.016,8),new
 // wipe pad, numbing glow, bandage
 const padG=new THREE.CylinderGeometry(R+.01,R+.01,.22,24,1,false,-.15,.3);padG.rotateX(Math.PI/2);const pad=new THREE.Mesh(padG,new THREE.MeshStandardMaterial({color:0xf6f6f2,roughness:1,side:THREE.DoubleSide}));g.add(pad);
 const cool=new THREE.Mesh(new THREE.CylinderGeometry(1.004,1.004,.9,64,1,true,Math.PI*.65,Math.PI*.7),new THREE.MeshBasicMaterial({color:0x8fc8ff,transparent:true,opacity:0,side:THREE.DoubleSide,depthWrite:false}));cool.rotation.x=Math.PI/2;cool.position.z=-.5;g.add(cool);
-const band=new THREE.Mesh(new THREE.CylinderGeometry(1.006,1.006,.6,64,1,true,Math.PI*.8,Math.PI*.4),new THREE.MeshPhysicalMaterial({color:0xffffff,transmission:.7,roughness:.2,transparent:true,opacity:0,side:THREE.DoubleSide}));band.rotation.x=Math.PI/2;band.position.z=-.3;g.add(band);
+const band=new THREE.Group();g.add(band);
+{const pl=new THREE.CylinderGeometry(R+.008,R+.008,.5,40,1,false,-.2,.4);pl.rotateX(Math.PI/2);
+ const tape=new THREE.Mesh(pl,new THREE.MeshStandardMaterial({color:0xefd9c2,roughness:.8,side:THREE.DoubleSide}));band.add(tape);
+ const pd=new THREE.CylinderGeometry(R+.012,R+.012,.22,24,1,false,-.11,.22);pd.rotateX(Math.PI/2);
+ const pad=new THREE.Mesh(pd,new THREE.MeshStandardMaterial({color:0xf4efe8,roughness:1,side:THREE.DoubleSide}));band.add(pad)}
+band.rotation.z=Math.PI;band.visible=false;
 
 // tattoo path on the skin top (a small feather), in (x,z) around the sample site
 const SITE_Z=-.3,path=[];
@@ -1704,11 +1709,11 @@ function deform(tight){if(Math.abs(tight-lastTight)<.002)return;lastTight=tight;
   p.needsUpdate=true;body.geometry.computeVertexNormals();
   rings.forEach(({m,o})=>{const q=m.geometry.attributes.position;for(let i=0;i<q.count;i++){const x=o[i*3],y=o[i*3+1],r=Math.hypot(x,y);if(r<1e-4)continue;const d=press(x/r*R,y/r*R,0,tight)*(r/R),k=(r-d)/r;q.setXY(i,x*k,y*k)}q.needsUpdate=true})}
 const worn=[cuff,mod];
-let step=0,t0=performance.now();
+let step=0,t0=performance.now(),wornOn=0;
 const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2,cl=t=>Math.max(0,Math.min(1,t));
 const m4=new THREE.Matrix4(),q=new THREE.Quaternion(),s1=new THREE.Vector3(1,1,1);
 function placeDots(n){dots.count=Math.min(n,path.length);for(let i=0;i<dots.count;i++){const p=onSkin(path[i][0],path[i][1],.004);const nrm=new THREE.Vector3(p.x,p.y,0).normalize();q.setFromUnitVectors(new THREE.Vector3(0,0,1),nrm);m4.compose(p,q,s1);dots.setMatrixAt(i,m4)}dots.instanceMatrix.needsUpdate=true}
-const SC=[['---','not worn yet'],['FIT','tightening'],['NUMB','03:00'],['SAMPLE','collecting'],['MARK','laser: feather'],['DONE','remove cartridge']];
+const SC=[['---','not worn yet'],['FIT','tightening'],['NUMB','03:00'],['SAMPLE','collecting'],['MARK','laser: feather'],['DONE','cuff off, plaster on']];
 window.cuffAnim=k=>{step=k;t0=performance.now();scDraw(...SC[k])};scDraw(...SC[0]);
 function frame(){const t=(performance.now()-t0)/1000;
   // defaults
@@ -1716,7 +1721,7 @@ function frame(){const t=(performance.now()-t0)/1000;
   if(step===1)cr=1.22-ease(cl(t/1.6))*.2;
   if(step===5)cr=1.02+ease(cl(t/1.2))*.1;
   // Prepare: the cuff is not on the arm yet; Fit: it slides on and tightens
-  {const on=step===0?0:step===1?ease(cl(t/.8)):1;worn.forEach(o=>o.visible=on>0);cuff.position.z=-.72-(1-on)*2.2;seamsMove(cuff.position.z);
+  {const on=step===0?0:step===1?ease(cl(t/.8)):step===5?1-ease(cl((t-1.0)/.9)):1;wornOn=on;worn.forEach(o=>o.visible=on>0);cuff.position.z=-.72-(1-on)*2.2;seamsMove(cuff.position.z);
    const tight=step===0?0:step===5?Math.max(0,1-ease(cl(t/1.2))):(step===1?ease(cl((t-.6)/1.4)):1);deform(tight)}
   cuff.scale.set(cr,1,cr);
   mod.position.set(0,cr+.16,cuff.position.z+.22);
@@ -1749,7 +1754,8 @@ function frame(){const t=(performance.now()-t0)/1000;
     else if(showL){head.position.set(0,cr+.06,SITE_Z);beam.visible=spot.visible=false}}
   else dots.count=0;
   if(step===5)head.position.set(-.26,cr+.06,cuff.position.z+.22);
-  band.material.opacity=step===5?ease(cl((t-1)/1))*.5:0;
+  if(wornOn<.02){head.visible=false;carriage.visible=false;sampleBead.visible=false}
+  {const k=step===5?ease(cl((t-2.1)/.5)):0;band.visible=k>0;band.position.set(0,0,SITE_Z+(1-k)*.0);band.scale.setScalar(.6+.4*k);band.position.y=(1-k)*.25}
   g.rotation.y=Math.sin(performance.now()/4000)*.12;
   r.render(scene,cam)}
 function size(){const w=box.clientWidth,h=box.clientHeight;if(!w)return;r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}
