@@ -527,7 +527,7 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
         <h3>What the cuff does on your arm</h3>
         <p class="mute small">Choose a step to see what the cuff's screen shows, or use the buttons under the screen.</p>
         <ol id="proc">
-          <li data-s="Prepare&#10;Screening complete.&#10;Clean your outer upper arm."><i>1</i><div><b>Prepare</b><span>Finish the screening questions and wipe your upper arm with the antiseptic pad.</span></div></li>
+          <li data-s="Prepare&#10;Cuff not on yet.&#10;Wipe the upper arm with the alcohol pad."><i>1</i><div><b>Prepare</b><span>Before putting the cuff on, finish the screening questions and wipe your upper arm with the alcohol pad from the kit. Let the skin dry.</span></div></li>
           <li data-s="Fit&#10;Tightening...&#10;Position confirmed."><i>2</i><div><b>Fit</b><span>Wrap the cuff around your arm and press start. It tightens itself and checks that it is in the right place.</span></div></li>
           <li data-s="Numb&#10;03:00 remaining&#10;You may feel a cool sensation."><i>3</i><div><b>Numb</b><span>A pad on the inside of the cuff numbs your skin. This takes about three minutes.</span></div></li>
           <li data-s="Sample&#10;Collecting...&#10;Sample collected. Thank you for your flight."><i>4</i><div><b>Sample</b><span>A small needle you never see takes about half a gram of muscle and seals it inside the cartridge.</span></div></li>
@@ -981,6 +981,10 @@ function podGeo(a,b,hh,R,across,n=3.2){const S=56,T=72,pos=[],idx=[];
     if(i===S)y-=.03;pos.push(x,y,z)}}
   for(let i=0;i<S;i++)for(let j=0;j<T;j++){const p=i*(T+1)+j;idx.push(p,p+T+1,p+1,p+1,p+T+1,p+T+2)}
   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setIndex(idx);g.computeVertexNormals();return g}
+function curvedBox(w,d,hh,r,R,across){const b=Math.min(.025,hh*.15);const g=new THREE.ExtrudeGeometry(rrShape(w,d,r),{depth:hh-2*b,bevelEnabled:true,bevelSize:b,bevelThickness:b,bevelSegments:3,curveSegments:10,steps:1});
+  g.rotateX(-Math.PI/2);g.translate(0,b,0);g.computeBoundingBox();const p=g.attributes.position;
+  // subdivide-free bend: shift every vertex down by the arm's curvature at its position
+  for(let i=0;i<p.count;i++){const q=across==='x'?p.getX(i):p.getZ(i);p.setY(i,p.getY(i)+Math.sqrt(Math.max(0,R*R-q*q))-R)}g.computeVertexNormals();return g}
 function rrShape(w,d,r){const s=new THREE.Shape(),x=-w/2,y=-d/2;s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);s.lineTo(x+w,y+d-r);s.quadraticCurveTo(x+w,y+d,x+w-r,y+d);s.lineTo(x+r,y+d);s.quadraticCurveTo(x,y+d,x,y+d-r);s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);return s}
 // blood-pressure-style inflation module on the band: a padded air bladder, a small pump and an air line to the main unit
 // built in the strap's own (lathe) frame: arm axis = local y; phiTop = angle that points to the main unit
@@ -1267,9 +1271,9 @@ function dither(m){m.onBeforeCompile=s=>{s.uniforms.uCut=ditherU;s.fragmentShade
     if((b[k]+.5)/16.<uCut) discard; }`)};return m}
 const cuff=new THREE.Mesh(strapGeo(.455,.6,.05),dither(fabricMat()));cuff.rotation.z=Math.PI/2;A.add(cuff);
 addInflation(cuff,.455,.6,.05,Math.PI/2,dither,-1);
-const unit=new THREE.Mesh(podGeo(.27,.24,.19,.51,'z').translate(0,-.05,0),dither(housingMat()));unit.position.y=.55;A.add(unit);
-{const bz=new THREE.Mesh(new THREE.ShapeGeometry(rrShape(.24,.17,.04)),dither(new THREE.MeshBasicMaterial({color:0x2a2a2a})));bz.rotation.x=-Math.PI/2;bz.position.y=.142;unit.add(bz);
- const sc=new THREE.Mesh(new THREE.ShapeGeometry(rrShape(.2,.13,.025)),dither(new THREE.MeshBasicMaterial({color:0xcfcfc6})));sc.rotation.x=-Math.PI/2;sc.position.y=.143;unit.add(sc)}
+const unit=new THREE.Mesh(curvedBox(.5,.44,.16,.07,.52,'z').translate(0,-.05,0),dither(housingMat()));unit.position.y=.55;A.add(unit);
+{const bz=new THREE.Mesh(new THREE.ShapeGeometry(rrShape(.24,.17,.04)),dither(new THREE.MeshBasicMaterial({color:0x2a2a2a})));bz.rotation.x=-Math.PI/2;bz.position.y=.112;unit.add(bz);
+ const sc=new THREE.Mesh(new THREE.ShapeGeometry(rrShape(.2,.13,.025)),dither(new THREE.MeshBasicMaterial({color:0xcfcfc6})));sc.rotation.x=-Math.PI/2;sc.position.y=.113;unit.add(sc)}
 const needle=new THREE.Mesh(new THREE.CylinderGeometry(.008,.008,.14,8),new THREE.MeshStandardMaterial({color:0xffffff,metalness:1,roughness:.15}));A.add(needle);
 const beadGeo=hBlob(new THREE.IcosahedronGeometry(.06,4),1.1,26,9);beadGeo.scale(1.9,.75,1.05);hBlob(beadGeo,.5,60,3);
 const bead=new THREE.Mesh(beadGeo,new THREE.MeshPhysicalMaterial({color:0xc86868,map:muscleTex,bumpMap:muscleTex,bumpScale:3,roughness:.4,clearcoat:.7,sheen:.6,sheenColor:new THREE.Color(0xff8c80)}));scene.add(bead);
@@ -1623,7 +1627,7 @@ const R=1,LEN=3.2;
 const g=new THREE.Group();scene.add(g);
 // arm body (skin outside)
 const skinMat=new THREE.MeshPhysicalMaterial({color:0xe2b896,roughness:.6,sheen:.5,sheenColor:new THREE.Color(0xffd8c8)});
-const body=new THREE.Mesh(new THREE.CylinderGeometry(R,R,LEN,96,1,true),skinMat);body.rotation.x=Math.PI/2;body.position.z=-LEN/2;g.add(body);
+const body=new THREE.Mesh(new THREE.CylinderGeometry(R,R,LEN,128,80,true),skinMat);body.rotation.x=Math.PI/2;body.position.z=-LEN/2;g.add(body);
 // cut face: tissue layers
 function ring(r1,r2,color,z=0){const m=new THREE.Mesh(new THREE.RingGeometry(r1,r2,96),new THREE.MeshStandardMaterial({color,roughness:.7,side:THREE.DoubleSide}));m.position.z=z;g.add(m);return m}
 const skinRing=ring(.94,R,0xd9927a,.001),fat=ring(.8,.94,0xe9cf8a),
@@ -1645,19 +1649,20 @@ const strapMat=dither(fabricMat());
 const cuff=new THREE.Mesh(strapGeo(1.0,1.32,.1),strapMat);
 addInflation(cuff,1.0,1.32,.1,Math.PI,dither,-1);cuff.rotation.x=Math.PI/2;cuff.position.z=-.72;g.add(cuff);
 const seamMat=dither(new THREE.MeshStandardMaterial({color:0x5a5a57,roughness:.7}));
-[-.58,.58].forEach(z=>{const s=new THREE.Mesh(new THREE.TorusGeometry(1.1,.008,6,128),seamMat);s.position.z=-.72+z;g.add(s)});
+const seams=[-.58,.58].map(z=>{const s=new THREE.Mesh(new THREE.TorusGeometry(1.1,.008,6,128),seamMat);s.userData.o=z;g.add(s);return s});
+function seamsMove(cz){seams.forEach(s=>{s.position.z=cz+s.userData.o;s.visible=cz>-1})}
 const cuffIn={scale:{set(){}}};
 // module: rounded housing with a top display, internals inside
 const mod=new THREE.Group();g.add(mod);
 const rr=(w,d,r)=>{const s=new THREE.Shape(),x=-w/2,y=-d/2;s.moveTo(x+r,y);s.lineTo(x+w-r,y);s.quadraticCurveTo(x+w,y,x+w,y+r);s.lineTo(x+w,y+d-r);s.quadraticCurveTo(x+w,y+d,x+w-r,y+d);s.lineTo(x+r,y+d);s.quadraticCurveTo(x,y+d,x,y+d-r);s.lineTo(x,y+r);s.quadraticCurveTo(x,y,x+r,y);return s};
 const hG=new THREE.ExtrudeGeometry(rr(.9,1.1,.14),{depth:.34,bevelEnabled:true,bevelSize:.04,bevelThickness:.04,bevelSegments:4,curveSegments:10});hG.rotateX(-Math.PI/2);hG.translate(0,-.19,0);
-const housing=new THREE.Mesh(podGeo(.56,.66,.6,1.12,'x').translate(0,-.2,0),dither(housingMat()));mod.add(housing);
+const housing=new THREE.Mesh(curvedBox(.9,1.0,.34,.12,1.12,'x').translate(0,-.2,0),dither(housingMat()));mod.add(housing);
 // e-ink display
 const scC=document.createElement('canvas');scC.width=512;scC.height=320;const scX=scC.getContext('2d');const scT=new THREE.CanvasTexture(scC);
 function scDraw(l1,l2){scX.fillStyle='#cfcfc6';scX.fillRect(0,0,512,320);scX.fillStyle='#1a1a1a';scX.font='500 64px IBM Plex Mono, monospace';scX.fillText(l1,34,120);scX.font='34px IBM Plex Mono, monospace';scX.fillText(l2,34,190);scX.fillRect(34,240,444,4);scT.needsUpdate=true}
 const scG=new THREE.ShapeGeometry(rrShape(.52,.33,.05));{const p=scG.attributes.position,uv=scG.attributes.uv;for(let i=0;i<p.count;i++)uv.setXY(i,p.getX(i)/.52+.5,p.getY(i)/.33+.5)}
-const screen=new THREE.Mesh(scG,new THREE.MeshBasicMaterial({map:scT}));screen.rotation.x=-Math.PI/2;screen.position.set(0,.398,-.1);mod.add(screen);
-const bezel=new THREE.Mesh(new THREE.ShapeGeometry(rrShape(.58,.39,.07)),new THREE.MeshBasicMaterial({color:0x2a2a2a}));bezel.rotation.x=-Math.PI/2;bezel.position.set(0,.397,-.1);mod.add(bezel);
+const screen=new THREE.Mesh(scG,new THREE.MeshBasicMaterial({map:scT}));screen.rotation.x=-Math.PI/2;screen.position.set(0,.142,-.12);mod.add(screen);
+const bezel=new THREE.Mesh(new THREE.ShapeGeometry(rrShape(.58,.39,.07)),new THREE.MeshBasicMaterial({color:0x2a2a2a}));bezel.rotation.x=-Math.PI/2;bezel.position.set(0,.141,-.12);mod.add(bezel);
 // internals (seen through the dither)
 const metal=new THREE.MeshStandardMaterial({color:0xb8b8b2,metalness:.85,roughness:.3});
 const cart=new THREE.Mesh(new THREE.CylinderGeometry(.075,.075,.42,24,1,true),new THREE.MeshPhysicalMaterial({color:0xffffff,transparent:true,opacity:.25,roughness:.05,side:THREE.DoubleSide,depthWrite:false}));cart.rotation.z=Math.PI/2;cart.position.set(.12,0,-.3);mod.add(cart);
@@ -1669,7 +1674,7 @@ const batt=new THREE.Mesh(new THREE.BoxGeometry(.36,.1,.22),new THREE.MeshStanda
 const sbG=new THREE.IcosahedronGeometry(.024,3);{const p=sbG.attributes.position,v=new THREE.Vector3();for(let i=0;i<p.count;i++){v.fromBufferAttribute(p,i);const n=Math.sin(v.x*90)*Math.cos(v.y*70)*.5+Math.sin(v.z*110+v.x*40)*.5;v.multiplyScalar(1+n*.35);p.setXYZ(i,v.x*1.7,v.y*.7,v.z)}sbG.computeVertexNormals()}
 const sampleBead=new THREE.Mesh(sbG,new THREE.MeshPhysicalMaterial({color:0xc98078,roughness:.5,clearcoat:.4,clearcoatRoughness:.4,sheen:.5,sheenColor:new THREE.Color(0xffc2b8)}));sampleBead.visible=false;g.add(sampleBead);
 // needle (front, in the cut plane)
-const needle=new THREE.Mesh(new THREE.CylinderGeometry(.012,.012,.42,12),new THREE.MeshStandardMaterial({color:0xdadada,metalness:1,roughness:.15}));g.add(needle);
+const needle=new THREE.Mesh(new THREE.CylinderGeometry(.012,.012,.3,12),new THREE.MeshStandardMaterial({color:0xdadada,metalness:1,roughness:.15}));g.add(needle);
 // laser head + beam
 const head=new THREE.Mesh(new THREE.CylinderGeometry(.05,.07,.12,20),new THREE.MeshStandardMaterial({color:0x333333,metalness:.6,roughness:.3}));g.add(head);
 const beam=new THREE.Mesh(new THREE.CylinderGeometry(.012,.012,1,8),new THREE.MeshBasicMaterial({color:0xff4136,transparent:true,opacity:.9}));g.add(beam);
@@ -1678,7 +1683,7 @@ const glow=new THREE.PointLight(0xff3b30,0,1.2);g.add(glow);
 // tattoo dots left on the skin
 const MAXD=260,dots=new THREE.InstancedMesh(new THREE.CircleGeometry(.016,8),new THREE.MeshBasicMaterial({color:0x1d1b1e}),MAXD);dots.count=0;dots.frustumCulled=false;g.add(dots);
 // wipe pad, numbing glow, bandage
-const pad=new THREE.Mesh(new THREE.BoxGeometry(.35,.02,.35),new THREE.MeshStandardMaterial({color:0xffffff,roughness:1}));g.add(pad);
+const pad=new THREE.Mesh(new THREE.BoxGeometry(.3,.025,.22),new THREE.MeshStandardMaterial({color:0xf6f6f2,roughness:1}));g.add(pad);
 const cool=new THREE.Mesh(new THREE.CylinderGeometry(1.004,1.004,.9,64,1,true,Math.PI*.65,Math.PI*.7),new THREE.MeshBasicMaterial({color:0x8fc8ff,transparent:true,opacity:0,side:THREE.DoubleSide,depthWrite:false}));cool.rotation.x=Math.PI/2;cool.position.z=-.5;g.add(cool);
 const band=new THREE.Mesh(new THREE.CylinderGeometry(1.006,1.006,.6,64,1,true,Math.PI*.8,Math.PI*.4),new THREE.MeshPhysicalMaterial({color:0xffffff,transmission:.7,roughness:.2,transparent:true,opacity:0,side:THREE.DoubleSide}));band.rotation.x=Math.PI/2;band.position.z=-.3;g.add(band);
 
@@ -1688,27 +1693,43 @@ for(let i=0;i<=40;i++){const t=i/40;path.push([Math.sin(t*2)*.03-.02+t*.04,SITE_
 for(let k=0;k<11;k++){const t=.12+k*.07,cx=path[Math.round(t*40)][0],cz=path[Math.round(t*40)][1],len=.1*Math.sin(t*Math.PI);[-1,1].forEach(sd=>{for(let j=1;j<=6;j++){const u=j/6;path.push([cx+sd*len*u,cz-len*u*.6])}})}
 const onSkin=(x,z,lift=0)=>new THREE.Vector3(x,Math.sqrt(Math.max(0,1-x*x))*(R+lift),z);
 
+const B0=body.geometry.attributes.position.array.slice();
+const rings=[skinRing,fat,muscle,bone].map(m=>({m,o:m.geometry.attributes.position.array.slice()}));
+// how far the skin is pressed in at a point on the arm (x across, y up, z along)
+function press(x,y,z,tight){if(tight<=0)return 0;let d=0;
+  if(z<-.04&&z>-1.4)d+=.018*Math.min(1,(z<-.1&&z>-1.34)?1:.5);
+  if(y>0&&z>-1.02){const fx=Math.max(0,1-Math.pow(Math.abs(x)/.5,4)),fz=z>-.02?.85:1;d+=.045*fx*fz*(y/R)}
+  return d*tight}
+let lastTight=-1;
+function deform(tight){if(Math.abs(tight-lastTight)<.002)return;lastTight=tight;
+  const p=body.geometry.attributes.position;for(let i=0;i<p.count;i++){const x=B0[i*3],ly=B0[i*3+1],lz=B0[i*3+2];const wz=ly-LEN/2,wy=-lz;const d=press(x,wy,wz,tight),k=(R-d)/R;p.setXYZ(i,x*k,ly,lz*k)}
+  p.needsUpdate=true;body.geometry.computeVertexNormals();
+  rings.forEach(({m,o})=>{const q=m.geometry.attributes.position;for(let i=0;i<q.count;i++){const x=o[i*3],y=o[i*3+1],r=Math.hypot(x,y);if(r<1e-4)continue;const d=press(x/r*R,y/r*R,0,tight)*(r/R),k=(r-d)/r;q.setXY(i,x*k,y*k)}q.needsUpdate=true})}
+const worn=[cuff,mod];
 let step=0,t0=performance.now();
 const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2,cl=t=>Math.max(0,Math.min(1,t));
 const m4=new THREE.Matrix4(),q=new THREE.Quaternion(),s1=new THREE.Vector3(1,1,1);
 function placeDots(n){dots.count=Math.min(n,path.length);for(let i=0;i<dots.count;i++){const p=onSkin(path[i][0],path[i][1],.004);const nrm=new THREE.Vector3(p.x,p.y,0).normalize();q.setFromUnitVectors(new THREE.Vector3(0,0,1),nrm);m4.compose(p,q,s1);dots.setMatrixAt(i,m4)}dots.instanceMatrix.needsUpdate=true}
-const SC=[['READY','screening done'],['FIT','tightening'],['NUMB','03:00'],['SAMPLE','collecting'],['MARK','laser: feather'],['DONE','remove cartridge']];
+const SC=[['---','not worn yet'],['FIT','tightening'],['NUMB','03:00'],['SAMPLE','collecting'],['MARK','laser: feather'],['DONE','remove cartridge']];
 window.cuffAnim=k=>{step=k;t0=performance.now();scDraw(...SC[k])};scDraw(...SC[0]);
 function frame(){const t=(performance.now()-t0)/1000;
   // defaults
   let cr=step===0?1.22:step===5?1.12:1.02;
   if(step===1)cr=1.22-ease(cl(t/1.6))*.2;
   if(step===5)cr=1.02+ease(cl(t/1.2))*.1;
+  // Prepare: the cuff is not on the arm yet; Fit: it slides on and tightens
+  {const on=step===0?0:step===1?ease(cl(t/.8)):1;worn.forEach(o=>o.visible=on>0);cuff.position.z=-.72-(1-on)*2.2;seamsMove(cuff.position.z);
+   const tight=step===0?0:step===5?Math.max(0,1-ease(cl(t/1.2))):(step===1?ease(cl((t-.6)/1.4)):1);deform(tight)}
   cuff.scale.set(cr,1,cr);
-  mod.position.set(0,cr+.2,-.5);
+  mod.position.set(0,cr+.16,cuff.position.z+.22);
   {const want=step===3||step===4?.78:step===2?.3:0;cutU.value+=(want-cutU.value)*.08}
-  pad.visible=step===0;if(step===0){const k=(t%2.4)/2.4;pad.position.copy(onSkin(-.3+k*.6,-.25+Math.sin(k*6.28)*.05,.02));pad.position.z=-.25+Math.sin(k*6.28)*.05}
+  pad.visible=step===0;if(step===0){const a=t*3.2,px=Math.cos(a)*.18,pz=-.45+Math.sin(a)*.14;pad.position.copy(onSkin(px,pz,.015));pad.rotation.set(0,a*.2,-Math.asin(Math.max(-1,Math.min(1,px))))}
   cool.material.opacity=step===2?.18+.12*Math.sin(t*3):step>2&&step<5?.08:0;
   skinRing.material.color.setHex(step===2?0xb7c8e0:0xd9927a);
   // needle
   const top=Math.sqrt(1)*1.0+.0;let tip=top,showN=step===3;
   if(step===3){const a=cl(t/1.4),b=cl((t-2.2)/1.2);tip=top-ease(a)*(top-.55)+ease(b)*(top-.55)}
-  needle.visible=showN;needle.position.set(0,tip+.21,.012);
+  needle.visible=showN;needle.position.set(0,tip+.15,-.03);
   // the fragment rides up with the needle, then is carried into the cartridge and stays there
   {const inCart=new THREE.Vector3(.08,cr+.2,-.8),up=cr+.12;
    if(step<3||(step===3&&t<1.4)){sampleBead.visible=false}
@@ -1718,9 +1739,9 @@ function frame(){const t=(performance.now()-t0)/1000;
   // laser
   const showL=step===4;head.visible=beam.visible=spot.visible=showL;glow.intensity=0;
   if(step>=4){const n=step===4?Math.floor(cl((t-.4)/5)*path.length):path.length;placeDots(n);
-    if(showL&&n<path.length){const p=path[Math.max(0,n)]||path[0];const sp=onSkin(p[0],p[1],.003);const hy=cr+.32;head.position.set(sp.x,hy,sp.z);
+    if(showL&&n<path.length){const p=path[Math.max(0,n)]||path[0];const sp=onSkin(p[0],p[1],.003);const hy=cr+.1;head.position.set(sp.x,hy,sp.z);
       beam.position.set(sp.x,(hy+sp.y)/2,sp.z);beam.scale.y=hy-sp.y;spot.position.copy(sp);glow.position.copy(sp).add(new THREE.Vector3(0,.05,0));glow.intensity=1.5+Math.random();beam.material.opacity=.6+Math.random()*.4}
-    else if(showL){head.position.set(0,cr+.32,SITE_Z);beam.visible=spot.visible=false}}
+    else if(showL){head.position.set(0,cr+.1,SITE_Z);beam.visible=spot.visible=false}}
   else dots.count=0;
   band.material.opacity=step===5?ease(cl((t-1)/1))*.5:0;
   g.rotation.y=Math.sin(performance.now()/4000)*.12;
