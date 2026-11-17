@@ -66,6 +66,10 @@ section.s:first-child{border-top:0;padding-top:72px}
 .hero{display:grid;grid-template-columns:5fr 6fr;gap:56px;align-items:center;padding:80px 0 40px}
 .hero h1{margin-bottom:26px;max-width:12ch}
 .hero p{color:#c8c8c3;max-width:46ch}
+.feed3d{position:relative;aspect-ratio:16/8;margin-top:30px;background:radial-gradient(ellipse at 50% 40%,#1a1a1a 0%,#000 75%);border:1px solid var(--line);overflow:hidden}
+.feed3d canvas{transition:opacity .2s}
+@media(max-width:700px){.feed3d{aspect-ratio:4/3}}
+.feed3d::after{content:"";position:absolute;left:0;right:0;bottom:0;height:45%;background:linear-gradient(transparent,rgba(0,0,0,.75));pointer-events:none;z-index:1}
 .hero3d{position:relative;aspect-ratio:3/2;background:radial-gradient(ellipse at 50% 45%,#181818 0%,#000 70%);border:1px solid var(--line);overflow:hidden}
 .h3-cap{position:absolute;left:18px;bottom:16px;right:18px;font-size:12px;color:var(--mute);z-index:2;pointer-events:none;max-width:none}
 .h3-cap span{display:block;font-size:11px;color:var(--dim)}
@@ -527,13 +531,9 @@ label{display:block;margin-bottom:6px;font-size:11.5px;color:var(--mute)}
     </div>
 
     <div class="donors-omni">
-      <h2>Somewhere above them, a small part of each of them is flying.</h2>
-      <p class="mute">A birder on a frozen riverbank. A father and daughter on a hill. A woman laughing with her neighbours after a long morning in the fields. They have never met. What they share is a small mark on the arm and a few hundred meals served this year to birds they will probably never see up close.</p>
-      <div class="omni">
-        <figure><div class="ph"><img src="img/13a.jpg" alt=""></div><figcaption>Ha-eun, 34, lives in Seoul and donates to the Cheorwon station in Korea.</figcaption></figure>
-        <figure><div class="ph"><img src="img/13b.jpg" alt=""></div><figcaption>Min-jun, 41, lives in Busan and donates to the Ikh Nart station in Mongolia.</figcaption></figure>
-        <figure><div class="ph"><img src="img/13c.jpg" alt=""></div><figcaption>Soon-ja, 63, donor number 018427, donates to the Chitwan station in Nepal.</figcaption></figure>
-      </div>
+      <h2>Every pack arrives cold, on feeding day.</h2>
+      <p class="mute">From the lab, your tissue travels to the feeding station in a refrigerated truck. On feeding days the packs are wheeled out and laid on the snow, a little apart from each other, so that more birds can eat at once.</p>
+      <div class="feed3d" id="feed3d" role="img" aria-label="Animation: a refrigerated truck backs up to a snowy field, a cart carries the packs out and lays them on the snow, and cinereous vultures land to eat."><p class="h3-cap" aria-hidden="true"></p></div>
     </div>
   </section>
 
@@ -1280,6 +1280,7 @@ function makeVulture(){
   v.userData={wings,head,legs};return v;
 }
 const vult=makeVulture();G.add(vult);
+window.efShared={makeVulture,packGeo,packMat};
 
 /* ---- timeline ---- */
 const T=18.4,P=[['0:00','Sample','A rice-sized piece of muscle is taken from your arm.'],['Day 2','Grow','Your cells multiply in their own vessel.'],['Day 70','Serve','They become a meal, delivered cold to a feeding station.'],['That winter','Fly','A vulture eats. Part of you is in its wings.']];
@@ -1360,6 +1361,123 @@ function frame(now){
   r.render(scene,cam);
 }
 function size(){const w=box.clientWidth,h=box.clientHeight;if(!w)return;r.setSize(w,h,false);cam.aspect=w/h;cam.fov=w/h<1.1?42:30;cam.updateProjectionMatrix()}
+new ResizeObserver(size).observe(box);size();
+const vis=watch(box);(function loop(now){requestAnimationFrame(loop);if(vis())frame(now||0)})();
+})();
+
+/* =============================== FEEDING DAY =============================== */
+(function(){
+const box=document.getElementById('feed3d');if(!box||!window.efShared)return;
+const {makeVulture,packGeo,packMat}=window.efShared;
+const r=mkRenderer();r.toneMapping=THREE.ACESFilmicToneMapping;r.shadowMap.enabled=true;r.shadowMap.type=THREE.PCFSoftShadowMap;box.appendChild(r.domElement);
+const cap=box.querySelector('.h3-cap');
+const scene=new THREE.Scene();scene.fog=new THREE.Fog(0x000000,14,30);
+const cam=new THREE.PerspectiveCamera(28,2,.1,80);
+scene.add(new THREE.HemisphereLight(0xeef2ff,0x1a1a1a,1));
+const sun=new THREE.DirectionalLight(0xffffff,2);sun.position.set(-6,10,6);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);
+Object.assign(sun.shadow.camera,{left:-12,right:12,top:8,bottom:-8});scene.add(sun);
+const mat=(c,o={})=>new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.7},o));
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2,cl=t=>Math.max(0,Math.min(1,t)),seg=(t,a,b)=>cl((t-a)/(b-a));
+const cast=o=>{o.traverse(m=>{if(m.isMesh){m.castShadow=true;m.receiveShadow=true}});return o};
+
+// snowy field
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(40,24,80,40),mat(0x8d8d89,{roughness:1}));ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;
+{const p=ground.geometry.attributes.position;for(let i=0;i<p.count;i++)p.setZ(i,(Math.sin(p.getX(i)*.7)*Math.cos(p.getY(i)*.5))*.08);ground.geometry.computeVertexNormals()}
+scene.add(ground);
+// dry stalks
+{const g=new THREE.CylinderGeometry(.008,.012,.3,4),m=mat(0x6b6458),N=260,st=new THREE.InstancedMesh(g,m,N),M=new THREE.Matrix4(),q=new THREE.Quaternion(),e=new THREE.Euler();
+ for(let i=0;i<N;i++){const x=(Math.random()-.5)*26,z=(Math.random()-.5)*12-1;if(Math.abs(z-1)<1.1&&x>-9&&x<4)continue;e.set((Math.random()-.5)*.5,0,(Math.random()-.5)*.5);q.setFromEuler(e);M.compose(new THREE.Vector3(x,.12,z),q,new THREE.Vector3(1,.6+Math.random(),1));st.setMatrixAt(i,M)}scene.add(st)}
+// track the truck comes in on
+
+
+/* ---- refrigerated truck ---- */
+const truck=new THREE.Group();truck.rotation.y=Math.PI;scene.add(truck); // reverses in, rear facing the field
+const white=mat(0xe9e9e4,{roughness:.45}),darkM=mat(0x1d1d1d,{roughness:.5}),glass=mat(0x2a3440,{roughness:.1,metalness:.3});
+const body=new THREE.Mesh(new THREE.BoxGeometry(2.6,1.3,1.2),white);body.position.set(-.3,1.05,0);truck.add(body);
+const cab=new THREE.Mesh(new THREE.BoxGeometry(.9,.95,1.15),white);cab.position.set(1.45,.85,0);truck.add(cab);
+const wind=new THREE.Mesh(new THREE.BoxGeometry(.05,.4,1),glass);wind.position.set(1.91,1.05,0);truck.add(wind);
+const unitC=new THREE.Mesh(new THREE.BoxGeometry(.18,.5,.8),mat(0xa8a8a3));unitC.position.set(1.0,1.45,0);truck.add(unitC); // cooling unit
+for(let k=0;k<5;k++){const v=new THREE.Mesh(new THREE.BoxGeometry(.19,.02,.7),darkM);v.position.set(1.0,1.27+k*.08,0);truck.add(v)}
+const stripe=new THREE.Mesh(new THREE.BoxGeometry(2.62,.06,1.22),mat(0x9b2a2a));stripe.position.set(-.3,.62,0);truck.add(stripe);
+const under=new THREE.Mesh(new THREE.BoxGeometry(3.6,.18,1),darkM);under.position.set(.1,.36,0);truck.add(under);
+const wheels=[];[[-1.1,.55],[-1.1,-.55],[1.4,.55],[1.4,-.55]].forEach(([x,z])=>{const w=new THREE.Mesh(new THREE.CylinderGeometry(.27,.27,.2,20),darkM);w.rotation.x=Math.PI/2;w.position.set(x,.27,z);truck.add(w);wheels.push(w)});
+// rear doors hinge at the back edge
+const doors=[];[-1,1].forEach(s=>{const hinge=new THREE.Group();hinge.position.set(-1.61,1.05,s*.6);truck.add(hinge);
+  const d=new THREE.Mesh(new THREE.BoxGeometry(.04,1.25,.6),white);d.position.z=-s*.3;hinge.add(d);doors.push({hinge,s})});
+cast(truck);
+// cold mist
+const NM=60,mist=new THREE.InstancedMesh(new THREE.SphereGeometry(.12,8,6),new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.18,depthWrite:false}),NM);mist.frustumCulled=false;scene.add(mist);
+const mists=Array.from({length:NM},()=>({o:Math.random()*2,y:Math.random()*.9,z:(Math.random()-.5)*.9,s:.6+Math.random()*.9}));
+
+/* ---- feeding cart ---- */
+const cart=new THREE.Group();scene.add(cart);
+const steelM=mat(0xb8b8b2,{metalness:.8,roughness:.35});
+const tray=new THREE.Group();tray.position.y=.42;cart.add(tray);
+const bed=new THREE.Mesh(new THREE.BoxGeometry(1.1,.05,.7),steelM);tray.add(bed);
+[[0,.08,.35,1.1,.16,.03],[0,.08,-.35,1.1,.16,.03],[.55,.08,0,.03,.16,.7]].forEach(([x,y,z,a,b,c])=>{const w=new THREE.Mesh(new THREE.BoxGeometry(a,b,c),steelM);w.position.set(x,y,z);tray.add(w)});
+const handle=new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,.7,8),darkM);handle.rotation.x=Math.PI/2;handle.position.set(-.85,.75,0);cart.add(handle);
+[[.35],[-.35]].forEach(([z])=>{const a=new THREE.Mesh(new THREE.CylinderGeometry(.018,.018,.55,8),darkM);a.position.set(-.7,.6,z);a.rotation.z=.7;cart.add(a)});
+const cw=[];[[.3,.3],[.3,-.3],[-.3,.3],[-.3,-.3]].forEach(([x,z])=>{const w=new THREE.Mesh(new THREE.CylinderGeometry(.13,.13,.06,16),darkM);w.rotation.x=Math.PI/2;w.position.set(x,.13,z);cart.add(w);cw.push(w)});
+const legs=new THREE.Mesh(new THREE.BoxGeometry(.9,.25,.05),darkM);legs.position.set(0,.27,0);cart.add(legs);
+cast(cart);
+// packs: four ride on the cart, then end up on the snow
+const NP=4,packs=[],spots=[[2.0,1.5],[3.1,.6],[2.4,-.5],[3.5,1.9]];
+for(let i=0;i<NP;i++){const p=new THREE.Mesh(packGeo,packMat);p.scale.setScalar(.38);p.castShadow=true;scene.add(p);packs.push(p)}
+
+/* ---- vultures ---- */
+const VN=3,vs=[];
+for(let i=0;i<VN;i++){const v=makeVulture();v.scale.multiplyScalar(.55);cast(v);scene.add(v);vs.push(v)}
+function wings(v,flap,spread){v.userData.wings.forEach(w=>{const f=1-spread;w.sh.rotation.set(0,w.s*1.45*f,flap*w.s-.15*f*w.s);w.el.rotation.set(0,w.s*1.5*f,-flap*.6*w.s)})}
+const vPlan=[{t0:11.2,from:[-6,7,-8],land:[1.5,1.7],face:-.4},{t0:12.0,from:[10,8,-6],land:[3.9,.5],face:2.6},{t0:12.9,from:[3,9,-11],land:[2.4,-1.1],face:1.4}];
+
+/* ---- timeline ---- */
+const T=21,CAP=[[0,'Delivery','Packs travel to the station in a refrigerated truck.'],[5,'Feeding day','They are wheeled out and laid on the snow, a little apart.'],[11,'Arrival','The vultures come down to eat.']];
+let lastCap=-1;function setCap(t){let i=0;CAP.forEach((c,k)=>{if(t>=c[0])i=k});if(i===lastCap||!cap)return;lastCap=i;cap.innerHTML=`<b>${CAP[i][1]}</b>${CAP[i][2]}`;cap.classList.remove('in');void cap.offsetWidth;cap.classList.add('in')}
+const M=new THREE.Matrix4(),Q=new THREE.Quaternion(),S=new THREE.Vector3(),P=new THREE.Vector3();
+const truckStop=-3.2;
+function frame(now){
+  const t=(now/1000)%T,tt=now/1000;setCap(t);
+  // camera
+  cam.position.set(-.6+Math.sin(tt*.07)*.6,4.6,12.5);cam.lookAt(-.6,.5,.3);
+  // truck drives in and parks
+  const drive=ease(seg(t,0,4));
+  truck.position.set(-12+(truckStop+12)*drive,0,1);
+  wheels.forEach(w=>w.rotation.y=-truck.position.x*3.7);
+  // doors swing open, then close
+  const op=ease(seg(t,4.2,5.2))*(1-ease(seg(t,10.5,11.5)));doors.forEach(d=>d.hinge.rotation.y=d.s*-op*1.9);
+  // cold mist drifting out of the open doors
+  for(let i=0;i<NM;i++){const m=mists[i],k=((tt*.35+m.o)%1),on=op>.3?op:0;P.set(truck.position.x+1.7+k*1.4,.7+m.y+k*.5,1+m.z+k*.2);S.setScalar(on*m.s*(1-k)*(.6+k));M.compose(P,Q.identity(),S);mist.setMatrixAt(i,M)}mist.instanceMatrix.needsUpdate=true;
+  // cart: out of the truck, to the field, tip, back
+  const out=ease(seg(t,5.6,8.2)),back=ease(seg(t,9.4,11.2)),tip=ease(seg(t,8.4,8.9))*(1-ease(seg(t,9.1,9.4)));
+  const start=new THREE.Vector3(truckStop+2.1,0,1),field=new THREE.Vector3(2.7,0,.6);
+  cart.visible=t>5.4&&t<11.4;
+  P.copy(start).lerp(field,out);P.lerp(start,back);cart.position.copy(P);
+  cart.rotation.y=back>0?Math.PI:0;tray.rotation.z=(back>0?-1:1)*tip*.5;
+  cw.forEach(w=>w.rotation.y=-cart.position.x*7);
+  // packs ride the cart, then slide off and get eaten
+  const eat=seg(t,13.5,18.3);
+  packs.forEach((p,i)=>{
+    if(t<5.4||t>19.5){p.visible=false;return}p.visible=true;
+    const onCart=new THREE.Vector3(cart.position.x+(i%2?.22:-.22),.55,cart.position.z+(i<2?.16:-.16));
+    if(t<8.5){p.position.copy(onCart);p.rotation.set(0,.2*i,0)}
+    else{const k=ease(seg(t,8.5+i*.08,9.1+i*.08));p.position.lerpVectors(onCart,new THREE.Vector3(spots[i][0],.05,spots[i][1]),k);p.position.y+=Math.sin(k*Math.PI)*.25;p.rotation.y=.2*i+k*(1+i)}
+    const s=.38*(1-eat*(.55+i*.08));p.scale.set(s,.38*(1-eat*.4),s)});
+  // vultures glide in, land, feed, and lift off
+  vs.forEach((v,i)=>{const pl=vPlan[i],land=new THREE.Vector3(pl.land[0],.36,pl.land[1]);
+    if(t<pl.t0||t>20.3){v.visible=false;return}v.visible=true;
+    let flap=0,spread=1;const H=v.userData.head;
+    if(t<pl.t0+2.2){const k=ease(seg(t,pl.t0,pl.t0+2.2));v.position.lerpVectors(new THREE.Vector3(...pl.from),land,k);
+      const d=land.clone().sub(new THREE.Vector3(...pl.from));v.rotation.set(0,Math.atan2(d.x,d.z),0);
+      flap=Math.sin(tt*4+i)*.12*(1-k)+(k>.82?Math.sin(tt*13)*.45:0);v.userData.legs.visible=k>.85;H.rotation.x=0}
+    else if(t<19){v.position.copy(land);v.rotation.set(0,pl.face,0);spread=.15;v.userData.legs.visible=true;
+      const pk=Math.max(0,Math.sin(tt*4.5+i*1.7));H.rotation.x=.45+pk*.6;H.position.y=.32-pk*.13}
+    else{const k=ease(seg(t,19,20.3));v.position.copy(land).add(new THREE.Vector3(Math.sin(pl.face)*3*k,3.5*k,Math.cos(pl.face)*3*k));v.rotation.set(-.3*k,pl.face,0);flap=Math.sin(tt*7+i)*.32;v.userData.legs.visible=k<.1;H.rotation.x=0;H.position.y=.32}
+    wings(v,flap,spread)});
+  // fade at the loop seam
+  r.domElement.style.opacity=String(Math.min(seg(t,0,.6),1-seg(t,20.3,21)));
+  r.render(scene,cam);
+}
+function size(){const w=box.clientWidth,h=box.clientHeight;if(!w)return;r.setSize(w,h,false);cam.aspect=w/h;cam.fov=w/h<1.2?44:28;cam.updateProjectionMatrix()}
 new ResizeObserver(size).observe(box);size();
 const vis=watch(box);(function loop(now){requestAnimationFrame(loop);if(vis())frame(now||0)})();
 })();
