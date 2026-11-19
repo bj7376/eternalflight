@@ -1349,27 +1349,27 @@ const lid=new THREE.Group();lid.position.y=.94;V.add(lid);
 const base=new THREE.Mesh(new THREE.CylinderGeometry(.8,.82,.12,64),steel);base.position.y=-.96;V.add(base);
 [[-.35,.2],[.3,-.25],[0,.42]].forEach(([x,z])=>{const p=new THREE.Mesh(new THREE.CylinderGeometry(.035,.035,.22,12),steel);p.position.set(x,1.08,z);V.add(p)});
 // culture medium
-const medMat=new THREE.MeshPhysicalMaterial({color:0xf0b0a8,transparent:true,opacity:.0,roughness:.1,transmission:.4,thickness:1,depthWrite:false});
+const medMat=new THREE.MeshPhysicalMaterial({color:0xf2d8d2,transparent:true,opacity:.0,roughness:.1,transmission:.4,thickness:1,depthWrite:false});
 const medium=new THREE.Mesh(new THREE.CylinderGeometry(.73,.73,1.5,64),medMat);medium.position.y=-.15;V.add(medium);
-const glow=new THREE.PointLight(0xffb0a0,0,3);glow.position.set(0,-.1,.4);V.add(glow);
+const glow=new THREE.PointLight(0xfff0ea,0,3);glow.position.set(0,-.1,.4);V.add(glow);
 // bubbles
 const NB=26,bub=new THREE.InstancedMesh(new THREE.SphereGeometry(.018,10,8),new THREE.MeshPhysicalMaterial({color:0xffffff,transmission:.9,roughness:0,thickness:.05,transparent:true,opacity:.7}),NB);bub.frustumCulled=false;V.add(bub);
 const bubs=Array.from({length:NB},()=>({x:(Math.random()-.5)*1.1,z:(Math.random()-.5)*1.1,o:Math.random()*1.5,s:.6+Math.random()*.8}));
 // cells: organic, translucent, with nucleus; each one buds off a parent
 const N=72;
-const cellGeo=hBlob(new THREE.IcosahedronGeometry(.13,4),.28,4.5);
-const cellMat=new THREE.MeshPhysicalMaterial({color:0xf4c3bb,roughness:.45,transmission:.55,thickness:.5,ior:1.33,attenuationColor:new THREE.Color(0xe08a84),attenuationDistance:.6,clearcoat:.25,clearcoatRoughness:.4,transparent:true,opacity:.92});
+const cellGeo=hBlob(new THREE.IcosahedronGeometry(.13,4),.1,2.5);
+const cellMat=new THREE.MeshPhysicalMaterial({color:0xf3e6e2,roughness:.35,transmission:.6,thickness:.4,ior:1.33,attenuationColor:new THREE.Color(0xf0d2cc),attenuationDistance:1.2,clearcoat:.4,clearcoatRoughness:.3,transparent:true,opacity:.9});
 const cells=new THREE.InstancedMesh(cellGeo,cellMat,N);cells.instanceMatrix.setUsage(THREE.DynamicDrawUsage);cells.frustumCulled=false;V.add(cells);
-const nuc=new THREE.InstancedMesh(hBlob(new THREE.IcosahedronGeometry(.05,3),.25,14,3),new THREE.MeshStandardMaterial({color:0xd98f88,roughness:.6}),N);nuc.frustumCulled=false;V.add(nuc);
-{const c=new THREE.Color();for(let i=0;i<N;i++){c.setHSL(.01+Math.random()*.02,.45+Math.random()*.15,.82+Math.random()*.08);cells.setColorAt(i,c)}}
+const nuc=new THREE.InstancedMesh(hBlob(new THREE.IcosahedronGeometry(.05,3),.25,14,3),new THREE.MeshStandardMaterial({color:0xd98f88,roughness:.6}),N);nuc.frustumCulled=false;nuc.visible=false;V.add(nuc);
+{const c=new THREE.Color();for(let i=0;i<N;i++){c.setHSL(.02+Math.random()*.02,.3+Math.random()*.1,.86+Math.random()*.04);cells.setColorAt(i,c)}}
 const cp=[],par=[],born=[],rot=[],asp=[];
 for(let i=0;i<N;i++){let v;do{v=new THREE.Vector3(Math.random()*2-1,Math.random()*2-1,Math.random()*2-1)}while(v.length()>1);
   cp.push(v.multiply(new THREE.Vector3(.5,.62,.5)).add(new THREE.Vector3(0,-.2,0)));par.push(i?Math.floor((i-1)/2):-1);
-  born.push(i?5.4+Math.log2(i+1)*.48+Math.random()*.2:5.1);rot.push(new THREE.Euler(Math.random()*6,Math.random()*6,Math.random()*6));asp.push(new THREE.Vector3(1+Math.random()*.6,.7+Math.random()*.3,.8+Math.random()*.4))}
+  born.push(i?5.4+Math.log2(i+1)*.48+Math.random()*.2:5.1);rot.push(new THREE.Euler(Math.random()*6,Math.random()*6,Math.random()*6));asp.push(new THREE.Vector3(1+Math.random()*.15,.9+Math.random()*.1,.95+Math.random()*.1))}
 cp[0].set(0,-.2,0);
 // muscle tissue block
-const packGeo=hBlob(new THREE.BoxGeometry(.9,.24,.6,24,6,16),.05,3.2,5);
-const packMat=new THREE.MeshPhysicalMaterial({color:0xd98a84,map:muscleTex,bumpMap:muscleTex,bumpScale:.8,roughness:.55,clearcoat:.25,clearcoatRoughness:.5});
+const packGeo=hBlob(new THREE.BoxGeometry(.9,.24,.6,24,6,16),.015,2,5);
+const packMat=new THREE.MeshPhysicalMaterial({color:0xe2b4aa,bumpMap:muscleTex,bumpScale:.12,roughness:.5,clearcoat:.35,clearcoatRoughness:.4});
 const pack=new THREE.Mesh(packGeo,packMat);V.add(pack);
 
 /* ---- stage 3: ground + vulture (x = 4.5) ---- */
@@ -1477,13 +1477,13 @@ function frame(now){
     if(t>=born[i]&&t<9.4){const a=ease(seg(t,born[i],born[i]+.7));
       const from=par[i]<0?cp[i]:cp[par[i]];tmp.copy(from).lerp(cp[i],a);s=.35+.65*a;
       // parent squashes briefly while a daughter buds off
-      for(let c=2*i+1;c<=2*i+2&&c<N;c++){if(t>=born[c]&&t<born[c]+.5)s*=.88}
+      
     }
     s*=(1-fuse*.55);
     tmp.y+=Math.sin(tt*1.3+i)*.015;
     pv.copy(tmp).lerp(new THREE.Vector3(cp[i].x*.85,-.78+(i%3)*.04,cp[i].z*.6),fuse);
     rot[i].y+=.003;q.setFromEuler(rot[i]);
-    const w=1+Math.sin(tt*1.7+i)*.05;sv.set(s*w*asp[i].x*(1+fuse*.9),s/w*asp[i].y,s*asp[i].z);m4.compose(pv,q,sv);cells.setMatrixAt(i,m4);
+    const w=1;sv.set(s*w*asp[i].x*(1+fuse*.9),s/w*asp[i].y,s*asp[i].z);m4.compose(pv,q,sv);cells.setMatrixAt(i,m4);
     tmp.set(.02,.01,.03).applyQuaternion(q).multiplyScalar(s);pv.add(tmp);sv.setScalar(s);m4.compose(pv,q,sv);nuc.setMatrixAt(i,m4)}
   cells.instanceMatrix.needsUpdate=true;nuc.instanceMatrix.needsUpdate=true;
   bubs.forEach((b,i)=>{const y=-.85+((tt*.25*b.s+b.o)%1.4);m4.compose(pv.set(b.x+Math.sin(tt*2+i)*.02,y,b.z),q.identity(),sv.setScalar(fill*b.s));bub.setMatrixAt(i,m4)});bub.instanceMatrix.needsUpdate=true;
