@@ -1369,7 +1369,7 @@ for(let i=0;i<N;i++){let v;do{v=new THREE.Vector3(Math.random()*2-1,Math.random(
 cp[0].set(0,-.2,0);
 // muscle tissue block
 const packGeo=hBlob(new THREE.BoxGeometry(.9,.24,.6,24,6,16),.015,2,5);
-const packMat=new THREE.MeshPhysicalMaterial({color:0xe2b4aa,bumpMap:muscleTex,bumpScale:.12,roughness:.5,clearcoat:.35,clearcoatRoughness:.4});
+const packMat=new THREE.MeshPhysicalMaterial({color:0x7e2426,bumpMap:muscleTex,bumpScale:.25,roughness:.5,clearcoat:.35,clearcoatRoughness:.4});
 const pack=new THREE.Mesh(packGeo,packMat);V.add(pack);
 
 /* ---- stage 3: ground + vulture (x = 4.5) ---- */
