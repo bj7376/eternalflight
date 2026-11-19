@@ -1428,7 +1428,7 @@ const vult=makeVulture();G.add(vult);
 window.efShared={makeVulture,packGeo,packMat};
 
 /* ---- timeline ---- */
-const T=18.4,P=[['0:00','Sample','A rice-sized piece of muscle is taken from your arm.'],['Day 2','Grow','Your cells multiply in their own vessel.'],['Day 70','Serve','They become a meal, delivered cold to a feeding station.'],['Feeding day','Fly','A vulture eats. Part of you is in its wings.']];
+const T=18.4,P=[['Day 1','Sample','A rice-sized piece of muscle is taken from your arm.'],['Day 2','Grow','Your cells multiply in their own vessel.'],['Day 70','Serve','They become a meal, delivered cold to a feeding station.'],['Feeding day','Fly','A vulture eats. Part of you is in its wings.']];
 let phase=-1;
 function setCap(i){if(i===phase||!cap)return;phase=i;cap.innerHTML=`<span>${P[i][0]}</span><b>${P[i][1]}</b>${P[i][2]}`;cap.classList.remove('in');void cap.offsetWidth;cap.classList.add('in')}
 const m4=new THREE.Matrix4(),q=new THREE.Quaternion(),sv=new THREE.Vector3(),pv=new THREE.Vector3();
