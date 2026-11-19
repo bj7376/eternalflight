@@ -1443,6 +1443,7 @@ function frame(now){
 
   /* stage 1 */
   setCap(t<4.4?0:t<9.4?1:t<11.6?2:3);
+  if(phase===1&&cap){const sp=cap.querySelector('span'),d='Day '+Math.round(2+68*Math.min(1,Math.max(0,(t-4.6)/4.6)));if(sp&&sp.textContent!==d)sp.textContent=d}
   const down=ease(seg(t,.6,1.4)),up=ease(seg(t,1.9,2.7));
   const tipY=.47-.14*down+.14*up;needle.position.set(0,tipY+.07,0);needle.visible=tr<2.75;
   // open the housing while working, close it, then loosen and lift the cuff off the arm
