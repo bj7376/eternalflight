@@ -1364,7 +1364,7 @@ const nuc=new THREE.InstancedMesh(hBlob(new THREE.IcosahedronGeometry(.05,3),.25
 {const c=new THREE.Color();for(let i=0;i<N;i++){c.setHSL(.02+Math.random()*.02,.3+Math.random()*.1,.86+Math.random()*.04);cells.setColorAt(i,c)}}
 const cp=[],par=[],born=[],rot=[],asp=[];
 for(let i=0;i<N;i++){let v;do{v=new THREE.Vector3(Math.random()*2-1,Math.random()*2-1,Math.random()*2-1)}while(v.length()>1);
-  cp.push(v.multiply(new THREE.Vector3(.5,.62,.5)).add(new THREE.Vector3(0,-.2,0)));par.push(i?Math.floor((i-1)/2):-1);
+  cp.push(v.multiply(new THREE.Vector3(.6,.62,.6)).add(new THREE.Vector3(0,-.15,0)));par.push(i?Math.floor((i-1)/2):-1);
   born.push(i?5.4+Math.log2(i+1)*.48+Math.random()*.2:5.1);rot.push(new THREE.Euler(Math.random()*6,Math.random()*6,Math.random()*6));asp.push(new THREE.Vector3(1+Math.random()*.15,.9+Math.random()*.1,.95+Math.random()*.1))}
 cp[0].set(0,-.2,0);
 // muscle tissue block
@@ -1469,17 +1469,17 @@ function frame(now){
   else bead.visible=false;
 
   /* stage 2: cells bud off parents, then fuse into tissue */
-  const fill=seg(t,4.5,5.2)*(1-seg(t,9.3,10));medMat.opacity=.16*fill;glow.intensity=.9*fill;
+  const fill=seg(t,4.5,5.2)*(1-seg(t,9.3,10));medMat.opacity=(.12+.14*seg(t,5.4,8.1))*fill;glow.intensity=.9*fill;
   const fuse=ease(seg(t,8.1,9.2));
   const tmp=new THREE.Vector3();
   for(let i=0;i<N;i++){
     let s=0;
     if(t>=born[i]&&t<9.4){const a=ease(seg(t,born[i],born[i]+.7));
-      const from=par[i]<0?cp[i]:cp[par[i]];tmp.copy(from).lerp(cp[i],a);s=.35+.65*a;
+      const from=par[i]<0?cp[i]:cp[par[i]];tmp.copy(from).lerp(cp[i],a);s=(.35+.65*a)*.32;
       // parent squashes briefly while a daughter buds off
       
     }
-    s*=(1-fuse*.55);
+    s*=(1-fuse);
     tmp.y+=Math.sin(tt*1.3+i)*.015;
     pv.copy(tmp).lerp(new THREE.Vector3(cp[i].x*.85,-.78+(i%3)*.04,cp[i].z*.6),fuse);
     rot[i].y+=.003;q.setFromEuler(rot[i]);
