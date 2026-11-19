@@ -1375,7 +1375,7 @@ const pack=new THREE.Mesh(packGeo,packMat);V.add(pack);
 /* ---- stage 3: ground + vulture (x = 4.5) ---- */
 const G=new THREE.Group();G.position.set(4.5,-.9,0);scene.add(G);
 const ground=new THREE.Mesh(new THREE.CircleGeometry(2.4,64),new THREE.MeshStandardMaterial({color:0x1c1c1b,roughness:1}));ground.rotation.x=-Math.PI/2;G.add(ground);
-const meal=new THREE.Mesh(packGeo,packMat);meal.position.y=.11;G.add(meal);
+const MS=.5,meal=new THREE.Mesh(packGeo,packMat);meal.position.y=.11*MS;G.add(meal);
 
 function makeVulture(){
   // cinereous vulture: uniformly dark brown, dark-faced juvenile head, huge hooked beak with pale blue cere, fluffy brown ruff, long fingered wings
@@ -1488,11 +1488,11 @@ function frame(now){
     tmp.set(.02,.01,.03).applyQuaternion(q).multiplyScalar(s);pv.add(tmp);sv.setScalar(s);m4.compose(pv,q,sv);nuc.setMatrixAt(i,m4)}
   cells.instanceMatrix.needsUpdate=true;nuc.instanceMatrix.needsUpdate=true;
   bubs.forEach((b,i)=>{const y=-.85+((tt*.25*b.s+b.o)%1.4);m4.compose(pv.set(b.x+Math.sin(tt*2+i)*.02,y,b.z),q.identity(),sv.setScalar(fill*b.s));bub.setMatrixAt(i,m4)});bub.instanceMatrix.needsUpdate=true;
-  pack.visible=t>9&&t<10.5;{const k=ease(seg(t,9.4,10.5));pack.position.set(4.5*k,-.78+Math.sin(k*Math.PI)*1.2-.01*k,0);pack.rotation.y=k*1.5}pack.scale.setScalar(t>9?ease(seg(t,9,9.4)):0);
+  pack.visible=t>9&&t<10.5;{const k=ease(seg(t,9.4,10.5));pack.position.set(4.5*k,-.78+Math.sin(k*Math.PI)*1.2-.01*k,0);pack.rotation.y=k*1.5}pack.scale.setScalar(t>9?ease(seg(t,9,9.4))*(1-(1-MS)*ease(seg(t,9.4,10.5))):0);
   glass.material.opacity=.1*(1-seg(t,9.3,10));
   // pack travels to the ground
   meal.visible=t>=10.5;meal.rotation.y=1.5;
-  const eaten=seg(t,12.6,14.6);meal.scale.set(1-eaten*.85,1-eaten*.5,1-eaten*.85);
+  const eaten=seg(t,12.6,14.6);meal.scale.set(MS*(1-eaten*.85),MS*(1-eaten*.5),MS*(1-eaten*.85));
 
   /* stage 3: vulture glides in, lands, eats, leaves */
   const W=vult.userData.wings,H=vult.userData.head;let flap=0,spread=1,land=0;
